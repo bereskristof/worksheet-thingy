@@ -4,6 +4,8 @@ public class Question
 {
     private readonly int _rowId;
     public string Text { get; set; } = string.Empty;
+    public string Id => _rowId.ToString();
+    public string AnswerCount => 0.ToString();
 
     public static Question NewFromListQuery(int rowId, string text)
     {

@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "ConsoleApp\Co
 		{FDCBCCD9-2F97-4D4B-B3A0-7EE1C034F764} = {FDCBCCD9-2F97-4D4B-B3A0-7EE1C034F764}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interface", "Interface\Interface.csproj", "{ECD11EB8-682C-4C7A-9358-E233635819C0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FDCBCCD9-2F97-4D4B-B3A0-7EE1C034F764} = {FDCBCCD9-2F97-4D4B-B3A0-7EE1C034F764}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,5 +26,9 @@ Global
 		{633CCFB5-E11A-4796-8DA5-521736A01283}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{633CCFB5-E11A-4796-8DA5-521736A01283}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{633CCFB5-E11A-4796-8DA5-521736A01283}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECD11EB8-682C-4C7A-9358-E233635819C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECD11EB8-682C-4C7A-9358-E233635819C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECD11EB8-682C-4C7A-9358-E233635819C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECD11EB8-682C-4C7A-9358-E233635819C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
