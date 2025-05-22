@@ -1,30 +1,46 @@
+using System.ComponentModel;
+
 namespace Storage.Task;
 
-public class Answer
+public class Answer : INotifyPropertyChanged
 {
-    private readonly int _rowId;
+    public event PropertyChangedEventHandler? PropertyChanged;
     
-    public int Id => _rowId;
+    public long Id { get; }
     
     public string Text { get; set; }
     
     private readonly Question _question;
 
-    internal Answer(int rowId, Question question, string text)
+    internal static Answer Load(Question question, long id, string text) => new(question, id, text);
+
+    internal static Answer New(Question question)
     {
-        _rowId = rowId;
+        var createCommand = Manager.Connection.CreateCommand();
+        createCommand.CommandText = "INSERT INTO Answers (Id, QuestionId, Answer) VALUES (@Id, @QuestionId, '');";
+        var newId = IdManager.GetAnswerId();
+        createCommand.Parameters.AddWithValue("Id", newId);
+        createCommand.Parameters.AddWithValue("@QuestionId", question.Id);
+        createCommand.ExecuteScalar();
+        return new Answer(question, newId, "");
+    }
+
+    private Answer(Question question, long id, string text)
+    {
         _question = question;
+        Id = id;
         Text = text;
     }
 
     public void Store()
     {
         var updateCommand = Manager.Connection.CreateCommand();
-        updateCommand.CommandText = $"UPDATE Answers SET Answer = @Answer, QuestionId = @QuestionId WHERE rowid = @rowId";
+        updateCommand.CommandText = "UPDATE Answers SET Answer = @Answer, QuestionId = @QuestionId WHERE Id = @Id";
         string encryptedText = Encryption.EncryptBase64(Text);
         updateCommand.Parameters.AddWithValue("@Answer", encryptedText);
-        updateCommand.Parameters.AddWithValue("@QuestionId", _question);
+        updateCommand.Parameters.AddWithValue("@QuestionId", _question.Id);
+        updateCommand.Parameters.AddWithValue("@Id", Id);
         updateCommand.ExecuteNonQuery();
-        Log.Write($"Answer {_rowId} stored");
+        Log.Write($"Answer {Id} stored");
     }
 }

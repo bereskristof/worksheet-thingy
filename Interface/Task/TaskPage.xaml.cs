@@ -26,12 +26,7 @@ public partial class TaskPage
             return;
         _currentQuestion?.Store();
         _currentQuestion = question;
-        AnswerListPanel.Children.Clear();
-        var answers = question.GetAnswers();
-        foreach (var answerItem in answers.Select(answer => new AnswerLine(answer)))
-        {
-            AnswerListPanel.Children.Add(answerItem);
-        }
+        AnswerListPanel.ItemsSource = _currentQuestion.Answers;
         // Update bindings
         Binding freshAfBinding = new()
         {
@@ -59,6 +54,6 @@ public partial class TaskPage
 
     private void ButtonAddAnswer_OnClick(object sender, RoutedEventArgs e)
     {
-        _currentQuestion?.AddAnswer();
+        _currentQuestion?.Answers.Add(_currentQuestion);
     }
 }

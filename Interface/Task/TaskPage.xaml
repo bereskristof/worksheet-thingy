@@ -36,23 +36,36 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="200"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/> <!-- <RowDefinition Height="200"/> -->
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <math:FormulaControl Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Formula="23 + \frac{9}{99}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <GridSplitter Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" VerticalAlignment="Stretch" Height="5" HorizontalAlignment="Stretch"/>
+            <!-- <math:FormulaControl Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Formula="23 + \frac{9}{99}" HorizontalAlignment="Center" VerticalAlignment="Center"/> -->
+            <!-- <GridSplitter Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" VerticalAlignment="Stretch" Height="5" HorizontalAlignment="Stretch"/> -->
             <TextBlock Grid.Column="0" Grid.Row="2" Text="{x:Static res:Lang.Task_Question}" HorizontalAlignment="Right" VerticalAlignment="Top" Padding="0,0,6,0"/>
             <TextBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2" TextWrapping="WrapWithOverflow" AcceptsReturn="True" Name="QuestionBox" Text="{Binding Path=.}"/>
             <TextBlock Grid.Column="0" Grid.Row="3" Text="{x:Static res:Lang.Task_Score}" HorizontalAlignment="Right" VerticalAlignment="Top" Padding="0,0,6,0" Margin="0,3,0,0"/>
             <TextBox Grid.Column="1" Grid.Row="3" Margin="0,3,0,0" Name="ScoreBox"/>
             <TextBlock Grid.Column="2" Grid.Row="3" Margin="3,3,0,0" Text="LqScoreError" Visibility="Hidden" Name="ScoreErrorText"/>
             <TextBlock Grid.Column="0" Grid.Row="4" Text="{x:Static res:Lang.Task_Answers}" HorizontalAlignment="Right" VerticalAlignment="Top" Padding="0,0,6,0" Margin="0,3,0,0"/>
-            <StackPanel Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="4" Name="AnswerListPanel"/>
+            <DataGrid Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="4" Name="AnswerListPanel" ItemsSource="{Binding}" GridLinesVisibility="None" SelectionMode="Single"
+                        HorizontalScrollBarVisibility="Disabled" AutoGenerateColumns="False" Margin="0,3,0,0">
+                <DataGrid.Columns>
+                    <DataGridCheckBoxColumn Header="Correct               (NoLang)" Width="50"/>
+                    <DataGridTextColumn Header="Answer                                                                                                                                                                                                                                                      (NoLang)" Binding="{Binding Text}" Width="*">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style>
+                                <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <!--     <DataGridTextColumn Header="Answers" Binding="{Binding (storage:Question.AnswerCount)}" Width="55"/> -->
+                </DataGrid.Columns>
+            </DataGrid>
             <Button Grid.Column="2" Grid.Row="5" HorizontalAlignment="Right" Content="{x:Static res:Lang.Task_AddAnswer}" Margin="0,3,0,0" Padding="4,1,4,1" Click="ButtonAddAnswer_OnClick"/>
         </Grid>
     </Grid>

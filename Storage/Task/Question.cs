@@ -4,8 +4,11 @@ namespace Storage.Task;
 
 public class Question : INotifyPropertyChanged
 {
-    private string _text = string.Empty;
     public event PropertyChangedEventHandler? PropertyChanged;
+    
+    private string _text = string.Empty;
+    
+    private AnswerList _answers = [];
     
     public long Id { get; }
 
@@ -19,7 +22,16 @@ public class Question : INotifyPropertyChanged
         }
     }
 
-    private List<Answer> Answers { get; set; } = [];
+    public AnswerList Answers
+    {
+        get
+        {
+            if (_answers.Count != 0) return _answers;
+            _answers.LoadAll(this);
+            return _answers;
+        }
+        private set => _answers = value;
+    }
     
     // public Image Image { get; private set; }
 
@@ -45,33 +57,6 @@ public class Question : INotifyPropertyChanged
         return new Question(newId, "");
     }
 
-    public List<Answer> GetAnswers()
-    {
-        if (Answers.Count != 0) return Answers;
-        
-        var queryCommand = Manager.Connection.CreateCommand();
-        queryCommand.CommandText = "SELECT Id, Answer FROM Answers WHERE Id = @Id;";
-        queryCommand.Parameters.AddWithValue("@Id", Id);
-        var reader = queryCommand.ExecuteReader();
-        while (reader.Read())
-        {
-            Answers.Add(new Answer(reader.GetInt32(0), this, reader.GetString(1)));
-        }
-        return Answers;
-    }
-
-    public Answer AddAnswer()
-    {
-        var createCommand = Manager.Connection.CreateCommand();
-        createCommand.CommandText = "INSERT INTO Answers (Id, QuestionId, Answer) VALUES (@Id, @questionId, '');";
-        var newId = IdManager.GetAnswerId();
-        createCommand.Parameters.AddWithValue("@Id", newId);
-        createCommand.Parameters.AddWithValue("@questionId", Id);
-        createCommand.ExecuteScalar();
-        Log.Write($"Added new answer to {Id}");
-        return new Answer((int)newId, this, ""); // TODO: Fix this being an int
-    }
-
     public void Store()
     {
         var updateCommand = Manager.Connection.CreateCommand();
@@ -80,6 +65,7 @@ public class Question : INotifyPropertyChanged
         updateCommand.Parameters.AddWithValue("@Question", encryptedText);
         updateCommand.Parameters.AddWithValue("@Id", Id);
         updateCommand.ExecuteNonQuery();
+        foreach (var answer in Answers) answer.Store();
         Log.Write($"Question {Id} stored");
     }
 }
