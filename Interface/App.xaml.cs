@@ -6,7 +6,8 @@ public partial class App
 {
     protected override void OnStartup(StartupEventArgs e)
     {
-        Storage.Manager.CreateDatabase("demo.wstkdb");
+        Storage.Manager.OpenDatabase("demo.wstkdb");
+        Storage.Encryption.TryPassword("DefaultPassword");
         base.OnStartup(e);
     }
 

@@ -8,30 +8,24 @@ public static class Manager
 
     public static SqliteConnection Connection
     {
-        get => _connection ?? throw new NullReferenceException("Access is invalid, database connection is null"); //TODO: Log
+        get
+        {
+            if (_connection != null) return _connection;
+            Log.Write("Null reference in Manager.Connection.get", Log.Severity.Error);
+            throw new NullReferenceException("Access is invalid, database connection is null");
+        }
         private set => _connection = value;
     }
-    
-    public static void CreateDatabase(string filename)
+
+    public static void OpenDatabase(string filename)
     {
         var connectionString = $"Data Source={filename}";
         Connection = new SqliteConnection(connectionString);
         Connection.Open();
 
         Tables.Init(Connection);
-        Encryption.GetKeyAndIv();
+        IdManager.Init();
         Log.Write("Opened database");
-    }
-
-    public static void UpdateTextRecord(string table, string id, string column, string? value)
-    {
-        var editCommand = Connection.CreateCommand();
-        editCommand.CommandText = "UPDATE @Table SET @Value = '@Column' WHERE rowid = @Id;";
-        editCommand.Parameters.AddWithValue("@Table", table);
-        editCommand.Parameters.AddWithValue("@Id", id);
-        editCommand.Parameters.AddWithValue("@Column", column);
-        editCommand.Parameters.AddWithValue("@Value", value);
-        editCommand.ExecuteNonQuery();
     }
 
     public static void CloseDatabase()

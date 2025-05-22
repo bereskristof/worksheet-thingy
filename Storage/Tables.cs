@@ -2,7 +2,7 @@ using Microsoft.Data.Sqlite;
 
 namespace Storage;
 
-public class Tables
+public static class Tables
 {
     internal static void Init(SqliteConnection connection)
     {
@@ -18,7 +18,7 @@ public class Tables
         var questionsTableCommand = connection.CreateCommand();
         questionsTableCommand.CommandText = """
                                             CREATE TABLE IF NOT EXISTS Questions (
-                                                Id INTEGER PRIMARY KEY,
+                                                Id INTEGER PRIMARY KEY AUTOINCREMENT,
                                                 Question TEXT
                                             );
                                             """;
@@ -27,6 +27,7 @@ public class Tables
         var answersTableCommand = connection.CreateCommand();
         answersTableCommand.CommandText = """
                                           CREATE TABLE IF NOT EXISTS Answers (
+                                              Id INTEGER PRIMARY KEY AUTOINCREMENT,
                                               QuestionId INTEGER, Answer TEXT,
                                               FOREIGN KEY (QuestionId) REFERENCES Questions(Id)
                                           );
@@ -36,6 +37,7 @@ public class Tables
         var imagesTableCommand = connection.CreateCommand();
         imagesTableCommand.CommandText = """
                                          CREATE TABLE IF NOT EXISTS Images (
+                                             Id INTEGER PRIMARY KEY AUTOINCREMENT,
                                              QuestionId INTEGER,
                                              Image BLOB,
                                              FOREIGN KEY (QuestionId) REFERENCES Questions(Id)

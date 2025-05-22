@@ -1,85 +1,85 @@
+using System.ComponentModel;
+
 namespace Storage.Task;
 
-public class Question
+public class Question : INotifyPropertyChanged
 {
-    private readonly int _rowId;
-    public string Text { get; set; } = string.Empty;
-    public int Id => _rowId;
-    public string AnswerCount => 0.ToString();
+    private string _text = string.Empty;
+    public event PropertyChangedEventHandler? PropertyChanged;
+    
+    public long Id { get; }
 
-    public static Question NewFromListQuery(int rowId, string text)
+    public string Text
     {
-        var question = new Question(rowId)
+        get => _text;
+        set
         {
-            Text = Encryption.DecryptBase64(text)
-        };
+            _text = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Text)));
+        }
+    }
+
+    private List<Answer> Answers { get; set; } = [];
+    
+    // public Image Image { get; private set; }
+
+    private Question(long id, string text)
+    {
+        Id = id;
+        Text = text;
+    }
+
+    internal static Question Load(long id, string text)
+    {
+        var question = new Question(id, Encryption.DecryptBase64(text));
         return question;
     }
 
-    public static List<Question> LoadAll()
-    {
-        var result = new List<Question>();
-        var queryCommand = Manager.Connection.CreateCommand();
-        queryCommand.CommandText = "SELECT rowid, Question FROM Questions ORDER BY rowid ASC;";
-        var reader = queryCommand.ExecuteReader();
-        while (reader.Read())
-        {
-            result.Add(NewFromListQuery(reader.GetInt32(0), reader.GetString(1)));
-        }
-        return result;
-    }
-
-    public static Question New()
+    internal static Question New()
     {
         var createCommand = Manager.Connection.CreateCommand();
-        createCommand.CommandText = """
-                                    INSERT INTO Questions (Question) VALUES ('');
-                                    SELECT last_insert_rowid();
-                                    """;
-        int rowId = Convert.ToInt32(createCommand.ExecuteScalar());
-        return new Question(rowId);
+        createCommand.CommandText = "INSERT INTO Questions (Id, Question) VALUES (@Id, '');";
+        var newId = IdManager.GetQuestionId();
+        createCommand.Parameters.AddWithValue("@Id", newId);
+        createCommand.ExecuteScalar();
+        return new Question(newId, "");
     }
 
-    public List<Answer> LoadAllAnswers()
+    public List<Answer> GetAnswers()
     {
-        var result = new List<Answer>();
+        if (Answers.Count != 0) return Answers;
+        
         var queryCommand = Manager.Connection.CreateCommand();
-        queryCommand.CommandText = "SELECT rowid, Answer FROM Answers WHERE rowid = @rowId;";
-        queryCommand.Parameters.AddWithValue("@rowId", _rowId);
+        queryCommand.CommandText = "SELECT Id, Answer FROM Answers WHERE Id = @Id;";
+        queryCommand.Parameters.AddWithValue("@Id", Id);
         var reader = queryCommand.ExecuteReader();
         while (reader.Read())
         {
-            result.Add(new Answer(reader.GetInt32(0), this, reader.GetString(1)));
+            Answers.Add(new Answer(reader.GetInt32(0), this, reader.GetString(1)));
         }
-        return result;
+        return Answers;
     }
 
     public Answer AddAnswer()
     {
         var createCommand = Manager.Connection.CreateCommand();
-        createCommand.CommandText = """
-                                    INSERT INTO Answers (QuestionId, Answer) VALUES (@questionId, '');
-                                    SELECT last_insert_rowid();
-                                    """;
-        createCommand.Parameters.AddWithValue("@questionId", _rowId);
-        Console.WriteLine(_rowId);
-        int rowId = Convert.ToInt32(createCommand.ExecuteScalar());
-        return new Answer(rowId, this, "");
-    }
-
-    private Question(int rowId)
-    {
-        _rowId = rowId;
+        createCommand.CommandText = "INSERT INTO Answers (Id, QuestionId, Answer) VALUES (@Id, @questionId, '');";
+        var newId = IdManager.GetAnswerId();
+        createCommand.Parameters.AddWithValue("@Id", newId);
+        createCommand.Parameters.AddWithValue("@questionId", Id);
+        createCommand.ExecuteScalar();
+        Log.Write($"Added new answer to {Id}");
+        return new Answer((int)newId, this, ""); // TODO: Fix this being an int
     }
 
     public void Store()
     {
         var updateCommand = Manager.Connection.CreateCommand();
-        updateCommand.CommandText = $"UPDATE Questions SET Question = @Question WHERE Id = @rowId";
+        updateCommand.CommandText = $"UPDATE Questions SET Question = @Question WHERE Id = @Id";
         string encryptedText = Encryption.EncryptBase64(Text);
         updateCommand.Parameters.AddWithValue("@Question", encryptedText);
-        updateCommand.Parameters.AddWithValue("@rowId", _rowId);
+        updateCommand.Parameters.AddWithValue("@Id", Id);
         updateCommand.ExecuteNonQuery();
-        Log.Write($"Question {_rowId} stored");
+        Log.Write($"Question {Id} stored");
     }
 }

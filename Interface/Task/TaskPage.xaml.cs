@@ -8,11 +8,14 @@ namespace Interface.Task;
 public partial class TaskPage
 {
     private Question? _currentQuestion;
+
+    public QuestionList Questions { get; set; } = [];
     
     public TaskPage()
     {
         InitializeComponent();
-        TaskList.DataContext = Question.LoadAll();
+        Questions.LoadAll();
+        TaskList.DataContext = Questions;
     }
 
     private void TaskList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -24,7 +27,7 @@ public partial class TaskPage
         _currentQuestion?.Store();
         _currentQuestion = question;
         AnswerListPanel.Children.Clear();
-        var answers = question.LoadAllAnswers();
+        var answers = question.GetAnswers();
         foreach (var answerItem in answers.Select(answer => new AnswerLine(answer)))
         {
             AnswerListPanel.Children.Add(answerItem);
@@ -48,10 +51,9 @@ public partial class TaskPage
 
     private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
     {
-        var question = Question.New();
+        var question = Questions.Add();
         _currentQuestion = question;
         _currentQuestion?.Store();
-        TaskList.DataContext = Question.LoadAll();
         TaskList.ScrollIntoView(TaskList.Items[^1]!);
     }
 

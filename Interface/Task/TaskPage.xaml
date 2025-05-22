@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:res="clr-namespace:Interface.Resources"
-             xmlns:storage="clr-namespace:Storage.Task;assembly=Storage"
              xmlns:math="clr-namespace:WpfMath.Controls;assembly=WpfMath"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -22,9 +21,9 @@
             <DataGrid Grid.Row="0" Name="TaskList" ItemsSource="{Binding}" AutoGenerateColumns="False" IsReadOnly="True"
                       SelectionChanged="TaskList_OnSelectionChanged" GridLinesVisibility="None" SelectionMode="Single" HorizontalScrollBarVisibility="Disabled" BorderThickness="0">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Id" Binding="{Binding (storage:Question.Id)}" Width="30"/>
-                    <DataGridTextColumn Header="Question" Binding="{Binding (storage:Question.Text)}" Width="*"/>
-                    <DataGridTextColumn Header="Answers" Binding="{Binding (storage:Question.AnswerCount)}" Width="55"/>
+                    <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="30"/>
+                    <DataGridTextColumn Header="Question" Binding="{Binding Text}" Width="*"/>
+                <!--     <DataGridTextColumn Header="Answers" Binding="{Binding (storage:Question.AnswerCount)}" Width="55"/> -->
                 </DataGrid.Columns>
             </DataGrid>
             <Button Grid.Row="1" Content="{x:Static res:Lang.Task_Add}" Click="ButtonBase_OnClick"/>

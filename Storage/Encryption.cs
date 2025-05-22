@@ -2,44 +2,106 @@ using System.Security.Cryptography;
 
 namespace Storage;
 
-// TODO: Make iv size hard coded
 public static class Encryption
 {
+    private const int Iterations = 10_000;
     private static byte[] _key = [];
     
-    public static void GetKeyAndIv()
-    {
-        var keyCommand = Manager.Connection.CreateCommand();
-        keyCommand.CommandText = "SELECT key, value FROM Security WHERE key = 'Key' OR key = 'IV';";
-        var reader = keyCommand.ExecuteReader();
-        while (reader.Read())
-        {
-            switch (reader.GetString(0))
-            {
-                case "Key":
-                    Console.WriteLine("Key: {0}", Convert.FromBase64String(reader.GetString(1)));
-                    _key = Convert.FromBase64String(reader.GetString(1));
-                    break;
-            }
-        }
-        if (_key.Length == 0)
-        {
-            Log.Write("Security key not found, creating new one"); // TODO: THIS IS OBVIOUSLY FUCKING RETARDED, REPLACE IT WITH SOMETHING THAT DOESN'T JUST SLOW THINGS DOWN!
-            var aes = Aes.Create();
-            if (_key.Length == 0) CreateKey(aes);
-            return;
-        }
-        Console.WriteLine(reader);
-    }
+    // public static void Init()
+    // {
+    //     var keyCommand = Manager.Connection.CreateCommand();
+    //     keyCommand.CommandText = "SELECT value FROM Security WHERE key = 'Key';";
+    //     var reader = keyCommand.ExecuteReader();
+    //     while (reader.Read())
+    //     {
+    //         Console.WriteLine("Key: {0}", Convert.FromBase64String(reader.GetString(0)));
+    //         _key = Convert.FromBase64String(reader.GetString(0));
+    //     }
+    //     if (_key.Length == 0)
+    //     {
+    //         Log.Write("Security key not found, creating new one");
+    //         var aes = Aes.Create();
+    //         if (_key.Length == 0) CreateKey(aes);
+    //         return;
+    //     }
+    //     Console.WriteLine(reader);
+    // }
 
-    private static void CreateKey(Aes aes)
+    public static void SavePassword(string password)
     {
-        _key = aes.Key;
+        byte[] salt = RandomNumberGenerator.GetBytes(32);
+        byte[] verify = RandomNumberGenerator.GetBytes(1024);
+        byte[] hash = SHA3_256.HashData(verify);
+        
+        byte[] key = Rfc2898DeriveBytes.Pbkdf2(password, salt, Iterations, HashAlgorithmName.SHA3_512, 32);
+        _key = key;
+
+        byte[] data = Encrypt(Convert.ToBase64String(verify));
+
         var storeCommand = Manager.Connection.CreateCommand();
-        storeCommand.CommandText = "INSERT INTO Security (key, value) VALUES ('Key', @keyValue);";
-        storeCommand.Parameters.AddWithValue("@keyValue", Convert.ToBase64String(_key));
+        storeCommand.CommandText = "INSERT INTO Security (key, value) VALUES ('Verify', @Verify), ('Salt', @Salt);";
+
+        byte[] concat = hash.Concat(data).ToArray();
+        storeCommand.Parameters.AddWithValue("@Verify", Convert.ToBase64String(concat));
+        storeCommand.Parameters.AddWithValue("@Salt", Convert.ToBase64String(salt));
         storeCommand.ExecuteNonQuery();
     }
+
+    public static bool TryPassword(string password)
+    {
+        byte[] salt = [];
+        var saltCommand = Manager.Connection.CreateCommand();
+        saltCommand.CommandText = "SELECT value FROM Security WHERE key = 'Salt';";
+        var saltReader = saltCommand.ExecuteReader();
+        while (saltReader.Read())
+        {
+            salt = Convert.FromBase64String(saltReader.GetString(0));
+        }
+
+        if (salt.Length == 0)
+        {
+            throw new CryptographicException("Salt missing from database");
+        }
+
+        byte[] verify = [];
+        var verifyCommand = Manager.Connection.CreateCommand();
+        verifyCommand.CommandText = "SELECT value FROM Security WHERE key = 'Verify';";
+        var reader = verifyCommand.ExecuteReader();
+        while (reader.Read())
+        {
+            verify = Convert.FromBase64String(reader.GetString(0));
+        }
+
+        if (verify.Length == 0)
+        {
+            throw new CryptographicException("Verify missing from database");
+        }
+        
+        var key = Rfc2898DeriveBytes.Pbkdf2(password, salt, Iterations, HashAlgorithmName.SHA3_512, 32);
+        _key = key;
+
+        try
+        {
+            byte[] data = Convert.FromBase64String(Decrypt(verify[32..]));
+            var challengeHash = SHA3_256.HashData(data);
+            return challengeHash.SequenceEqual(verify[..32]);
+        }
+        catch (CryptographicException)
+        {
+            return false;
+        }
+    }
+
+    // private static bool ValidateKey(byte[] )
+
+    // private static void CreateKey(Aes aes)
+    // {
+    //     _key = aes.Key;
+    //     var storeCommand = Manager.Connection.CreateCommand();
+    //     storeCommand.CommandText = "INSERT INTO Security (key, value) VALUES ('Key', @keyValue);";
+    //     storeCommand.Parameters.AddWithValue("@keyValue", Convert.ToBase64String(_key));
+    //     storeCommand.ExecuteNonQuery();
+    // }
     
     private static byte[] Encrypt(string plainText)
     {
