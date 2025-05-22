@@ -1,4 +1,7 @@
-﻿namespace Interface;
+﻿using System.ComponentModel;
+using Interface.Task;
+
+namespace Interface;
 
 public partial class MainWindow
 {
@@ -6,6 +9,9 @@ public partial class MainWindow
     {
         InitializeComponent();
     }
-    
-    
+
+    private void MainWindow_OnClosing(object? sender, CancelEventArgs e)
+    {
+        TaskPage.OnExit();
+    }
 }

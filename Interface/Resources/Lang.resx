@@ -33,4 +33,19 @@
     <data name="MenuTabs_Tasks" xml:space="preserve">
         <value>Tasks</value>
     </data>
+    <data name="Task_Add" xml:space="preserve">
+        <value>Add Task</value>
+    </data>
+    <data name="Task_Question" xml:space="preserve">
+        <value>Question:</value>
+    </data>
+    <data name="Task_Score" xml:space="preserve">
+        <value>Score:</value>
+    </data>
+    <data name="Task_AddAnswer" xml:space="preserve">
+        <value>Add Answer</value>
+    </data>
+    <data name="Task_Answers" xml:space="preserve">
+        <value>Answers:</value>
+    </data>
 </root>

@@ -12,7 +12,7 @@ public partial class App
 
     protected override void OnExit(ExitEventArgs e)
     {
-        Storage.Manager.CloseDatabase();
         base.OnExit(e);
+        Storage.Manager.CloseDatabase();
     }
 }

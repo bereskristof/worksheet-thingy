@@ -103,5 +103,50 @@ namespace Interface.Resources {
                 return ResourceManager.GetString("MenuTabs_Tasks", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Task.
+        /// </summary>
+        public static string Task_Add {
+            get {
+                return ResourceManager.GetString("Task_Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Answer.
+        /// </summary>
+        public static string Task_AddAnswer {
+            get {
+                return ResourceManager.GetString("Task_AddAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Answers:.
+        /// </summary>
+        public static string Task_Answers {
+            get {
+                return ResourceManager.GetString("Task_Answers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question:.
+        /// </summary>
+        public static string Task_Question {
+            get {
+                return ResourceManager.GetString("Task_Question", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Score:.
+        /// </summary>
+        public static string Task_Score {
+            get {
+                return ResourceManager.GetString("Task_Score", resourceCulture);
+            }
+        }
     }
 }

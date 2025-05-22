@@ -30,4 +30,8 @@
       <ProjectReference Include="..\Storage\Storage.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="WpfMath" Version="2.1.0" />
+    </ItemGroup>
+
 </Project>

@@ -6,6 +6,7 @@
         xmlns:res="clr-namespace:Interface.Resources"
         xmlns:task="clr-namespace:Interface.Task"
         mc:Ignorable="d"
+        Closing="MainWindow_OnClosing"
         Title="MainWindow" Height="600" Width="800">
     <DockPanel>
         <Menu DockPanel.Dock="Top">
@@ -17,7 +18,7 @@
         </Menu>
         <TabControl Margin="2,2,2,2">
             <TabItem Header="{x:Static res:Lang.MenuTabs_Tasks}">
-                <task:TaskPage/>
+                <task:TaskPage x:Name="TaskPage"/>
             </TabItem>
         </TabControl>
     </DockPanel>

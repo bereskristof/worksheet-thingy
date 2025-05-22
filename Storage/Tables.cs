@@ -18,6 +18,7 @@ public class Tables
         var questionsTableCommand = connection.CreateCommand();
         questionsTableCommand.CommandText = """
                                             CREATE TABLE IF NOT EXISTS Questions (
+                                                Id INTEGER PRIMARY KEY,
                                                 Question TEXT
                                             );
                                             """;

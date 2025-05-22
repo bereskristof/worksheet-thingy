@@ -1,0 +1,52 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\beres\\RiderProjects\\Vostok\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{ECD11EB8-682C-4C7A-9358-E233635819C0}|Interface\\Interface.csproj|c:\\users\\beres\\riderprojects\\vostok\\interface\\task\\taskpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{ECD11EB8-682C-4C7A-9358-E233635819C0}|Interface\\Interface.csproj|solutionrelative:interface\\task\\taskpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ECD11EB8-682C-4C7A-9358-E233635819C0}|Interface\\Interface.csproj|c:\\users\\beres\\riderprojects\\vostok\\interface\\resources\\lang.resx||{81828910-B8B3-4D2B-99A3-067027C180C1}",
+      "RelativeMoniker": "D:0:0:{ECD11EB8-682C-4C7A-9358-E233635819C0}|Interface\\Interface.csproj|solutionrelative:interface\\resources\\lang.resx||{81828910-B8B3-4D2B-99A3-067027C180C1}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "TaskPage.xaml",
+              "DocumentMoniker": "C:\\Users\\beres\\RiderProjects\\Vostok\\Interface\\Task\\TaskPage.xaml",
+              "RelativeDocumentMoniker": "Interface\\Task\\TaskPage.xaml",
+              "ToolTip": "C:\\Users\\beres\\RiderProjects\\Vostok\\Interface\\Task\\TaskPage.xaml",
+              "RelativeToolTip": "Interface\\Task\\TaskPage.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-05-10T11:19:56.606Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Lang.resx",
+              "DocumentMoniker": "C:\\Users\\beres\\RiderProjects\\Vostok\\Interface\\Resources\\Lang.resx",
+              "RelativeDocumentMoniker": "Interface\\Resources\\Lang.resx",
+              "ToolTip": "C:\\Users\\beres\\RiderProjects\\Vostok\\Interface\\Resources\\Lang.resx",
+              "RelativeToolTip": "Interface\\Resources\\Lang.resx",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
+              "WhenOpened": "2025-05-10T07:53:57.186Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
