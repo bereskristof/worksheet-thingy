@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:res="clr-namespace:Interface.Resources"
         xmlns:password="clr-namespace:Interface.Password"
+        xmlns:creation="clr-namespace:Interface.Creation"
         mc:Ignorable="d"
         Closing="MainWindow_OnClosing"
         Title="MainWindow" Height="800" Width="1200">
@@ -18,6 +19,7 @@
         <!-- </Menu> -->
         <Grid Name="Main">
             <password:PasswordPage x:Name="PasswordEntry" PasswordUnlocked="PasswordEntry_OnPasswordUnlocked"/>
+            <!-- <creation:CreationPage/> -->
         </Grid>
     </DockPanel>
 </Window>

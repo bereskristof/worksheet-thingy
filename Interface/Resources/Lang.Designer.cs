@@ -132,6 +132,42 @@ namespace Interface.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Confirm.
+        /// </summary>
+        public static string Setup_Confirm {
+            get {
+                return ResourceManager.GetString("Setup_Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Path to the File:.
+        /// </summary>
+        public static string Setup_File {
+            get {
+                return ResourceManager.GetString("Setup_File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password for the File:.
+        /// </summary>
+        public static string Setup_Password {
+            get {
+                return ResourceManager.GetString("Setup_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Setup a new Database.
+        /// </summary>
+        public static string Setup_Title {
+            get {
+                return ResourceManager.GetString("Setup_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Task.
         /// </summary>
         public static string Task_Add {

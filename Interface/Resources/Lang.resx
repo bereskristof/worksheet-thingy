@@ -72,4 +72,16 @@
     <data name="Password_Enter" xml:space="preserve">
         <value>Enter</value>
     </data>
+    <data name="Setup_Title" xml:space="preserve">
+        <value>Setup a new Database</value>
+    </data>
+    <data name="Setup_File" xml:space="preserve">
+        <value>Path to the File:</value>
+    </data>
+    <data name="Setup_Password" xml:space="preserve">
+        <value>Password for the File:</value>
+    </data>
+    <data name="Setup_Confirm" xml:space="preserve">
+        <value>Confirm</value>
+    </data>
 </root>
