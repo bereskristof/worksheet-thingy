@@ -7,11 +7,11 @@ public class QuestionList : ObservableCollection<Question>
     public void LoadAll()
     {
         var queryCommand = Manager.Connection.CreateCommand();
-        queryCommand.CommandText = "SELECT Id, Question FROM Questions ORDER BY Id ASC;";
+        queryCommand.CommandText = "SELECT Id, Question, Points FROM Questions ORDER BY Id ASC;";
         var reader = queryCommand.ExecuteReader();
         while (reader.Read())
         {
-            Add(Question.Load(reader.GetInt32(0), reader.GetString(1)));
+            Add(Question.Load(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2)));
         }
     }
 

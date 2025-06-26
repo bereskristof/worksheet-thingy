@@ -38,14 +38,22 @@ public partial class TaskPage
         _currentQuestion = question;
         AnswerListPanel.ItemsSource = _currentQuestion.Answers;
         // Update bindings
-        Binding freshAfBinding = new()
+        Binding questionBinding = new()
         {
             Source = question,
             Path = new PropertyPath("Text"), 
             UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
             Mode = BindingMode.TwoWay,
         };
-        BindingOperations.SetBinding(QuestionBox, TextBox.TextProperty, freshAfBinding);
+        BindingOperations.SetBinding(QuestionBox, TextBox.TextProperty, questionBinding);
+        Binding scoreBinding = new()
+        {
+            Source = question,
+            Path = new PropertyPath("Points"), 
+            UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+            Mode = BindingMode.TwoWay,
+        };
+        BindingOperations.SetBinding(ScoreBox, TextBox.TextProperty, scoreBinding);
         TaskList.Items.Refresh(); // HACK
         TaskList.SelectedItem = question;
     }
@@ -70,7 +78,7 @@ public partial class TaskPage
         _currentQuestion?.Answers.Add(_currentQuestion);
     }
 
-    private void ButtonDeleteAnswer_OnClick(object sender, RoutedEventArgs e) // TODO: Impl.
+    private void ButtonDeleteAnswer_OnClick(object sender, RoutedEventArgs e)
     {
         if (AnswerListPanel.SelectedItem is not Answer answer)
             return;

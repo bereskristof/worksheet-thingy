@@ -21,6 +21,8 @@ public class Question : INotifyPropertyChanged
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Text)));
         }
     }
+    
+    public int Points { get; set; }
 
     public AnswerList Answers
     {
@@ -35,34 +37,36 @@ public class Question : INotifyPropertyChanged
     
     // public Image Image { get; private set; }
 
-    private Question(long id, string text)
+    private Question(long id, string text, int points)
     {
         Id = id;
         Text = text;
+        Points = points;
     }
 
-    internal static Question Load(long id, string text)
+    internal static Question Load(long id, string text, int points)
     {
-        var question = new Question(id, Encryption.DecryptBase64(text));
+        var question = new Question(id, Encryption.DecryptBase64(text), points);
         return question;
     }
 
     internal static Question New()
     {
         var createCommand = Manager.Connection.CreateCommand();
-        createCommand.CommandText = "INSERT INTO Questions (Id, Question) VALUES (@Id, '');";
+        createCommand.CommandText = "INSERT INTO Questions (Id, Points, Question) VALUES (@Id, 0, '');";
         var newId = IdManager.GetQuestionId();
         createCommand.Parameters.AddWithValue("@Id", newId);
         createCommand.ExecuteScalar();
-        return new Question(newId, "");
+        return new Question(newId, "", 0);
     }
 
     public void Store()
     {
         var updateCommand = Manager.Connection.CreateCommand();
-        updateCommand.CommandText = $"UPDATE Questions SET Question = @Question WHERE Id = @Id";
+        updateCommand.CommandText = $"UPDATE Questions SET Question = @Question, Points = @Points WHERE Id = @Id";
         string encryptedText = Encryption.EncryptBase64(Text);
         updateCommand.Parameters.AddWithValue("@Question", encryptedText);
+        updateCommand.Parameters.AddWithValue("@Points", Points);
         updateCommand.Parameters.AddWithValue("@Id", Id);
         updateCommand.ExecuteNonQuery();
         foreach (var answer in Answers) answer.Store();

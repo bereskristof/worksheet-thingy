@@ -19,6 +19,7 @@ public static class Tables
         questionsTableCommand.CommandText = """
                                             CREATE TABLE IF NOT EXISTS Questions (
                                                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                                Points INTEGER NOT NULL,
                                                 Question TEXT
                                             );
                                             """;
@@ -28,7 +29,9 @@ public static class Tables
         answersTableCommand.CommandText = """
                                           CREATE TABLE IF NOT EXISTS Answers (
                                               Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                              QuestionId INTEGER, Answer TEXT,
+                                              QuestionId INTEGER,
+                                              Correct INTEGER,
+                                              Answer TEXT,
                                               FOREIGN KEY (QuestionId) REFERENCES Questions(Id)
                                           );
                                           """;
