@@ -132,6 +132,15 @@ namespace Interface.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete Selected Task.
+        /// </summary>
+        public static string Task_Delete {
+            get {
+                return ResourceManager.GetString("Task_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Question:.
         /// </summary>
         public static string Task_Question {

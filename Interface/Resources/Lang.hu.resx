@@ -41,4 +41,7 @@
     <data name="Task_Answers" xml:space="preserve">
         <value>Válaszok:</value>
     </data>
+    <data name="Task_Delete" xml:space="preserve">
+        <value>Kijelölt feladat törlése</value>
+    </data>
 </root>

@@ -18,12 +18,22 @@ public partial class TaskPage
         TaskList.DataContext = Questions;
     }
 
+    public void OnExit()
+    {
+        _currentQuestion?.Store();
+    }
+
     private void TaskList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (sender is not DataGrid grid)
             return;
         if (grid.SelectedItem is not Question question)
             return;
+        ChangeSelectedTask(question);
+    }
+
+    private void ChangeSelectedTask(Question question)
+    {
         _currentQuestion?.Store();
         _currentQuestion = question;
         AnswerListPanel.ItemsSource = _currentQuestion.Answers;
@@ -36,20 +46,23 @@ public partial class TaskPage
             Mode = BindingMode.TwoWay,
         };
         BindingOperations.SetBinding(QuestionBox, TextBox.TextProperty, freshAfBinding);
-        grid.Items.Refresh(); // HACK, If you fix this, change the selection color too!
+        TaskList.Items.Refresh(); // HACK
+        TaskList.SelectedItem = question;
     }
 
-    public void OnExit()
-    {
-        _currentQuestion?.Store();
-    }
-
-    private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+    private void ButtonAdd_OnClick(object sender, RoutedEventArgs e)
     {
         var question = Questions.Add();
         _currentQuestion = question;
         _currentQuestion?.Store();
         TaskList.ScrollIntoView(TaskList.Items[^1]!);
+        ChangeSelectedTask(question);
+    }
+
+    private void ButtonDelete_OnClick(object sender, RoutedEventArgs e)
+    {
+        if (_currentQuestion == null) return; // Does nothing if no question is selected
+        Questions.Remove(_currentQuestion);
     }
 
     private void ButtonAddAnswer_OnClick(object sender, RoutedEventArgs e)

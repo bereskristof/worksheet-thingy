@@ -20,6 +20,9 @@
             <TabItem Header="{x:Static res:Lang.MenuTabs_Tasks}">
                 <task:TaskPage x:Name="TaskPage"/>
             </TabItem>
+            <TabItem Header="Sheets"/>
+            <TabItem Header="Export" IsEnabled="False"/>
+            <TabItem Header="Correct" IsEnabled="False"/>
         </TabControl>
     </DockPanel>
 </Window>

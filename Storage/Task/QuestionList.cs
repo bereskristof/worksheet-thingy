@@ -21,4 +21,10 @@ public class QuestionList : ObservableCollection<Question>
         base.Add(question);
         return question;
     }
+
+    public new void Remove(Question question)
+    {
+        base.Remove(question);
+        question.Delete();
+    }
 }

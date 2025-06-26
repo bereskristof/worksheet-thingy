@@ -48,4 +48,7 @@
     <data name="Task_Answers" xml:space="preserve">
         <value>Answers:</value>
     </data>
+    <data name="Task_Delete" xml:space="preserve">
+        <value>Delete Selected Task</value>
+    </data>
 </root>

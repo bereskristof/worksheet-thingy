@@ -68,4 +68,13 @@ public class Question : INotifyPropertyChanged
         foreach (var answer in Answers) answer.Store();
         Log.Write($"Question {Id} stored");
     }
+
+    public void Delete()
+    {
+        var deleteCommand = Manager.Connection.CreateCommand();
+        deleteCommand.CommandText = $"DELETE FROM Questions WHERE Id = @Id";
+        deleteCommand.Parameters.AddWithValue("@Id", Id);
+        deleteCommand.ExecuteNonQuery();
+        Log.Write($"Question {Id} deleted");
+    }
 }
