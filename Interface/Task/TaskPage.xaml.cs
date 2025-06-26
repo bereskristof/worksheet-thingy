@@ -63,8 +63,8 @@ public partial class TaskPage
         var question = Questions.Add();
         _currentQuestion = question;
         _currentQuestion?.Store();
-        TaskList.ScrollIntoView(TaskList.Items[^1]!);
         ChangeSelectedTask(question);
+        TaskList.ScrollIntoView(TaskList.Items[^1]!);
     }
 
     private void ButtonDelete_OnClick(object sender, RoutedEventArgs e)

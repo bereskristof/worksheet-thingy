@@ -14,6 +14,12 @@ public partial class PasswordPage
         InitializeComponent();
         _backgroundLoader.DoWork += BackgroundLoader_DoWork;
         _backgroundLoader.RunWorkerCompleted += BackgroundLoader_RunWorkerCompleted;
+        Loaded += Page_Loaded;
+    }
+
+    private void Page_Loaded(object sender, RoutedEventArgs e)
+    {
+        MainPasswordBox.Focus();
     }
 
     private void MainPasswordBox_OnPasswordChanged(object sender, RoutedEventArgs e)
