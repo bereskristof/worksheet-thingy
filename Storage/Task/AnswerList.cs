@@ -22,4 +22,10 @@ public class AnswerList : ObservableCollection<Answer>
         base.Add(answer);
         return answer;
     }
+
+    public new void Remove(Answer answer)
+    {
+        base.Remove(answer);
+        answer.Delete();
+    }
 }

@@ -37,7 +37,7 @@
         <value>Add Task</value>
     </data>
     <data name="Task_Question" xml:space="preserve">
-        <value>Question:</value>
+        <value>Question</value>
     </data>
     <data name="Task_Score" xml:space="preserve">
         <value>Score:</value>
@@ -50,5 +50,17 @@
     </data>
     <data name="Task_Delete" xml:space="preserve">
         <value>Delete Selected Task</value>
+    </data>
+    <data name="Task_DeleteAnswer" xml:space="preserve">
+        <value>Delete Selected Answer</value>
+    </data>
+    <data name="Task_AnswerCorrect" xml:space="preserve">
+        <value>Correct</value>
+    </data>
+    <data name="Task_Answer" xml:space="preserve">
+        <value>Answer</value>
+    </data>
+    <data name="Task_QuestionLabel" xml:space="preserve">
+        <value>Question:</value>
     </data>
 </root>

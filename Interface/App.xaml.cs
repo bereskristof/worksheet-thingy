@@ -9,6 +9,9 @@ public partial class App
         Storage.Manager.OpenDatabase("demo.wstkdb");
         Storage.Encryption.TryPassword("DefaultPassword");
         base.OnStartup(e);
+#if DEBUG
+        SetDebugLocale();
+#endif
     }
 
     protected override void OnExit(ExitEventArgs e)
@@ -16,4 +19,15 @@ public partial class App
         base.OnExit(e);
         Storage.Manager.CloseDatabase();
     }
+
+#if DEBUG
+    private static void SetDebugLocale()
+    {
+        string debugCulture = Environment.GetEnvironmentVariable("WPF_DEBUG_CULTURE") ?? "en-US";
+        Console.WriteLine(debugCulture);
+        var culture = new System.Globalization.CultureInfo(debugCulture);
+        Thread.CurrentThread.CurrentCulture = culture;
+        Thread.CurrentThread.CurrentUICulture = culture;
+    }
+#endif
 }

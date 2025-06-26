@@ -43,4 +43,13 @@ public class Answer : INotifyPropertyChanged
         updateCommand.ExecuteNonQuery();
         Log.Write($"Answer {Id} stored");
     }
+
+    public void Delete()
+    {
+        var deleteCommand = Manager.Connection.CreateCommand();
+        deleteCommand.CommandText = "DELETE FROM Answers WHERE Id = @Id";
+        deleteCommand.Parameters.AddWithValue("@Id", Id);
+        deleteCommand.ExecuteNonQuery();
+        Log.Write($"Answer {Id} deleted");
+    }
 }

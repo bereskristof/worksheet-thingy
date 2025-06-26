@@ -69,4 +69,11 @@ public partial class TaskPage
     {
         _currentQuestion?.Answers.Add(_currentQuestion);
     }
+
+    private void ButtonDeleteAnswer_OnClick(object sender, RoutedEventArgs e) // TODO: Impl.
+    {
+        if (AnswerListPanel.SelectedItem is not Answer answer)
+            return;
+        _currentQuestion?.Answers.Remove(answer);
+    }
 }

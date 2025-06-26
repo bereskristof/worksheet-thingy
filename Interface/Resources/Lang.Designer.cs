@@ -123,6 +123,24 @@ namespace Interface.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Answer.
+        /// </summary>
+        public static string Task_Answer {
+            get {
+                return ResourceManager.GetString("Task_Answer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Correct.
+        /// </summary>
+        public static string Task_AnswerCorrect {
+            get {
+                return ResourceManager.GetString("Task_AnswerCorrect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Answers:.
         /// </summary>
         public static string Task_Answers {
@@ -141,11 +159,29 @@ namespace Interface.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question:.
+        ///   Looks up a localized string similar to Delete Selected Answer.
+        /// </summary>
+        public static string Task_DeleteAnswer {
+            get {
+                return ResourceManager.GetString("Task_DeleteAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question.
         /// </summary>
         public static string Task_Question {
             get {
                 return ResourceManager.GetString("Task_Question", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question:.
+        /// </summary>
+        public static string Task_QuestionLabel {
+            get {
+                return ResourceManager.GetString("Task_QuestionLabel", resourceCulture);
             }
         }
         
