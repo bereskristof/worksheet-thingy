@@ -30,7 +30,7 @@
         <value>Feladat hozzáadása</value>
     </data>
     <data name="Task_AddAnswer" xml:space="preserve">
-        <value>Kérdés hozzáadása</value>
+        <value>Válasz hozzáadása</value>
     </data>
     <data name="Task_Question" xml:space="preserve">
         <value>Kérdés</value>
@@ -55,5 +55,14 @@
     </data>
     <data name="Task_QuestionLabel" xml:space="preserve">
         <value>Kérdés:</value>
+    </data>
+    <data name="Password_Label" xml:space="preserve">
+        <value>Jelszó:</value>
+    </data>
+    <data name="Password_Failure" xml:space="preserve">
+        <value>A jelszó hibás.</value>
+    </data>
+    <data name="Password_Enter" xml:space="preserve">
+        <value>Tovább</value>
     </data>
 </root>

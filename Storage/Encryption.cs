@@ -47,6 +47,7 @@ public static class Encryption
         storeCommand.ExecuteNonQuery();
     }
 
+    /// WARNING: Sets the encryption key as a side effect, not just checks for validity.
     public static bool TryPassword(string password)
     {
         byte[] salt = [];

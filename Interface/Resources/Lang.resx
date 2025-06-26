@@ -63,4 +63,13 @@
     <data name="Task_QuestionLabel" xml:space="preserve">
         <value>Question:</value>
     </data>
+    <data name="Password_Label" xml:space="preserve">
+        <value>Enter password:</value>
+    </data>
+    <data name="Password_Failure" xml:space="preserve">
+        <value>Password is incorrect.</value>
+    </data>
+    <data name="Password_Enter" xml:space="preserve">
+        <value>Enter</value>
+    </data>
 </root>

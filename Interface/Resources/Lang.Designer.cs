@@ -105,6 +105,33 @@ namespace Interface.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter.
+        /// </summary>
+        public static string Password_Enter {
+            get {
+                return ResourceManager.GetString("Password_Enter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password is incorrect..
+        /// </summary>
+        public static string Password_Failure {
+            get {
+                return ResourceManager.GetString("Password_Failure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter password:.
+        /// </summary>
+        public static string Password_Label {
+            get {
+                return ResourceManager.GetString("Password_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Task.
         /// </summary>
         public static string Task_Add {

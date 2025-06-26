@@ -4,25 +4,20 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:res="clr-namespace:Interface.Resources"
-        xmlns:task="clr-namespace:Interface.Task"
+        xmlns:password="clr-namespace:Interface.Password"
         mc:Ignorable="d"
         Closing="MainWindow_OnClosing"
         Title="MainWindow" Height="600" Width="800">
-    <DockPanel>
-        <Menu DockPanel.Dock="Top">
-            <MenuItem Header="{x:Static res:Lang.Menu_File}">
-                <MenuItem Header="{x:Static res:Lang.Menu_New}"/>
-                <MenuItem Header="{x:Static res:Lang.Menu_Open}"/>
-                <MenuItem Header="{x:Static res:Lang.Menu_Exit}"/>
-            </MenuItem>
-        </Menu>
-        <TabControl Margin="2,2,2,2">
-            <TabItem Header="{x:Static res:Lang.MenuTabs_Tasks}">
-                <task:TaskPage x:Name="TaskPage"/>
-            </TabItem>
-            <TabItem Header="Sheets"/>
-            <TabItem Header="Export" IsEnabled="False"/>
-            <TabItem Header="Correct" IsEnabled="False"/>
-        </TabControl>
+    <DockPanel UseLayoutRounding="True">
+        <!-- <Menu DockPanel.Dock="Top"> -->
+        <!--     <MenuItem Header="{x:Static res:Lang.Menu_File}"> -->
+        <!--         <MenuItem Header="{x:Static res:Lang.Menu_New}"/> -->
+        <!--         <MenuItem Header="{x:Static res:Lang.Menu_Open}"/> -->
+        <!--         <MenuItem Header="{x:Static res:Lang.Menu_Exit}"/> -->
+        <!--     </MenuItem> -->
+        <!-- </Menu> -->
+        <Grid Name="Main">
+            <password:PasswordPage x:Name="PasswordEntry" PasswordUnlocked="PasswordEntry_OnPasswordUnlocked"/>
+        </Grid>
     </DockPanel>
 </Window>
