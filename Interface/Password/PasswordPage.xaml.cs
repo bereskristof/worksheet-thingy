@@ -7,7 +7,7 @@ public partial class PasswordPage
 {
     public event EventHandler? PasswordUnlocked;
     private readonly BackgroundWorker _backgroundLoader = new();
-    private bool _lastUnlockResult = false;
+    private bool _lastUnlockResult;
     
     public PasswordPage()
     {
@@ -30,9 +30,6 @@ public partial class PasswordPage
     private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
     {
         string password = MainPasswordBox.Password;
-#if DEBUG
-        if (password == "") password = "DefaultPassword";
-#endif
         LoadingBar.Visibility = Visibility.Visible;
         _backgroundLoader.RunWorkerAsync(password);
     }
@@ -50,5 +47,19 @@ public partial class PasswordPage
             PasswordUnlocked?.Invoke(this, EventArgs.Empty);
         else
             IncorrectLabel.Visibility = Visibility.Visible;
+    }
+
+    private void NewButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        PasswordMode.Visibility = Visibility.Collapsed;
+        ImportMode.Visibility = Visibility.Collapsed;
+        CreateMode.Visibility = Visibility.Visible;
+    }
+
+    private void ImportButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        PasswordMode.Visibility = Visibility.Collapsed;
+        ImportMode.Visibility = Visibility.Visible;
+        CreateMode.Visibility = Visibility.Collapsed;
     }
 }

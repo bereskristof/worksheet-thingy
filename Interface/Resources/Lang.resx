@@ -72,14 +72,14 @@
     <data name="Password_Enter" xml:space="preserve">
         <value>Enter</value>
     </data>
-    <data name="Setup_Title" xml:space="preserve">
-        <value>Setup a new Database</value>
+    <data name="Setup_Existing" xml:space="preserve">
+        <value>Import</value>
     </data>
     <data name="Setup_File" xml:space="preserve">
-        <value>Path to the File:</value>
+        <value>Path:</value>
     </data>
     <data name="Setup_Password" xml:space="preserve">
-        <value>Password for the File:</value>
+        <value>Password:</value>
     </data>
     <data name="Setup_Confirm" xml:space="preserve">
         <value>Confirm</value>
@@ -87,13 +87,37 @@
     <data name="Task_Image" xml:space="preserve">
         <value>Insert Image</value>
     </data>
-    <data name="Image_Title" xml:space="preserve">
-        <value />
-    </data>
     <data name="Task_ImageLabel" xml:space="preserve">
         <value>Attached Image</value>
     </data>
     <data name="Task_ImageDelete" xml:space="preserve">
         <value>Delete Image</value>
+    </data>
+    <data name="Password_Change" xml:space="preserve">
+        <value>Import</value>
+    </data>
+    <data name="Password_New" xml:space="preserve">
+        <value>New</value>
+    </data>
+    <data name="Setup_Title" xml:space="preserve">
+        <value>Create a new Database</value>
+    </data>
+    <data name="Setup_Browse" xml:space="preserve">
+        <value>Browse</value>
+    </data>
+    <data name="Import_Title" xml:space="preserve">
+        <value>Import an existing Database</value>
+    </data>
+    <data name="Import_Confirm" xml:space="preserve">
+        <value>Confirm</value>
+    </data>
+    <data name="Import_New" xml:space="preserve">
+        <value>New</value>
+    </data>
+    <data name="Import_File" xml:space="preserve">
+        <value>Path:</value>
+    </data>
+    <data name="Import_Browse" xml:space="preserve">
+        <value>Browse</value>
     </data>
 </root>

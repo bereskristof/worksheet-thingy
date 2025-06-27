@@ -66,13 +66,13 @@
         <value>Tovább</value>
     </data>
     <data name="Setup_File" xml:space="preserve">
-        <value>Útvonal a file-hoz:</value>
+        <value>Útvonal:</value>
     </data>
     <data name="Setup_Password" xml:space="preserve">
-        <value>Jelszó a file-nak:</value>
+        <value>Jelszó:</value>
     </data>
-    <data name="Setup_Title" xml:space="preserve">
-        <value>Új adatbázis létrehozása</value>
+    <data name="Setup_Existing" xml:space="preserve">
+        <value>Importálás</value>
     </data>
     <data name="Setup_Confirm" xml:space="preserve">
         <value>Elfogadás</value>
@@ -85,5 +85,32 @@
     </data>
     <data name="Task_ImageDelete" xml:space="preserve">
         <value>Kép törlése</value>
+    </data>
+    <data name="Password_Change" xml:space="preserve">
+        <value>Importálás</value>
+    </data>
+    <data name="Password_New" xml:space="preserve">
+        <value>Új</value>
+    </data>
+    <data name="Setup_Title" xml:space="preserve">
+        <value>Új adatbázis létrehozása</value>
+    </data>
+    <data name="Setup_Browse" xml:space="preserve">
+        <value>Tallózás</value>
+    </data>
+    <data name="Import_File" xml:space="preserve">
+        <value>Útvonal:</value>
+    </data>
+    <data name="Import_Confirm" xml:space="preserve">
+        <value>Elfogadás</value>
+    </data>
+    <data name="Import_New" xml:space="preserve">
+        <value>Új</value>
+    </data>
+    <data name="Import_Title" xml:space="preserve">
+        <value>Meglévő adatbázis importálása</value>
+    </data>
+    <data name="Import_Browse" xml:space="preserve">
+        <value>Tallózás</value>
     </data>
 </root>

@@ -16,16 +16,39 @@ public static class Manager
         }
         private set => _connection = value;
     }
-
-    public static void OpenDatabase(string filename)
+    
+    public static void CreateDatabase(string filename, string password)
     {
         var connectionString = $"Data Source={filename}";
         Connection = new SqliteConnection(connectionString);
         Connection.Open();
+        Tables.Init(Connection);
+        IdManager.Init();
+        
+        Encryption.SavePassword(password);
+        Encryption.TryPassword(password);
+        
+        Log.Write("Created database");
+    }
+
+    /// Returns true if the database was opened successfully, false otherwise.
+    public static bool OpenDatabase(string filename)
+    {
+        var connectionString = $"Data Source={filename}; Mode=ReadWrite";
+        Connection = new SqliteConnection(connectionString);
+        try
+        {
+            Connection.Open();
+        }
+        catch (SqliteException e)
+        {
+            return false;
+        }
 
         Tables.Init(Connection);
         IdManager.Init();
         Log.Write("Opened database");
+        return true;
     }
 
     public static void CloseDatabase()

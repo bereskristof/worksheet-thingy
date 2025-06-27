@@ -60,11 +60,47 @@ namespace Interface.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Browse.
         /// </summary>
-        public static string Image_Title {
+        public static string Import_Browse {
             get {
-                return ResourceManager.GetString("Image_Title", resourceCulture);
+                return ResourceManager.GetString("Import_Browse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm.
+        /// </summary>
+        public static string Import_Confirm {
+            get {
+                return ResourceManager.GetString("Import_Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Path:.
+        /// </summary>
+        public static string Import_File {
+            get {
+                return ResourceManager.GetString("Import_File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New.
+        /// </summary>
+        public static string Import_New {
+            get {
+                return ResourceManager.GetString("Import_New", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import an existing Database.
+        /// </summary>
+        public static string Import_Title {
+            get {
+                return ResourceManager.GetString("Import_Title", resourceCulture);
             }
         }
         
@@ -114,6 +150,15 @@ namespace Interface.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import.
+        /// </summary>
+        public static string Password_Change {
+            get {
+                return ResourceManager.GetString("Password_Change", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter.
         /// </summary>
         public static string Password_Enter {
@@ -141,6 +186,24 @@ namespace Interface.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New.
+        /// </summary>
+        public static string Password_New {
+            get {
+                return ResourceManager.GetString("Password_New", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Browse.
+        /// </summary>
+        public static string Setup_Browse {
+            get {
+                return ResourceManager.GetString("Setup_Browse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm.
         /// </summary>
         public static string Setup_Confirm {
@@ -150,7 +213,16 @@ namespace Interface.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Path to the File:.
+        ///   Looks up a localized string similar to Import.
+        /// </summary>
+        public static string Setup_Existing {
+            get {
+                return ResourceManager.GetString("Setup_Existing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Path:.
         /// </summary>
         public static string Setup_File {
             get {
@@ -159,7 +231,7 @@ namespace Interface.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password for the File:.
+        ///   Looks up a localized string similar to Password:.
         /// </summary>
         public static string Setup_Password {
             get {
@@ -168,7 +240,7 @@ namespace Interface.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Setup a new Database.
+        ///   Looks up a localized string similar to Create a new Database.
         /// </summary>
         public static string Setup_Title {
             get {
