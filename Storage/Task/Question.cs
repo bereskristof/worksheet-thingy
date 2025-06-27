@@ -34,8 +34,6 @@ public class Question : INotifyPropertyChanged
         }
         private set => _answers = value;
     }
-    
-    // public Image Image { get; private set; }
 
     private Question(long id, string text, int points)
     {
@@ -80,5 +78,51 @@ public class Question : INotifyPropertyChanged
         deleteCommand.Parameters.AddWithValue("@Id", Id);
         deleteCommand.ExecuteNonQuery();
         Log.Write($"Question {Id} deleted");
+    }
+
+    public MemoryStream? FetchImageStream()
+    {
+        var fetchCommand = Manager.Connection.CreateCommand();
+        fetchCommand.CommandText = $"SELECT Image FROM Images WHERE QuestionId = @QuestionId";
+        fetchCommand.Parameters.AddWithValue("@QuestionId", Id);
+        using var reader = fetchCommand.ExecuteReader();
+        if (!reader.Read()) return null;
+        using var dataStream = reader.GetStream(0);
+        var memoryStream = new MemoryStream();
+        dataStream.CopyTo(memoryStream);
+        var decryptedData = Encryption.DecryptBlob(memoryStream.ToArray());
+        var cleanMemoryStream = new MemoryStream(decryptedData);
+        return cleanMemoryStream;
+    }
+
+    public void StoreImageFromPath(string path)
+    {
+        byte[] data;
+        try
+        {
+            data = File.ReadAllBytes(path);
+        }
+        catch
+        {
+            Log.Write($"Failed to add image from path: {path}");
+            return;
+        }
+        byte[] encryptedData = Encryption.EncryptBlob(data);
+        var storeCommand = Manager.Connection.CreateCommand();
+        storeCommand.CommandText = "INSERT INTO Images (QuestionId, Image) VALUES (@QuestionId, @Image)";
+        storeCommand.Parameters.AddWithValue("@QuestionId", Id);
+        storeCommand.Parameters.AddWithValue("@Image", encryptedData);
+        DeleteImage();
+        storeCommand.ExecuteNonQuery();
+        Log.Write($"Image from path {path} added to question {Id}");
+    }
+    
+    public void DeleteImage()
+    {
+        var deleteCommand = Manager.Connection.CreateCommand();
+        deleteCommand.CommandText = "DELETE FROM Images WHERE QuestionId = @QuestionId";
+        deleteCommand.Parameters.AddWithValue("@QuestionId", Id);
+        deleteCommand.ExecuteNonQuery();
+        Log.Write($"Image for question {Id} deleted");
     }
 }

@@ -60,6 +60,15 @@ namespace Interface.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string Image_Title {
+            get {
+                return ResourceManager.GetString("Image_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exit.
         /// </summary>
         public static string Menu_Exit {
@@ -227,6 +236,24 @@ namespace Interface.Resources {
         public static string Task_DeleteAnswer {
             get {
                 return ResourceManager.GetString("Task_DeleteAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert Image.
+        /// </summary>
+        public static string Task_Image {
+            get {
+                return ResourceManager.GetString("Task_Image", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attached Image.
+        /// </summary>
+        public static string Task_ImageLabel {
+            get {
+                return ResourceManager.GetString("Task_ImageLabel", resourceCulture);
             }
         }
         

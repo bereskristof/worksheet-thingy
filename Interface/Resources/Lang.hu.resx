@@ -77,4 +77,10 @@
     <data name="Setup_Confirm" xml:space="preserve">
         <value>Elfogadás</value>
     </data>
+    <data name="Task_Image" xml:space="preserve">
+        <value>Kép beszúrása</value>
+    </data>
+    <data name="Task_ImageLabel" xml:space="preserve">
+        <value>Csatolt kép</value>
+    </data>
 </root>

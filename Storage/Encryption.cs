@@ -122,6 +122,24 @@ public static class Encryption
         return aesAlg.IV.Concat(encrypted).ToArray();
     }
     
+    public static byte[] EncryptBlob(byte[] blob)
+    {
+        using Aes aesAlg = Aes.Create();
+        aesAlg.Key = _key;
+
+        ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
+
+        using MemoryStream msEncrypt = new MemoryStream();
+        using CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write);
+        BinaryWriter bwEncrypt = new BinaryWriter(csEncrypt);
+        bwEncrypt.Write(blob);
+        bwEncrypt.Close();
+
+        var encrypted = msEncrypt.ToArray();
+
+        return aesAlg.IV.Concat(encrypted).ToArray();
+    }
+    
     public static string EncryptBase64(string plainText) 
         => Convert.ToBase64String(Encrypt(plainText));
 
@@ -140,6 +158,24 @@ public static class Encryption
         
         var plaintext = srDecrypt.ReadToEnd();
         return plaintext;
+    }
+
+    public static byte[] DecryptBlob(byte[] cipherBlob)
+    {
+        const int offset = 16;
+        using Aes aesAlg = Aes.Create();
+        aesAlg.Key = _key;
+        aesAlg.IV = cipherBlob.Take(offset).ToArray();
+
+        ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
+
+        using MemoryStream msDecrypt = new MemoryStream(cipherBlob.Take(Range.StartAt(offset)).ToArray());
+        using CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read);
+        using BinaryReader brDecrypt = new BinaryReader(csDecrypt);
+        
+        int remaining = (int)(msDecrypt.Length - msDecrypt.Position);
+        byte[] decrypted = brDecrypt.ReadBytes(remaining);
+        return decrypted;
     }
     
     public static string DecryptBase64(string cipherText)
