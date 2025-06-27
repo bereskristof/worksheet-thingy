@@ -83,4 +83,7 @@
     <data name="Task_ImageLabel" xml:space="preserve">
         <value>Csatolt kép</value>
     </data>
+    <data name="Task_ImageDelete" xml:space="preserve">
+        <value>Kép törlése</value>
+    </data>
 </root>

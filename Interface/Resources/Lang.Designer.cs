@@ -249,6 +249,15 @@ namespace Interface.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete Image.
+        /// </summary>
+        public static string Task_ImageDelete {
+            get {
+                return ResourceManager.GetString("Task_ImageDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Attached Image.
         /// </summary>
         public static string Task_ImageLabel {

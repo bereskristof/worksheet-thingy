@@ -93,4 +93,7 @@
     <data name="Task_ImageLabel" xml:space="preserve">
         <value>Attached Image</value>
     </data>
+    <data name="Task_ImageDelete" xml:space="preserve">
+        <value>Delete Image</value>
+    </data>
 </root>

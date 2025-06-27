@@ -69,6 +69,7 @@ public partial class TaskPage
         if (_currentQuestion == null) return;
         ImagePanel.Visibility = Visibility.Collapsed;
         ImageProgressBar.Visibility = Visibility.Visible;
+        ImageButton.IsEnabled = false;
         BackgroundWorker asyncImageLoader = new();
         asyncImageLoader.DoWork += BackgroundLoader_DoWork;
         asyncImageLoader.RunWorkerCompleted += BackgroundLoader_RunWorkerCompleted;
@@ -92,6 +93,7 @@ public partial class TaskPage
         {
             ImagePreview.Source = null;
             ImagePanel.Visibility = Visibility.Collapsed;
+            ImageButton.IsEnabled = true;
             return;
         }
         ImagePreview.Source = BitmapFrame.Create(result.Item2, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
@@ -102,7 +104,7 @@ public partial class TaskPage
     {
         QuestionBox.IsEnabled = true;
         ScoreBox.IsEnabled = true;
-        ImageButton.IsEnabled = true;
+        // ImageButton.IsEnabled = true; // Handled elsewhere
         AnswerAddButton.IsEnabled = true;
         AnswerDeleteButton.IsEnabled = true;
     }
@@ -120,6 +122,12 @@ public partial class TaskPage
     {
         if (_currentQuestion == null) return; // Does nothing if no question is selected
         Questions.Remove(_currentQuestion);
+    }
+
+    private void ButtonDeleteImage_OnClick(object sender, RoutedEventArgs e)
+    {
+        _currentQuestion?.DeleteImage();
+        UpdateImagePreview();
     }
 
     private void ButtonAddAnswer_OnClick(object sender, RoutedEventArgs e)
