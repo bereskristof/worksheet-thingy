@@ -18,18 +18,6 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="Menu_File" xml:space="preserve">
-        <value>File</value>
-    </data>
-    <data name="Menu_New" xml:space="preserve">
-        <value>New</value>
-    </data>
-    <data name="Menu_Open" xml:space="preserve">
-        <value>Open...</value>
-    </data>
-    <data name="Menu_Exit" xml:space="preserve">
-        <value>Exit</value>
-    </data>
     <data name="MenuTabs_Tasks" xml:space="preserve">
         <value>Tasks</value>
     </data>

@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Windows;
 using Microsoft.Win32;
@@ -17,6 +18,9 @@ public partial class PasswordPage
         _backgroundLoader.DoWork += BackgroundLoader_DoWork;
         _backgroundLoader.RunWorkerCompleted += BackgroundLoader_RunWorkerCompleted;
         Loaded += Page_Loaded;
+        LanguageComboBox.Text = Equals(Thread.CurrentThread.CurrentCulture, CultureInfo.GetCultureInfo("hu-HU")) ? "Magyar" : "English";
+        LanguageComboBoxEn.Selected += LanguageEnglish_Selected;
+        LanguageComboBoxHu.Selected += LanguageHungarian_Selected;
     }
     
     // Main password page methods
@@ -191,5 +195,20 @@ public partial class PasswordPage
         RegistryKey? path = Registry.CurrentUser.OpenSubKey(Interface.Resources.RegistryNames.KeyPath);
         string defaultPath = path?.GetValue(Interface.Resources.RegistryNames.ValueDbPath) as string ?? string.Empty;
         return defaultPath;
+    }
+
+    private void LanguageEnglish_Selected(object sender, RoutedEventArgs e) 
+        => ChangeLanguage("en-US");
+
+    private void LanguageHungarian_Selected(object sender, RoutedEventArgs e) 
+        => ChangeLanguage("hu-HU");
+
+    private static void ChangeLanguage(string newCulture)
+    {
+        var key = Registry.CurrentUser.CreateSubKey(Interface.Resources.RegistryNames.KeyPath, RegistryKeyPermissionCheck.ReadWriteSubTree);
+        key.SetValue(Interface.Resources.RegistryNames.ValueLocale, newCulture);
+        
+        System.Diagnostics.Process.Start(Environment.ProcessPath ?? throw new InvalidOperationException());
+        Application.Current.Shutdown();
     }
 }

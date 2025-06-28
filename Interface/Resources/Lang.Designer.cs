@@ -114,42 +114,6 @@ namespace Interface.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Exit.
-        /// </summary>
-        public static string Menu_Exit {
-            get {
-                return ResourceManager.GetString("Menu_Exit", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to File.
-        /// </summary>
-        public static string Menu_File {
-            get {
-                return ResourceManager.GetString("Menu_File", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to New.
-        /// </summary>
-        public static string Menu_New {
-            get {
-                return ResourceManager.GetString("Menu_New", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Open....
-        /// </summary>
-        public static string Menu_Open {
-            get {
-                return ResourceManager.GetString("Menu_Open", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Tasks.
         /// </summary>
         public static string MenuTabs_Tasks {

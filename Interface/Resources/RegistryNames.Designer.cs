@@ -76,5 +76,14 @@ namespace Interface.Resources {
                 return ResourceManager.GetString("ValueDbPath", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ProgramLocale.
+        /// </summary>
+        internal static string ValueLocale {
+            get {
+                return ResourceManager.GetString("ValueLocale", resourceCulture);
+            }
+        }
     }
 }

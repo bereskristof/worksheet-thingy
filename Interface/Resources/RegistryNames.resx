@@ -24,4 +24,7 @@
     <data name="ValueDbPath" xml:space="preserve">
         <value>DatabasePath</value>
     </data>
+    <data name="ValueLocale" xml:space="preserve">
+        <value>ProgramLocale</value>
+    </data>
 </root>

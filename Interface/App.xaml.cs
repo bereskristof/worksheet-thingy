@@ -1,5 +1,5 @@
-﻿using System.Windows;
-using Interface.Password;
+﻿using System.Globalization;
+using System.Windows;
 using Microsoft.Win32;
 
 namespace Interface;
@@ -9,9 +9,7 @@ public partial class App
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
-#if DEBUG
-        SetDebugLocale();
-#endif
+        SetLocale();
     }
 
     protected override void OnExit(ExitEventArgs e)
@@ -20,14 +18,14 @@ public partial class App
         Storage.Manager.CloseDatabase();
     }
 
-#if DEBUG
-    private static void SetDebugLocale()
+    private static void SetLocale()
     {
-        string debugCulture = Environment.GetEnvironmentVariable("WPF_DEBUG_CULTURE") ?? "en-US";
-        Console.WriteLine(debugCulture);
-        var culture = new System.Globalization.CultureInfo(debugCulture);
+        string systemCulture = CultureInfo.InstalledUICulture.ToString();
+        var key = Registry.CurrentUser.OpenSubKey(Interface.Resources.RegistryNames.KeyPath);
+        string targetCulture = key?.GetValue(Interface.Resources.RegistryNames.ValueLocale, systemCulture) as string ?? systemCulture;
+        Console.WriteLine(targetCulture);
+        var culture = new CultureInfo(targetCulture);
         Thread.CurrentThread.CurrentCulture = culture;
         Thread.CurrentThread.CurrentUICulture = culture;
     }
-#endif
 }
