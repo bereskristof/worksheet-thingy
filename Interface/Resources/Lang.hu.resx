@@ -113,4 +113,22 @@
     <data name="Import_Browse" xml:space="preserve">
         <value>Tallózás</value>
     </data>
+    <data name="PasswordResult_InvalidPath" xml:space="preserve">
+        <value>Az útvonal nem lehet üres.</value>
+    </data>
+    <data name="PasswordResult_ImportFailed" xml:space="preserve">
+        <value>Nem sikerült importálni az adatbázist, lehet az útvonal hibás.</value>
+    </data>
+    <data name="PasswordResult_ImportedSuccess" xml:space="preserve">
+        <value>Adatbázis sikeresen importálva.</value>
+    </data>
+    <data name="PasswordResult_CreatedSuccess" xml:space="preserve">
+        <value>Új adatbázis sikeresen létrehozva.</value>
+    </data>
+    <data name="Import_Back" xml:space="preserve">
+        <value>Belépés</value>
+    </data>
+    <data name="Setup_Back" xml:space="preserve">
+        <value>Belépés</value>
+    </data>
 </root>

@@ -1,5 +1,6 @@
-﻿using System.IO;
-using System.Windows;
+﻿using System.Windows;
+using Interface.Password;
+using Microsoft.Win32;
 
 namespace Interface;
 
@@ -7,9 +8,6 @@ public partial class App
 {
     protected override void OnStartup(StartupEventArgs e)
     {
-        bool result = Storage.Manager.OpenDatabase(Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "test.db"));
-        Console.WriteLine(result);
-        // TODO: Propagate this to PasswordPage to swap to create mode if the database does not exist.
         base.OnStartup(e);
 #if DEBUG
         SetDebugLocale();

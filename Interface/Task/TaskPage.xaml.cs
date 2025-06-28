@@ -149,7 +149,7 @@ public partial class TaskPage
         UpdateImagePreview();
     }
     
-    private string GetLoadPath(string title)
+    private static string GetLoadPath(string title)
     {
         OpenFileDialog openDialog = new OpenFileDialog
         {

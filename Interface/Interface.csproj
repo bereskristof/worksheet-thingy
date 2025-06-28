@@ -16,6 +16,10 @@
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>Lang.Designer.cs</LastGenOutput>
       </EmbeddedResource>
+      <EmbeddedResource Update="Resources\RegistryNames.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RegistryNames.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
@@ -23,6 +27,11 @@
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>Lang.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\RegistryNames.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RegistryNames.resx</DependentUpon>
       </Compile>
     </ItemGroup>
 

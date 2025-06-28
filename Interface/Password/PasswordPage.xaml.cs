@@ -1,5 +1,7 @@
 using System.ComponentModel;
+using System.IO;
 using System.Windows;
+using Microsoft.Win32;
 
 namespace Interface.Password;
 
@@ -16,18 +18,16 @@ public partial class PasswordPage
         _backgroundLoader.RunWorkerCompleted += BackgroundLoader_RunWorkerCompleted;
         Loaded += Page_Loaded;
     }
+    
+    // Main password page methods
 
-    private void Page_Loaded(object sender, RoutedEventArgs e)
-    {
-        MainPasswordBox.Focus();
-    }
+    private void Page_Loaded(object sender, RoutedEventArgs e) 
+        => MainPasswordBox.Focus();
 
-    private void MainPasswordBox_OnPasswordChanged(object sender, RoutedEventArgs e)
-    {
-        IncorrectLabel.Visibility = Visibility.Hidden;
-    }
+    private void MainPasswordBox_OnPasswordChanged(object sender, RoutedEventArgs e) 
+        => IncorrectLabel.Visibility = Visibility.Hidden;
 
-    private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+    private void ButtonLoadDb_OnClick(object sender, RoutedEventArgs e)
     {
         string password = MainPasswordBox.Password;
         LoadingBar.Visibility = Visibility.Visible;
@@ -48,18 +48,136 @@ public partial class PasswordPage
         else
             IncorrectLabel.Visibility = Visibility.Visible;
     }
+    
+    // Page mode switching methods
 
     private void NewButton_OnClick(object sender, RoutedEventArgs e)
-    {
-        PasswordMode.Visibility = Visibility.Collapsed;
-        ImportMode.Visibility = Visibility.Collapsed;
-        CreateMode.Visibility = Visibility.Visible;
-    }
+        => SwapToNewMode();
 
-    private void ImportButton_OnClick(object sender, RoutedEventArgs e)
+    private void ImportButton_OnClick(object sender, RoutedEventArgs e) 
+        => SwapToImportMode();
+
+    private void PasswordButton_OnClick(object sender, RoutedEventArgs e)
+        => SwapToPasswordMode();
+    
+    public void SwapToImportMode()
     {
         PasswordMode.Visibility = Visibility.Collapsed;
         ImportMode.Visibility = Visibility.Visible;
         CreateMode.Visibility = Visibility.Collapsed;
+        AddFileBox.Text = GetDefaultDbPath();
+        BackButtonUpdateVisibility();
+    }
+    
+    private void SwapToPasswordMode()
+    {
+        PasswordMode.Visibility = Visibility.Visible;
+        ImportMode.Visibility = Visibility.Collapsed;
+        CreateMode.Visibility = Visibility.Collapsed;
+    }
+    
+    public void SwapToNewMode()
+    {
+        PasswordMode.Visibility = Visibility.Collapsed;
+        ImportMode.Visibility = Visibility.Collapsed;
+        CreateMode.Visibility = Visibility.Visible;
+        BackButtonUpdateVisibility();
+    }
+    
+    private void BackButtonUpdateVisibility()
+    {
+        ImportBackButton.Visibility = GetDefaultDbPath() == string.Empty ? Visibility.Collapsed : Visibility.Visible;
+        CreateBackButton.Visibility = GetDefaultDbPath() == string.Empty ? Visibility.Collapsed : Visibility.Visible;
+    }
+    
+    // Creation page methods
+
+    private void CreateBrowse_OnClick(object sender, RoutedEventArgs e)
+    {
+        string path = GetSavePath(Interface.Resources.Lang.Setup_Title);
+        if (!string.IsNullOrEmpty(path))
+            NewFileBox.Text = path;
+    }
+
+    private void CreateConfirm_OnClick(object sender, RoutedEventArgs e) 
+        => CreateNewDatabase(NewFileBox.Text.Trim(), NewPasswordBox.Password);
+    
+    private static string GetSavePath(string title)
+    {
+        SaveFileDialog saveDialog = new SaveFileDialog
+        {
+            Filter = "Database|*.db|All files|*.*",
+            FilterIndex = 1,
+            RestoreDirectory = true,
+            Title = title
+        };
+        
+        return saveDialog.ShowDialog() == true ? Path.GetFullPath(saveDialog.FileName) : string.Empty;
+    }
+
+    private void CreateNewDatabase(string filepath, string password)
+    {
+        if (string.IsNullOrEmpty(filepath))
+        {
+            MessageBox.Show(Interface.Resources.Lang.PasswordResult_InvalidPath, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
+
+        Storage.Manager.CreateDatabase(filepath, password);
+        MessageBox.Show(Interface.Resources.Lang.PasswordResult_CreatedSuccess, "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+        SwapToPasswordMode();
+    }
+    
+    // Import page methods
+    
+    private void ImportBrowse_OnClick(object sender, RoutedEventArgs e)
+    {
+        string path = GetLoadPath(Interface.Resources.Lang.Import_Title);
+        if (!string.IsNullOrEmpty(path))
+            AddFileBox.Text = path;
+    }
+    
+    private void ImportConfirm_OnClick(object sender, RoutedEventArgs e)
+    {
+        string filepath = AddFileBox.Text.Trim();
+        if (string.IsNullOrEmpty(filepath))
+        {
+            MessageBox.Show(Interface.Resources.Lang.PasswordResult_InvalidPath, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
+
+        if (Storage.Manager.OpenDatabase(filepath))
+        {
+            var key = Registry.CurrentUser.CreateSubKey(Interface.Resources.RegistryNames.KeyPath, RegistryKeyPermissionCheck.ReadWriteSubTree);
+            key.SetValue(Interface.Resources.RegistryNames.ValueDbPath, filepath);
+            MessageBox.Show(Interface.Resources.Lang.PasswordResult_ImportedSuccess, "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            SwapToPasswordMode();
+        }
+        else
+        {
+            MessageBox.Show(Interface.Resources.Lang.PasswordResult_ImportFailed, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+    
+    private static string GetLoadPath(string title)
+    {
+        OpenFileDialog openDialog = new OpenFileDialog
+        {
+            Filter = "Database|*.db|All files|*.*",
+            FilterIndex = 1,
+            RestoreDirectory = true,
+            Title = title
+        };
+        
+        return openDialog.ShowDialog() == true ? Path.GetFullPath(openDialog.FileName) : string.Empty;
+    }
+    
+    // Common methods
+    
+    private static string GetDefaultDbPath()
+    {
+        RegistryKey? path = Registry.CurrentUser.OpenSubKey(Interface.Resources.RegistryNames.KeyPath);
+        string defaultPath = path?.GetValue(Interface.Resources.RegistryNames.ValueDbPath) as string ?? string.Empty;
+        return defaultPath;
     }
 }

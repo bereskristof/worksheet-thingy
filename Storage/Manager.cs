@@ -22,6 +22,15 @@ public static class Manager
         var connectionString = $"Data Source={filename}";
         Connection = new SqliteConnection(connectionString);
         Connection.Open();
+        
+        var cleanCommand = Connection.CreateCommand();
+        cleanCommand.CommandText = "DROP TABLE IF EXISTS Questions; " +
+                                   "DROP TABLE IF EXISTS Answers; " +
+                                   "DROP TABLE IF EXISTS Images; " +
+                                   "DROP TABLE IF EXISTS Security;";
+        cleanCommand.ExecuteNonQuery();
+        cleanCommand.Dispose();
+        
         Tables.Init(Connection);
         IdManager.Init();
         

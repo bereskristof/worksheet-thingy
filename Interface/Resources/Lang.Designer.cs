@@ -60,6 +60,15 @@ namespace Interface.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Login.
+        /// </summary>
+        public static string Import_Back {
+            get {
+                return ResourceManager.GetString("Import_Back", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Browse.
         /// </summary>
         public static string Import_Browse {
@@ -191,6 +200,51 @@ namespace Interface.Resources {
         public static string Password_New {
             get {
                 return ResourceManager.GetString("Password_New", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New database created successfully..
+        /// </summary>
+        public static string PasswordResult_CreatedSuccess {
+            get {
+                return ResourceManager.GetString("PasswordResult_CreatedSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Database imported successfully..
+        /// </summary>
+        public static string PasswordResult_ImportedSuccess {
+            get {
+                return ResourceManager.GetString("PasswordResult_ImportedSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to import database, maybe the path is invalid?.
+        /// </summary>
+        public static string PasswordResult_ImportFailed {
+            get {
+                return ResourceManager.GetString("PasswordResult_ImportFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The path may not be empty..
+        /// </summary>
+        public static string PasswordResult_InvalidPath {
+            get {
+                return ResourceManager.GetString("PasswordResult_InvalidPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login.
+        /// </summary>
+        public static string Setup_Back {
+            get {
+                return ResourceManager.GetString("Setup_Back", resourceCulture);
             }
         }
         
