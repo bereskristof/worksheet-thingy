@@ -91,6 +91,10 @@ public static class Encryption
         {
             return false;
         }
+        catch (FormatException)
+        {
+            return false;
+        }
     }
 
     // private static bool ValidateKey(byte[] )
