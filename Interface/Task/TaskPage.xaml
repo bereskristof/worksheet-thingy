@@ -66,6 +66,9 @@
                                 <Setter Property="BorderThickness" Value="1" />
                                 <Setter Property="BorderBrush" Value="LightBlue" />
                             </Trigger>
+                            <DataTrigger Binding="{Binding FailedToDecrypt}" Value="True">
+                                <Setter Property="Foreground" Value="Brown"/>
+                            </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </DataGrid.CellStyle>
@@ -177,6 +180,9 @@
                                     <Setter Property="BorderThickness" Value="1" />
                                     <Setter Property="BorderBrush" Value="{x:Static SystemColors.HighlightBrush}" />
                                 </Trigger>
+                                <DataTrigger Binding="{Binding FailedToDecrypt}" Value="True">
+                                    <Setter Property="Foreground" Value="Brown"/>
+                                </DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </DataGrid.CellStyle>

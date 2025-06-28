@@ -13,8 +13,10 @@ public class Answer : INotifyPropertyChanged
     public bool Correct { get; set; }
     
     private readonly Question _question;
+    
+    public bool FailedToDecrypt { get; private set; }
 
-    internal static Answer Load(Question question, long id, string text, bool correct) => new(question, id, text, correct);
+    internal static Answer Load(Question question, long id, string text, bool correct, bool corrupted) => new(question, id, text, correct, corrupted);
 
     internal static Answer New(Question question)
     {
@@ -24,15 +26,16 @@ public class Answer : INotifyPropertyChanged
         createCommand.Parameters.AddWithValue("Id", newId);
         createCommand.Parameters.AddWithValue("@QuestionId", question.Id);
         createCommand.ExecuteScalar();
-        return new Answer(question, newId, "", false);
+        return new Answer(question, newId, "", false, false);
     }
 
-    private Answer(Question question, long id, string text, bool correct)
+    private Answer(Question question, long id, string text, bool correct, bool corrupted)
     {
         _question = question;
         Id = id;
         Text = text;
         Correct = correct;
+        FailedToDecrypt = corrupted;
     }
 
     public void Store()
@@ -46,6 +49,7 @@ public class Answer : INotifyPropertyChanged
         updateCommand.Parameters.AddWithValue("@Id", Id);
         updateCommand.ExecuteNonQuery();
         Log.Write($"Answer {Id} stored");
+        FailedToDecrypt = false;
     }
 
     public void Delete()

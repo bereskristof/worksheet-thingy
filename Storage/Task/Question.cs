@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Security.Cryptography;
 
 namespace Storage.Task;
 
@@ -23,6 +24,8 @@ public class Question : INotifyPropertyChanged
     }
     
     public int Points { get; set; }
+    
+    public bool FailedToDecrypt { get; private set; }
 
     public AnswerList Answers
     {
@@ -44,7 +47,19 @@ public class Question : INotifyPropertyChanged
 
     internal static Question Load(long id, string text, int points)
     {
-        var question = new Question(id, Encryption.DecryptBase64(text), points);
+        string decryptedText;
+        bool corrupted = false;
+        try
+        {
+            decryptedText = Encryption.DecryptBase64(text);
+        }
+        catch (Exception e) when (e is CryptographicException or FormatException)
+        {
+            decryptedText = "[DAMAGED] " + text;
+            corrupted = true;
+        }
+        var question = new Question(id, decryptedText, points);
+        if (corrupted) question.FailedToDecrypt = true;
         return question;
     }
 
@@ -69,6 +84,7 @@ public class Question : INotifyPropertyChanged
         updateCommand.ExecuteNonQuery();
         foreach (var answer in Answers) answer.Store();
         Log.Write($"Question {Id} stored");
+        FailedToDecrypt = false;
     }
 
     public void Delete()

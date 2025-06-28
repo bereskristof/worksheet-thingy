@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Security.Cryptography;
 
 namespace Storage.Task;
 
@@ -12,10 +13,25 @@ public class AnswerList : ObservableCollection<Answer>
         var reader = queryCommand.ExecuteReader();
         while (reader.Read())
         {
-            Add(Answer.Load(question, reader.GetInt64(0), Encryption.DecryptBase64(reader.GetString(1)), reader.GetBoolean(2)));
+            GetEncrypted(reader.GetString(1), out string text, out var corrupted);
+            var answer = Answer.Load(question, reader.GetInt64(0), text, reader.GetBoolean(2), corrupted);
+            Add(answer);
         }
     }
 
+    private void GetEncrypted(string cipherText, out string decryptedText, out bool corrupted)
+    {
+        corrupted = false;
+        try
+        {
+            decryptedText = Encryption.DecryptBase64(cipherText);
+        }
+        catch (Exception e) when (e is CryptographicException or FormatException)
+        {
+            decryptedText = "[DAMAGED] " + cipherText;
+            corrupted = true;
+        }
+    }
     public Answer Add(Question question)
     {
         var answer = Answer.New(question);
