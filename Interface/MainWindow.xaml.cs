@@ -24,7 +24,7 @@ public partial class MainWindow
         }
         else // The Key was not empty, either the file was moved, or it no longer exists, or maybe the registry was tampered with
         {
-            MessageBox.Show("Database could no longer be found, please update the import path.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(Interface.Resources.Lang.PasswordResult_DefaultFileMissing, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             ClearDefaultDbPath();
             PasswordEntry.SwapToImportMode();
         }

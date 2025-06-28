@@ -138,4 +138,10 @@
     <data name="Setup_Back" xml:space="preserve">
         <value>Login</value>
     </data>
+    <data name="Setup_Hint" xml:space="preserve">
+        <value>At least 8 character long passwords are recommended.</value>
+    </data>
+    <data name="PasswordResult_DefaultFileMissing" xml:space="preserve">
+        <value>Database could no longer be found, please update the import path.</value>
+    </data>
 </root>

@@ -101,7 +101,19 @@ public partial class PasswordPage
 
     private void CreateConfirm_OnClick(object sender, RoutedEventArgs e) 
         => CreateNewDatabase(NewFileBox.Text.Trim(), NewPasswordBox.Password);
-    
+
+    private void NewPasswordBox_GotFocus(object sender, RoutedEventArgs e) 
+        => UpdatePasswordHint(NewPasswordBox.Password.Length);
+
+    private void NewPasswordBox_PasswordChanged(object sender, RoutedEventArgs e) 
+        => UpdatePasswordHint(NewPasswordBox.Password.Length);
+
+    private void NewPasswordBox_OnLostFocus(object sender, RoutedEventArgs e)
+        => PasswordHintLabel.Visibility = Visibility.Hidden;
+
+    private void UpdatePasswordHint(long passwordLength) 
+        => PasswordHintLabel.Visibility = passwordLength >= 8 ? Visibility.Hidden : Visibility.Visible;
+
     private static string GetSavePath(string title)
     {
         SaveFileDialog saveDialog = new SaveFileDialog

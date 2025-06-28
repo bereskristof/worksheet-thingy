@@ -213,6 +213,15 @@ namespace Interface.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Database could no longer be found, please update the import path..
+        /// </summary>
+        public static string PasswordResult_DefaultFileMissing {
+            get {
+                return ResourceManager.GetString("PasswordResult_DefaultFileMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Database imported successfully..
         /// </summary>
         public static string PasswordResult_ImportedSuccess {
@@ -281,6 +290,15 @@ namespace Interface.Resources {
         public static string Setup_File {
             get {
                 return ResourceManager.GetString("Setup_File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to At least 8 character long passwords are recommended..
+        /// </summary>
+        public static string Setup_Hint {
+            get {
+                return ResourceManager.GetString("Setup_Hint", resourceCulture);
             }
         }
         
