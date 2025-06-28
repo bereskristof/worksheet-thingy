@@ -60,6 +60,24 @@ namespace Interface.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An unhandled exception occurred, and the program will close..
+        /// </summary>
+        public static string Crash_Message {
+            get {
+                return ResourceManager.GetString("Crash_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occured!.
+        /// </summary>
+        public static string Crash_Title {
+            get {
+                return ResourceManager.GetString("Crash_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login.
         /// </summary>
         public static string Import_Back {

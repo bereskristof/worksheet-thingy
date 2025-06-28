@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Windows;
+using System.Windows.Threading;
 using Microsoft.Win32;
 
 namespace Interface;
@@ -9,7 +10,13 @@ public partial class MainWindow
     private MainEditor? _mainEditor;
     public MainWindow()
     {
+        Application.Current.DispatcherUnhandledException += DispatcherUnhandledException_Raised;
         InitializeComponent();
+        HandleLoginUiDefaultPage();
+    }
+
+    private void HandleLoginUiDefaultPage()
+    {
         string path = GetDefaultDbPath();
         bool wasEmpty = false;
         if (path == string.Empty) {
@@ -20,13 +27,13 @@ public partial class MainWindow
         if (result) return;
         if (wasEmpty) // The Key was empty, most likely the first time the program was run
         {
-            PasswordEntry.SwapToNewMode();
+            PasswordEntry.SwapToNewMode(true);
         }
         else // The Key was not empty, either the file was moved, or it no longer exists, or maybe the registry was tampered with
         {
             MessageBox.Show(Interface.Resources.Lang.PasswordResult_DefaultFileMissing, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             ClearDefaultDbPath();
-            PasswordEntry.SwapToImportMode();
+            PasswordEntry.SwapToImportMode(true);
         }
     }
 
@@ -40,6 +47,16 @@ public partial class MainWindow
         _mainEditor = new MainEditor();
         Main.Children.Remove(PasswordEntry);
         Main.Children.Add(_mainEditor);
+    }
+    
+    private void DispatcherUnhandledException_Raised(object sender, DispatcherUnhandledExceptionEventArgs e)
+    {
+        string errorMessage = $"{Interface.Resources.Lang.Crash_Message}\n\n- Error message -\n{e.Exception.Message}\n\n- Error stacktrace -\n{e.Exception.StackTrace}";
+        MessageBox.Show(errorMessage, Interface.Resources.Lang.Crash_Title, MessageBoxButton.OK, MessageBoxImage.Error);
+        // TODO: Dump data
+        e.Handled = true;
+        // TODO: Attempt saving the database?
+        Close();
     }
     
     private static string GetDefaultDbPath()

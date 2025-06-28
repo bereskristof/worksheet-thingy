@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using Microsoft.Win32;
 
 namespace Interface.Password;
@@ -55,43 +56,35 @@ public partial class PasswordPage
     
     // Page mode switching methods
 
-    private void NewButton_OnClick(object sender, RoutedEventArgs e)
-        => SwapToNewMode();
-
-    private void ImportButton_OnClick(object sender, RoutedEventArgs e) 
-        => SwapToImportMode();
-
-    private void PasswordButton_OnClick(object sender, RoutedEventArgs e)
-        => SwapToPasswordMode();
-    
-    public void SwapToImportMode()
+    private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        PasswordMode.Visibility = Visibility.Collapsed;
-        ImportMode.Visibility = Visibility.Visible;
-        CreateMode.Visibility = Visibility.Collapsed;
+        if (PasswordMode.IsSelected) SwapToPasswordMode();
+        else if (ImportMode.IsSelected) SwapToImportMode();
+        else if (CreateMode.IsSelected) SwapToNewMode();
+    }
+    
+    public void SwapToImportMode(bool force = false)
+    {
+        if (force) ImportMode.IsSelected = true;
         AddFileBox.Text = GetDefaultDbPath();
         BackButtonUpdateVisibility();
     }
     
-    private void SwapToPasswordMode()
+    private void SwapToPasswordMode(bool force = false)
     {
-        PasswordMode.Visibility = Visibility.Visible;
-        ImportMode.Visibility = Visibility.Collapsed;
-        CreateMode.Visibility = Visibility.Collapsed;
+        if (force) PasswordMode.IsSelected = true;
+        BackButtonUpdateVisibility();
     }
     
-    public void SwapToNewMode()
+    public void SwapToNewMode(bool force = false)
     {
-        PasswordMode.Visibility = Visibility.Collapsed;
-        ImportMode.Visibility = Visibility.Collapsed;
-        CreateMode.Visibility = Visibility.Visible;
+        if (force) CreateMode.IsSelected = true;
         BackButtonUpdateVisibility();
     }
     
     private void BackButtonUpdateVisibility()
     {
-        ImportBackButton.Visibility = GetDefaultDbPath() == string.Empty ? Visibility.Collapsed : Visibility.Visible;
-        CreateBackButton.Visibility = GetDefaultDbPath() == string.Empty ? Visibility.Collapsed : Visibility.Visible;
+        PasswordMode.Visibility = GetDefaultDbPath() == string.Empty ? Visibility.Collapsed : Visibility.Visible;
     }
     
     // Creation page methods
@@ -141,7 +134,7 @@ public partial class PasswordPage
 
         Storage.Manager.CreateDatabase(filepath, password);
         MessageBox.Show(Interface.Resources.Lang.PasswordResult_CreatedSuccess, "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-        SwapToPasswordMode();
+        SwapToPasswordMode(true);
     }
     
     // Import page methods
@@ -167,7 +160,7 @@ public partial class PasswordPage
             var key = Registry.CurrentUser.CreateSubKey(Interface.Resources.RegistryNames.KeyPath, RegistryKeyPermissionCheck.ReadWriteSubTree);
             key.SetValue(Interface.Resources.RegistryNames.ValueDbPath, filepath);
             MessageBox.Show(Interface.Resources.Lang.PasswordResult_ImportedSuccess, "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-            SwapToPasswordMode();
+            SwapToPasswordMode(true);
         }
         else
         {
