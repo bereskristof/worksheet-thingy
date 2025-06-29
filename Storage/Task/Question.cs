@@ -89,6 +89,9 @@ public class Question : INotifyPropertyChanged
 
     public void Delete()
     {
+        DeleteImage();
+        foreach (var answer in Answers) 
+            answer.Delete();
         var deleteCommand = Manager.Connection.CreateCommand();
         deleteCommand.CommandText = $"DELETE FROM Questions WHERE Id = @Id";
         deleteCommand.Parameters.AddWithValue("@Id", Id);

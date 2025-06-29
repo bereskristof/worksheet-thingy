@@ -61,7 +61,7 @@ public partial class TaskPage
         BindingOperations.SetBinding(ScoreBox, TextBox.TextProperty, scoreBinding);
         TaskList.Items.Refresh(); // Ugly HACK, does cause problems with async workers!
         TaskList.SelectedItem = question;
-        EnableDisabledControls();
+        SetRightControls();
     }
 
     private void UpdateImagePreview()
@@ -100,13 +100,13 @@ public partial class TaskPage
         ImagePanel.Visibility = Visibility.Visible;
     }
 
-    private void EnableDisabledControls()
+    private void SetRightControls(bool enable = true)
     {
-        QuestionBox.IsEnabled = true;
-        ScoreBox.IsEnabled = true;
+        QuestionBox.IsEnabled = enable;
+        ScoreBox.IsEnabled = enable;
         // ImageButton.IsEnabled = true; // Handled elsewhere
-        AnswerAddButton.IsEnabled = true;
-        AnswerDeleteButton.IsEnabled = true;
+        AnswerAddButton.IsEnabled = enable;
+        AnswerDeleteButton.IsEnabled = enable;
     }
 
     private void ButtonAdd_OnClick(object sender, RoutedEventArgs e)
@@ -122,6 +122,8 @@ public partial class TaskPage
     {
         if (_currentQuestion == null) return; // Does nothing if no question is selected
         Questions.Remove(_currentQuestion);
+        SetRightControls(false);
+        ImageButton.IsEnabled = false;
     }
 
     private void ButtonDeleteImage_OnClick(object sender, RoutedEventArgs e)
