@@ -1,0 +1,43 @@
+<UserControl x:Class="Interface.Sheet.SelectorElement"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:res="clr-namespace:Interface.Resources"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Border Background="{DynamicResource {x:Static SystemColors.MenuBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}" Margin="0,3,0,0" BorderThickness="1,1,1,1" Padding="4,4,4,4" VerticalAlignment="Top" Name="MainBorder">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static res:Lang.Sheet_ContainerTitle}" FontStyle="Italic" Name="TitleTextBlock" VerticalAlignment="Center" Padding="0"/>
+                <Grid Grid.Row="0" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <ComboBox Grid.Column="0" HorizontalAlignment="Stretch" Name="BehaviourBox" Padding="4, 0">
+                        <ComboBoxItem Content="{x:Static res:Lang.Sheet_OptionListOrdered}" IsSelected="True" Selected="OptionListOrdered_OnSelected"/>
+                        <ComboBoxItem Content="{x:Static res:Lang.Sheet_OptionListShuffled}" Selected="OptionListShuffled_OnSelected"/>
+                        <ComboBoxItem Content="{x:Static res:Lang.Sheet_OptionPickRandom}" Selected="OptionPickShuffled_OnSelected"/>
+                    </ComboBox>
+                    <Button Grid.Column="1" Content="{x:Static res:Lang.Sheet_Hide}" Margin="3, 0, 0,0" Padding="4, 0" Click="ButtonHide_OnClick" Name="HideButton"/>
+                </Grid>
+                <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Name="ContentList"/>
+                <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="0, 3, 0,0" Name="ManageButtons">
+                    <Button Content="{x:Static res:Lang.Sheet_AddQuestion}" Padding="4, 0" Click="ButtonAddTask_OnClick"/>
+                    <Button Content="{x:Static res:Lang.Sheet_AddContainer}" Margin="3, 0, 0,0" Padding="4, 0" Click="ButtonAddContainer_OnClick"/>
+                    <Button Content="{x:Static res:Lang.Sheet_Delete}" Margin="3, 0, 0,0" Padding="4, 0" Click="ButtonDelete_OnClick" Name="DeleteButton"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

@@ -1,0 +1,81 @@
+<UserControl x:Class="Interface.Sheet.SheetPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:res="clr-namespace:Interface.Resources"
+             xmlns:local="clr-namespace:Interface.Sheet"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <ScrollViewer Name="SheetTreeView">
+                <local:SelectorElement RequestsTaskSelection="SheetEditor_OnRequestsTaskSelection"/>
+            </ScrollViewer>
+        </Grid>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Width="5" Margin="3,0,3,0" />
+        <Grid Grid.Column="2">
+            <DataGrid Grid.Row="0" Grid.ColumnSpan="4" Name="TaskList" ItemsSource="{Binding}"
+                      AutoGenerateColumns="False" IsReadOnly="True"
+                      SelectionChanged="TaskList_OnSelectionChanged" GridLinesVisibility="None" SelectionMode="Single"
+                      HorizontalScrollBarVisibility="Disabled"
+                      BorderThickness="0" Background="Transparent" CanUserResizeRows="False" RowHeaderWidth="0"
+                      IsEnabled="False">
+                <!-- Styling -->
+                <DataGrid.Resources>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="LightBlue" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
+                                     Color="LightBlue" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}"
+                                     Color="Black" />
+                </DataGrid.Resources>
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.MenuBrushKey}}" />
+                        <Setter Property="BorderBrush"
+                                Value="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}" />
+                        <Setter Property="BorderThickness" Value="1" />
+                        <Setter Property="Padding" Value="4, 2" />
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+                <DataGrid.RowStyle>
+                    <Style TargetType="{x:Type DataGridRow}">
+                        <Setter Property="BorderThickness" Value="0, 0, 0, 1" />
+                        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.MenuBrushKey}}" />
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.CellStyle>
+                    <Style TargetType="{x:Type DataGridCell}">
+                        <Style.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="Background" Value="LightBlue" />
+                                <Setter Property="BorderThickness" Value="1" />
+                                <Setter Property="BorderBrush" Value="LightBlue" />
+                            </Trigger>
+                            <Trigger Property="IsEditing" Value="True">
+                                <Setter Property="Background" Value="LightBlue" />
+                                <Setter Property="BorderThickness" Value="1" />
+                                <Setter Property="BorderBrush" Value="LightBlue" />
+                            </Trigger>
+                            <DataTrigger Binding="{Binding FailedToDecrypt}" Value="True">
+                                <Setter Property="Foreground" Value="Brown"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.CellStyle>
+                <!-- Styling -->
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="30" />
+                    <DataGridTextColumn Header="{x:Static res:Lang.Task_Question}" Binding="{Binding Text}" Width="*" />
+                    <DataGridTextColumn Header="Points" Binding="{Binding Points}" Width="55"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </Grid>
+</UserControl>

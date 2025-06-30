@@ -60,9 +60,6 @@
     <data name="Password_Enter" xml:space="preserve">
         <value>Enter</value>
     </data>
-    <data name="Setup_Existing" xml:space="preserve">
-        <value>Import</value>
-    </data>
     <data name="Setup_File" xml:space="preserve">
         <value>Path:</value>
     </data>
@@ -99,9 +96,6 @@
     <data name="Import_Confirm" xml:space="preserve">
         <value>Confirm</value>
     </data>
-    <data name="Import_New" xml:space="preserve">
-        <value>New</value>
-    </data>
     <data name="Import_File" xml:space="preserve">
         <value>Path:</value>
     </data>
@@ -120,9 +114,6 @@
     <data name="PasswordResult_ImportFailed" xml:space="preserve">
         <value>Failed to import database, maybe the path is invalid?</value>
     </data>
-    <data name="Import_Back" xml:space="preserve">
-        <value>Login</value>
-    </data>
     <data name="Setup_Back" xml:space="preserve">
         <value>Login</value>
     </data>
@@ -137,5 +128,41 @@
     </data>
     <data name="Crash_Message" xml:space="preserve">
         <value>An unhandled exception occurred, and the program will close.</value>
+    </data>
+    <data name="Sheet_OptionListOrdered" xml:space="preserve">
+        <value />
+    </data>
+    <data name="Sheet_OptionListShuffled" xml:space="preserve">
+        <value />
+    </data>
+    <data name="Sheet_OptionPickRandom" xml:space="preserve">
+        <value />
+    </data>
+    <data name="Sheet_Hide" xml:space="preserve">
+        <value />
+    </data>
+    <data name="Sheet_AddQuestion" xml:space="preserve">
+        <value />
+    </data>
+    <data name="Sheet_AddContainer" xml:space="preserve">
+        <value />
+    </data>
+    <data name="Sheet_Delete" xml:space="preserve">
+        <value />
+    </data>
+    <data name="Sheet_ContainerTitle" xml:space="preserve">
+        <value />
+    </data>
+    <data name="Sheet_Show" xml:space="preserve">
+        <value />
+    </data>
+    <data name="Sheet_RootTitle" xml:space="preserve">
+        <value />
+    </data>
+    <data name="Sheet_QuestionTitle" xml:space="preserve">
+        <value />
+    </data>
+    <data name="Sheet_SelectQuestion" xml:space="preserve">
+        <value />
     </data>
 </root>

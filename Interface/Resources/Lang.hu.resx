@@ -11,18 +11,6 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="Menu_File" xml:space="preserve">
-        <value>Fájl</value>
-    </data>
-    <data name="Menu_Exit" xml:space="preserve">
-        <value>Kilépés</value>
-    </data>
-    <data name="Menu_New" xml:space="preserve">
-        <value>Új</value>
-    </data>
-    <data name="Menu_Open" xml:space="preserve">
-        <value>Megnyit...</value>
-    </data>
     <data name="MenuTabs_Tasks" xml:space="preserve">
         <value>Feladatok</value>
     </data>
@@ -71,9 +59,6 @@
     <data name="Setup_Password" xml:space="preserve">
         <value>Jelszó:</value>
     </data>
-    <data name="Setup_Existing" xml:space="preserve">
-        <value>Importálás</value>
-    </data>
     <data name="Setup_Confirm" xml:space="preserve">
         <value>Elfogadás</value>
     </data>
@@ -104,9 +89,6 @@
     <data name="Import_Confirm" xml:space="preserve">
         <value>Elfogadás</value>
     </data>
-    <data name="Import_New" xml:space="preserve">
-        <value>Új</value>
-    </data>
     <data name="Import_Title" xml:space="preserve">
         <value>Meglévő adatbázis importálása</value>
     </data>
@@ -125,9 +107,6 @@
     <data name="PasswordResult_CreatedSuccess" xml:space="preserve">
         <value>Új adatbázis sikeresen létrehozva.</value>
     </data>
-    <data name="Import_Back" xml:space="preserve">
-        <value>Belépés</value>
-    </data>
     <data name="Setup_Back" xml:space="preserve">
         <value>Belépés</value>
     </data>
@@ -142,5 +121,41 @@
     </data>
     <data name="Crash_Message" xml:space="preserve">
         <value>Kezeletlen kivétel történt, és a program bezárul.</value>
+    </data>
+    <data name="Sheet_AddContainer" xml:space="preserve">
+        <value>Kérdéscsoport hozzáadása</value>
+    </data>
+    <data name="Sheet_AddQuestion" xml:space="preserve">
+        <value>Kérdés hozzáadása</value>
+    </data>
+    <data name="Sheet_Delete" xml:space="preserve">
+        <value>Törlés</value>
+    </data>
+    <data name="Sheet_Hide" xml:space="preserve">
+        <value>Becsuk</value>
+    </data>
+    <data name="Sheet_OptionListOrdered" xml:space="preserve">
+        <value>Mindegyik szekvenciális</value>
+    </data>
+    <data name="Sheet_OptionListShuffled" xml:space="preserve">
+        <value>Mindegyik összekeverve</value>
+    </data>
+    <data name="Sheet_OptionPickRandom" xml:space="preserve">
+        <value>Csak 1 kiválasztása</value>
+    </data>
+    <data name="Sheet_ContainerTitle" xml:space="preserve">
+        <value>Csoport</value>
+    </data>
+    <data name="Sheet_Show" xml:space="preserve">
+        <value>Kinyit</value>
+    </data>
+    <data name="Sheet_RootTitle" xml:space="preserve">
+        <value>Feladatlap</value>
+    </data>
+    <data name="Sheet_QuestionTitle" xml:space="preserve">
+        <value>Kérdés</value>
+    </data>
+    <data name="Sheet_SelectQuestion" xml:space="preserve">
+        <value>Kérdés kiválasztása</value>
     </data>
 </root>

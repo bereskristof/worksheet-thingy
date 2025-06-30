@@ -78,15 +78,6 @@ namespace Interface.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Login.
-        /// </summary>
-        public static string Import_Back {
-            get {
-                return ResourceManager.GetString("Import_Back", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Browse.
         /// </summary>
         public static string Import_Browse {
@@ -110,15 +101,6 @@ namespace Interface.Resources {
         public static string Import_File {
             get {
                 return ResourceManager.GetString("Import_File", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to New.
-        /// </summary>
-        public static string Import_New {
-            get {
-                return ResourceManager.GetString("Import_New", resourceCulture);
             }
         }
         
@@ -258,15 +240,6 @@ namespace Interface.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import.
-        /// </summary>
-        public static string Setup_Existing {
-            get {
-                return ResourceManager.GetString("Setup_Existing", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Path:.
         /// </summary>
         public static string Setup_File {
@@ -299,6 +272,114 @@ namespace Interface.Resources {
         public static string Setup_Title {
             get {
                 return ResourceManager.GetString("Setup_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string Sheet_AddContainer {
+            get {
+                return ResourceManager.GetString("Sheet_AddContainer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string Sheet_AddQuestion {
+            get {
+                return ResourceManager.GetString("Sheet_AddQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string Sheet_ContainerTitle {
+            get {
+                return ResourceManager.GetString("Sheet_ContainerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string Sheet_Delete {
+            get {
+                return ResourceManager.GetString("Sheet_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string Sheet_Hide {
+            get {
+                return ResourceManager.GetString("Sheet_Hide", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string Sheet_OptionListOrdered {
+            get {
+                return ResourceManager.GetString("Sheet_OptionListOrdered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string Sheet_OptionListShuffled {
+            get {
+                return ResourceManager.GetString("Sheet_OptionListShuffled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string Sheet_OptionPickRandom {
+            get {
+                return ResourceManager.GetString("Sheet_OptionPickRandom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string Sheet_QuestionTitle {
+            get {
+                return ResourceManager.GetString("Sheet_QuestionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string Sheet_RootTitle {
+            get {
+                return ResourceManager.GetString("Sheet_RootTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string Sheet_SelectQuestion {
+            get {
+                return ResourceManager.GetString("Sheet_SelectQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string Sheet_Show {
+            get {
+                return ResourceManager.GetString("Sheet_Show", resourceCulture);
             }
         }
         

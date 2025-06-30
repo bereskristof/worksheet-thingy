@@ -5,13 +5,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:res="clr-namespace:Interface.Resources"
              xmlns:task="clr-namespace:Interface.Task"
+             xmlns:sheet="clr-namespace:Interface.Sheet"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <TabControl Margin="2" Padding="3">
         <TabItem Header="{x:Static res:Lang.MenuTabs_Tasks}">
             <task:TaskPage x:Name="TaskPage"/>
         </TabItem>
-        <TabItem Header="Sheets"/>
+        <TabItem Header="Sheets">
+            <sheet:SheetPage/>
+        </TabItem>
         <TabItem Header="Export" IsEnabled="False"/>
         <TabItem Header="Correct" IsEnabled="False"/>
     </TabControl>

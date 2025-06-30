@@ -13,12 +13,11 @@ public partial class TaskPage
 {
     private Question? _currentQuestion;
 
-    public QuestionList Questions { get; set; } = [];
-    
+    private static QuestionList Questions => Bindings.Instance.Questions;
+
     public TaskPage()
     {
         InitializeComponent();
-        Questions.LoadAll();
         TaskList.DataContext = Questions;
     }
 
