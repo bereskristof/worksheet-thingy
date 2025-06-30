@@ -15,7 +15,7 @@
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0">
             <ScrollViewer Name="SheetTreeView">
-                <local:SelectorElement RequestsTaskSelection="SheetEditor_OnRequestsTaskSelection"/>
+                <local:SelectorElement x:Name="RootSelector" RequestsTaskSelection="SheetEditor_OnRequestsTaskSelection"/>
             </ScrollViewer>
         </Grid>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Width="5" Margin="3,0,3,0" />

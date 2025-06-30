@@ -2,6 +2,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using Storage.Sheet;
 using Storage.Task;
 
 namespace Interface.Sheet;
@@ -17,11 +18,14 @@ public partial class TaskElement : ICanRequestDeletion
         new(236, 236, 236),
         new(244, 244, 244),
     ];
+    
+    public TaskNode Node { get; set; }
 
-    public TaskElement() : this(0) { }
+    public TaskElement() : this(new TaskNode { Question = null }) { }
 
-    internal TaskElement(uint depth = 0)
+    internal TaskElement(TaskNode node, uint depth = 0)
     {
+        Node = node;
         InitializeComponent();
         FormatDesignByIndent(depth);
     }
@@ -58,6 +62,6 @@ public partial class TaskElement : ICanRequestDeletion
             Mode = BindingMode.OneWay,
         };
         BindingOperations.SetBinding(QuestionPreview, TextBlock.TextProperty, questionBinding);
-        // TODO: Update not yet added node
+        Node.Question = question;
     }
 }

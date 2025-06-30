@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Storage.Sheet;
 
 namespace Interface.Sheet;
 
@@ -10,6 +11,8 @@ public partial class SelectorElement : ICanRequestDeletion
     
     public event EventHandler? RequestsTaskSelection;
     
+    public SelectorNode Node { get; set; }
+    
     private readonly Tuple<byte, byte, byte>[] _indentColors =
     [
         new(236, 236, 236),
@@ -18,26 +21,24 @@ public partial class SelectorElement : ICanRequestDeletion
     
     private readonly uint _depth;
     
-    public SelectorElement() : this(0) { }
+    public SelectorElement() : this(Bindings.Instance.SheetRoot) { } // Not exactly a good idea
 
-    private SelectorElement(uint depth = 0)
+    private SelectorElement(SelectorNode node, uint depth = 0)
     {
         _depth = depth;
+        Node = node;
         InitializeComponent();
         FormatDesignByIndent(_depth);
     }
 
     private void OptionListOrdered_OnSelected(object sender, RoutedEventArgs e)
-    {
-    }
+        => Node.Type = SelectorNode.SelectorType.Sequential;
 
-    private void OptionListShuffled_OnSelected(object sender, RoutedEventArgs e)
-    {
-    }
+    private void OptionListShuffled_OnSelected(object sender, RoutedEventArgs e) 
+        => Node.Type = SelectorNode.SelectorType.Shuffled;
 
-    private void OptionPickShuffled_OnSelected(object sender, RoutedEventArgs e)
-    {
-    }
+    private void OptionPickShuffled_OnSelected(object sender, RoutedEventArgs e) 
+        => Node.Type = SelectorNode.SelectorType.Random;
 
     private void ButtonHide_OnClick(object sender, RoutedEventArgs e) 
         => ToggleHide();
@@ -66,7 +67,7 @@ public partial class SelectorElement : ICanRequestDeletion
         MainBorder.BorderBrush = Brushes.Transparent;
         MainBorder.BorderThickness = new Thickness(0);
         MainBorder.Padding = new Thickness(0);
-        MainBorder.Margin = new Thickness(3, 3, 5, 3);
+        MainBorder.Margin = new Thickness(0, 0, 3, 0);
         TitleTextBlock.Text = Interface.Resources.Lang.Sheet_RootTitle;
         DeleteButton.Visibility = Visibility.Collapsed;
         HideButton.Visibility = Visibility.Collapsed;
@@ -82,7 +83,9 @@ public partial class SelectorElement : ICanRequestDeletion
     
     private void AddChildTask()
     {
-        var task = new TaskElement(_depth + 1);
+        var node = new TaskNode { Question = null };
+        Node.Children.Add(node);
+        var task = new TaskElement(node, _depth + 1);
         ContentList.Children.Add(task);
         task.RequestsDeletion += DeleteChild;
         task.RequestsTaskSelection += BubbleTaskSelection;
@@ -90,7 +93,9 @@ public partial class SelectorElement : ICanRequestDeletion
 
     private void AddChildSelector()
     {
-        var selector = new SelectorElement(_depth + 1);
+        var node = new SelectorNode();
+        Node.Children.Add(node);
+        var selector = new SelectorElement(node, _depth + 1);
         ContentList.Children.Add(selector);
         selector.RequestsDeletion += DeleteChild;
         selector.RequestsTaskSelection += BubbleTaskSelection;

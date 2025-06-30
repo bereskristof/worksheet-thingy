@@ -17,5 +17,8 @@
         </TabItem>
         <TabItem Header="Export" IsEnabled="False"/>
         <TabItem Header="Correct" IsEnabled="False"/>
+        <TabItem Header="Debug">
+            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Content="Generate lists" Click="ButtonBase_OnClick"/>
+        </TabItem>
     </TabControl>
 </UserControl>

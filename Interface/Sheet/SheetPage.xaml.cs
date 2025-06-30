@@ -13,6 +13,7 @@ public partial class SheetPage
     {
         InitializeComponent();
         TaskList.DataContext = Questions;
+        RootSelector.Node = Bindings.Instance.SheetRoot;
     }
 
     private void TaskList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -1,3 +1,4 @@
+using Storage.Sheet;
 using Storage.Task;
 
 namespace Interface;
@@ -12,6 +13,8 @@ public sealed class Bindings
     // Instance
     
     public QuestionList Questions { get; private set; } = [];
+    
+    public SelectorNode SheetRoot { get; private set; } = new();
     
     private Bindings()
     {
