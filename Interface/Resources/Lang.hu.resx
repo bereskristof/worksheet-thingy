@@ -158,4 +158,19 @@
     <data name="Sheet_SelectQuestion" xml:space="preserve">
         <value>Kérdés kiválasztása</value>
     </data>
+    <data name="Task_Points" xml:space="preserve">
+        <value>Pontok</value>
+    </data>
+    <data name="Task_HasImage" xml:space="preserve">
+        <value>Kép</value>
+    </data>
+    <data name="MenuTabs_Sheets" xml:space="preserve">
+        <value>Feladatlap</value>
+    </data>
+    <data name="MenuTabs_Export" xml:space="preserve">
+        <value>Kiadás</value>
+    </data>
+    <data name="MenuTabs_Correct" xml:space="preserve">
+        <value>Javítás</value>
+    </data>
 </root>

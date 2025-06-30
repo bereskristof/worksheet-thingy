@@ -114,6 +114,33 @@ namespace Interface.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Correction.
+        /// </summary>
+        public static string MenuTabs_Correct {
+            get {
+                return ResourceManager.GetString("MenuTabs_Correct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export.
+        /// </summary>
+        public static string MenuTabs_Export {
+            get {
+                return ResourceManager.GetString("MenuTabs_Export", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sheets.
+        /// </summary>
+        public static string MenuTabs_Sheets {
+            get {
+                return ResourceManager.GetString("MenuTabs_Sheets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tasks.
         /// </summary>
         public static string MenuTabs_Tasks {
@@ -276,7 +303,7 @@ namespace Interface.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Add question group.
         /// </summary>
         public static string Sheet_AddContainer {
             get {
@@ -285,7 +312,7 @@ namespace Interface.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Add question.
         /// </summary>
         public static string Sheet_AddQuestion {
             get {
@@ -294,7 +321,7 @@ namespace Interface.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Group.
         /// </summary>
         public static string Sheet_ContainerTitle {
             get {
@@ -303,7 +330,7 @@ namespace Interface.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Delete.
         /// </summary>
         public static string Sheet_Delete {
             get {
@@ -312,7 +339,7 @@ namespace Interface.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Hide.
         /// </summary>
         public static string Sheet_Hide {
             get {
@@ -321,7 +348,7 @@ namespace Interface.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to List all in order.
         /// </summary>
         public static string Sheet_OptionListOrdered {
             get {
@@ -330,7 +357,7 @@ namespace Interface.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to List all shuffled.
         /// </summary>
         public static string Sheet_OptionListShuffled {
             get {
@@ -339,7 +366,7 @@ namespace Interface.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Pick 1 randomly.
         /// </summary>
         public static string Sheet_OptionPickRandom {
             get {
@@ -348,7 +375,7 @@ namespace Interface.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Question.
         /// </summary>
         public static string Sheet_QuestionTitle {
             get {
@@ -357,7 +384,7 @@ namespace Interface.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Task sheet.
         /// </summary>
         public static string Sheet_RootTitle {
             get {
@@ -366,7 +393,7 @@ namespace Interface.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Select question.
         /// </summary>
         public static string Sheet_SelectQuestion {
             get {
@@ -375,7 +402,7 @@ namespace Interface.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Show.
         /// </summary>
         public static string Sheet_Show {
             get {
@@ -447,6 +474,15 @@ namespace Interface.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Image.
+        /// </summary>
+        public static string Task_HasImage {
+            get {
+                return ResourceManager.GetString("Task_HasImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Insert Image.
         /// </summary>
         public static string Task_Image {
@@ -470,6 +506,15 @@ namespace Interface.Resources {
         public static string Task_ImageLabel {
             get {
                 return ResourceManager.GetString("Task_ImageLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Points.
+        /// </summary>
+        public static string Task_Points {
+            get {
+                return ResourceManager.GetString("Task_Points", resourceCulture);
             }
         }
         

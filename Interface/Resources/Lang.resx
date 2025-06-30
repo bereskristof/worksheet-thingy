@@ -130,39 +130,54 @@
         <value>An unhandled exception occurred, and the program will close.</value>
     </data>
     <data name="Sheet_OptionListOrdered" xml:space="preserve">
-        <value />
+        <value>List all in order</value>
     </data>
     <data name="Sheet_OptionListShuffled" xml:space="preserve">
-        <value />
+        <value>List all shuffled</value>
     </data>
     <data name="Sheet_OptionPickRandom" xml:space="preserve">
-        <value />
+        <value>Pick 1 randomly</value>
     </data>
     <data name="Sheet_Hide" xml:space="preserve">
-        <value />
+        <value>Hide</value>
     </data>
     <data name="Sheet_AddQuestion" xml:space="preserve">
-        <value />
+        <value>Add question</value>
     </data>
     <data name="Sheet_AddContainer" xml:space="preserve">
-        <value />
+        <value>Add question group</value>
     </data>
     <data name="Sheet_Delete" xml:space="preserve">
-        <value />
+        <value>Delete</value>
     </data>
     <data name="Sheet_ContainerTitle" xml:space="preserve">
-        <value />
+        <value>Group</value>
     </data>
     <data name="Sheet_Show" xml:space="preserve">
-        <value />
+        <value>Show</value>
     </data>
     <data name="Sheet_RootTitle" xml:space="preserve">
-        <value />
+        <value>Task sheet</value>
     </data>
     <data name="Sheet_QuestionTitle" xml:space="preserve">
-        <value />
+        <value>Question</value>
     </data>
     <data name="Sheet_SelectQuestion" xml:space="preserve">
-        <value />
+        <value>Select question</value>
+    </data>
+    <data name="Task_Points" xml:space="preserve">
+        <value>Points</value>
+    </data>
+    <data name="Task_HasImage" xml:space="preserve">
+        <value>Image</value>
+    </data>
+    <data name="MenuTabs_Sheets" xml:space="preserve">
+        <value>Sheets</value>
+    </data>
+    <data name="MenuTabs_Export" xml:space="preserve">
+        <value>Export</value>
+    </data>
+    <data name="MenuTabs_Correct" xml:space="preserve">
+        <value>Correction</value>
     </data>
 </root>

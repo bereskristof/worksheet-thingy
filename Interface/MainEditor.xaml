@@ -12,11 +12,11 @@
         <TabItem Header="{x:Static res:Lang.MenuTabs_Tasks}">
             <task:TaskPage x:Name="TaskPage"/>
         </TabItem>
-        <TabItem Header="Sheets">
+        <TabItem Header="{x:Static res:Lang.MenuTabs_Sheets}">
             <sheet:SheetPage/>
         </TabItem>
-        <TabItem Header="Export" IsEnabled="False"/>
-        <TabItem Header="Correct" IsEnabled="False"/>
+        <TabItem Header="{x:Static res:Lang.MenuTabs_Export}" IsEnabled="False"/>
+        <TabItem Header="{x:Static res:Lang.MenuTabs_Correct}" IsEnabled="False"/>
         <TabItem Header="Debug">
             <Button HorizontalAlignment="Left" VerticalAlignment="Top" Content="Generate lists" Click="ButtonBase_OnClick"/>
         </TabItem>
