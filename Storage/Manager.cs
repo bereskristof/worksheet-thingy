@@ -4,6 +4,8 @@ namespace Storage;
 
 public static class Manager
 {
+    public const string TempUUID = "20384ab2-627d-4d60-bacf-052dc05567e9";
+    
     private static SqliteConnection? _connection;
 
     public static SqliteConnection Connection
@@ -49,7 +51,7 @@ public static class Manager
         {
             Connection.Open();
         }
-        catch (SqliteException e)
+        catch (SqliteException)
         {
             return false;
         }

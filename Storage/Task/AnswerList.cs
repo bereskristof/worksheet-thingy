@@ -44,4 +44,15 @@ public class AnswerList : ObservableCollection<Answer>
         base.Remove(answer);
         answer.Delete();
     }
+
+    public Answer[] GetRandomAnswers(int count)
+    {
+        var correctAnswers = this.Where(e => e.Correct).ToArray();
+        var incorrectAnswers = this.Where(e => !e.Correct)
+            .OrderBy(_ => RandomNumberGenerator.GetInt32(int.MaxValue))
+            .Take(count - correctAnswers.Length); // Take() never takes more than available
+        var selectedAnswers = correctAnswers.Concat(incorrectAnswers).ToArray();
+        RandomNumberGenerator.Shuffle<Answer>(selectedAnswers);
+        return selectedAnswers;
+    }
 }

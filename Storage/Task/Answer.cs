@@ -1,11 +1,7 @@
-using System.ComponentModel;
-
 namespace Storage.Task;
 
-public class Answer : INotifyPropertyChanged
+public class Answer
 {
-    public event PropertyChangedEventHandler? PropertyChanged;
-    
     public long Id { get; }
     
     public string Text { get; set; }

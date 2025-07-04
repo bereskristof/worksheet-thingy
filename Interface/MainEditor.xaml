@@ -6,6 +6,7 @@
              xmlns:res="clr-namespace:Interface.Resources"
              xmlns:task="clr-namespace:Interface.Task"
              xmlns:sheet="clr-namespace:Interface.Sheet"
+             xmlns:export="clr-namespace:Interface.Export"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <TabControl Margin="2" Padding="3">
@@ -15,7 +16,9 @@
         <TabItem Header="{x:Static res:Lang.MenuTabs_Sheets}">
             <sheet:SheetPage/>
         </TabItem>
-        <TabItem Header="{x:Static res:Lang.MenuTabs_Export}" IsEnabled="False"/>
+        <TabItem Header="{x:Static res:Lang.MenuTabs_Export}">
+            <export:ExportPage/>
+        </TabItem>
         <TabItem Header="{x:Static res:Lang.MenuTabs_Correct}" IsEnabled="False"/>
         <TabItem Header="Debug">
             <Button HorizontalAlignment="Left" VerticalAlignment="Top" Content="Generate lists" Click="ButtonBase_OnClick"/>
