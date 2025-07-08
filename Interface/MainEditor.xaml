@@ -7,6 +7,7 @@
              xmlns:task="clr-namespace:Interface.Task"
              xmlns:sheet="clr-namespace:Interface.Sheet"
              xmlns:export="clr-namespace:Interface.Export"
+             xmlns:about="clr-namespace:Interface.About"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <TabControl Margin="2" Padding="3">
@@ -22,6 +23,9 @@
         <TabItem Header="{x:Static res:Lang.MenuTabs_Correct}" IsEnabled="False"/>
         <TabItem Header="Debug">
             <Button HorizontalAlignment="Left" VerticalAlignment="Top" Content="Generate lists" Click="ButtonBase_OnClick"/>
+        </TabItem>
+        <TabItem Header="About">
+            <about:About/>
         </TabItem>
     </TabControl>
 </UserControl>
