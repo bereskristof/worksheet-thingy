@@ -44,7 +44,6 @@ public class Answer
         FailedToDecrypt = corrupted;
         _storedText = decryptedText;
         _bufferedText = decryptedText;
-        // PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Text)));
         Log.Write($"GetText: Answer {Id} text fetched from database");
         return decryptedText;
     }
@@ -56,6 +55,11 @@ public class Answer
             Log.Write($"SetText: Question {Id} text update skipped");
             return;
         }
+        UpdateText(value);
+    }
+
+    private void UpdateText(string value)
+    {
         var updateCommand = Manager.Connection.CreateCommand();
         updateCommand.CommandText = "UPDATE Answers SET Answer = @Answer WHERE Id = @Id";
         string encryptedText = Encryption.EncryptBase64(value);
@@ -63,7 +67,7 @@ public class Answer
         updateCommand.Parameters.AddWithValue("@Id", Id);
         updateCommand.ExecuteNonQuery();
         _storedText = value;
-        Log.Write($"SetText: Answer {Id} text stored in the database");
+        Log.Write($"UpdateText: Answer {Id} text stored in the database");
     }
     
     private bool GetCorrect()
@@ -115,22 +119,9 @@ public class Answer
         createCommand.Parameters.AddWithValue("Id", newId);
         createCommand.Parameters.AddWithValue("@QuestionId", question.Id);
         createCommand.ExecuteScalar();
-        return new Answer(question, newId, "", false, false);
-    }
-
-    [Obsolete]
-    public void Store()
-    {
-    //     var updateCommand = Manager.Connection.CreateCommand();
-    //     updateCommand.CommandText = "UPDATE Answers SET Answer = @Answer, QuestionId = @QuestionId, Correct = @Correct WHERE Id = @Id";
-    //     string encryptedText = Encryption.EncryptBase64(Text);
-    //     updateCommand.Parameters.AddWithValue("@Answer", encryptedText);
-    //     updateCommand.Parameters.AddWithValue("@QuestionId", _question.Id);
-    //     updateCommand.Parameters.AddWithValue("@Correct", Correct);
-    //     updateCommand.Parameters.AddWithValue("@Id", Id);
-    //     updateCommand.ExecuteNonQuery();
-    //     Log.Write($"Answer {Id} stored");
-    //     FailedToDecrypt = false;
+        var newAnswer = new Answer(question, newId, "", false, false);
+        newAnswer.UpdateText(string.Empty);
+        return newAnswer;
     }
 
     public void Delete()

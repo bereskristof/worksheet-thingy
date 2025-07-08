@@ -63,7 +63,6 @@ public class Question : INotifyPropertyChanged
         FailedToDecrypt = corrupted;
         _storedText = decryptedText;
         _bufferedText = decryptedText;
-        // PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Text)));
         Log.Write($"GetText: Question {Id} text fetched from database");
         return decryptedText;
     }
@@ -77,6 +76,12 @@ public class Question : INotifyPropertyChanged
             Log.Write($"SetText: Question {Id} text update skipped");
             return;
         }
+        UpdateText(value);
+    }
+
+    /// Updates the question text in the database, without checking if the text has changed.
+    private void UpdateText(string value)
+    {
         var updateCommand = Manager.Connection.CreateCommand();
         updateCommand.CommandText = "UPDATE Questions SET Question = @Question WHERE Id = @Id";
         string encryptedText = Encryption.EncryptBase64(value);
@@ -84,7 +89,7 @@ public class Question : INotifyPropertyChanged
         updateCommand.Parameters.AddWithValue("@Id", Id);
         updateCommand.ExecuteNonQuery();
         _storedText = value;
-        Log.Write($"SetText: Question {Id} text stored in the database");
+        Log.Write($"UpdateText: Question {Id} text stored in the database");
     }
 
     /// Gets the points' amount, fetches it from the database if necessary.
@@ -146,24 +151,13 @@ public class Question : INotifyPropertyChanged
         createCommand.Parameters.AddWithValue("@Id", newId);
         createCommand.Parameters.AddWithValue("@Points", DefaultPoints);
         createCommand.ExecuteScalar();
-        return new Question(newId, string.Empty, DefaultPoints, false);
+        var newQuestion = new Question(newId, string.Empty, DefaultPoints, false);
+        newQuestion.UpdateText(string.Empty);
+        return newQuestion;
     }
 
     [Obsolete("Planning to rework this class to save data on it's own, without the need for a separate Store method.")]
-    public void Store()
-    {
-        return;
-        // var updateCommand = Manager.Connection.CreateCommand();
-        // updateCommand.CommandText = $"UPDATE Questions SET Question = @Question, Points = @Points WHERE Id = @Id";
-        // string encryptedText = Encryption.EncryptBase64(Text);
-        // updateCommand.Parameters.AddWithValue("@Question", encryptedText);
-        // updateCommand.Parameters.AddWithValue("@Points", Points);
-        // updateCommand.Parameters.AddWithValue("@Id", Id);
-        // updateCommand.ExecuteNonQuery();
-        // foreach (var answer in Answers) answer.Store();
-        // Log.Write($"Question {Id} stored");
-        // FailedToDecrypt = false;
-    }
+    public void Store() {}
 
     /// Removes the question from the database, deletes all answers and image associated with it.
     public void Delete()
