@@ -184,4 +184,19 @@ public static class Encryption
     
     public static string DecryptBase64(string cipherText)
         => Decrypt(Convert.FromBase64String(cipherText));
+    
+    public static bool CanDecryptBase64(string text, out string decryptedText)
+    {
+        bool isDecrypted = false;
+        try
+        {
+            decryptedText = DecryptBase64(text);
+            isDecrypted = true;
+        }
+        catch (Exception e) when (e is CryptographicException or FormatException)
+        {
+            decryptedText = "[DAMAGED] " + text;
+        }
+        return isDecrypted;
+    }
 }

@@ -58,7 +58,7 @@ public class Question : INotifyPropertyChanged
             return string.Empty;
         }
         string encryptedText = reader.GetString(0);
-        bool corrupted = !CanDecryptText(encryptedText, out string decryptedText);
+        bool corrupted = !Encryption.CanDecryptBase64(encryptedText, out string decryptedText);
         if (corrupted) Log.Write($"GetText: Question {Id} value is corrupted", Log.Severity.Error);
         FailedToDecrypt = corrupted;
         _storedText = decryptedText;
@@ -132,25 +132,9 @@ public class Question : INotifyPropertyChanged
     /// Used for batch loading, where `text` is already read, but not yet decrypted.
     internal static Question Load(long id, string text, int points)
     {
-        bool corrupted = !CanDecryptText(text, out string decryptedText);
+        bool corrupted = !Encryption.CanDecryptBase64(text, out string decryptedText);
         var question = new Question(id, decryptedText, points, corrupted);
         return question;
-    }
-    
-    /// Decrypts the provided text, returns true if the text was successfully decrypted.
-    private static bool CanDecryptText(string text, out string decryptedText)
-    {
-        bool isDecrypted = false;
-        try
-        {
-            decryptedText = Encryption.DecryptBase64(text);
-            isDecrypted = true;
-        }
-        catch (Exception e) when (e is CryptographicException or FormatException)
-        {
-            decryptedText = "[DAMAGED] " + text;
-        }
-        return isDecrypted;
     }
 
     /// Creates a new empty question, used when adding a new question in the UI, immediately stores it in the database.
