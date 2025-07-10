@@ -180,4 +180,7 @@
     <data name="MenuTabs_Correct" xml:space="preserve">
         <value>Correction</value>
     </data>
+    <data name="Task_Select" xml:space="preserve">
+        <value>Select</value>
+    </data>
 </root>

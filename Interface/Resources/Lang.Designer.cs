@@ -544,5 +544,14 @@ namespace Interface.Resources {
                 return ResourceManager.GetString("Task_Score", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select.
+        /// </summary>
+        public static string Task_Select {
+            get {
+                return ResourceManager.GetString("Task_Select", resourceCulture);
+            }
+        }
     }
 }

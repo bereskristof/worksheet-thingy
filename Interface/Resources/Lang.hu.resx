@@ -173,4 +173,7 @@
     <data name="MenuTabs_Correct" xml:space="preserve">
         <value>Javítás</value>
     </data>
+    <data name="Task_Select" xml:space="preserve">
+        <value>Választ</value>
+    </data>
 </root>

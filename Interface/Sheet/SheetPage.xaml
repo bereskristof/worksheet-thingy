@@ -22,7 +22,7 @@
         <Grid Grid.Column="2">
             <DataGrid Grid.Row="0" Grid.ColumnSpan="4" Name="TaskList" ItemsSource="{Binding}"
                       AutoGenerateColumns="False" IsReadOnly="True"
-                      SelectionChanged="TaskList_OnSelectionChanged" GridLinesVisibility="None" SelectionMode="Single"
+                      GridLinesVisibility="None" SelectionMode="Single"
                       HorizontalScrollBarVisibility="Disabled"
                       BorderThickness="0" Background="Transparent" CanUserResizeRows="False" RowHeaderWidth="0"
                       IsEnabled="False">
@@ -71,6 +71,14 @@
                 </DataGrid.CellStyle>
                 <!-- Styling -->
                 <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="{x:Static res:Lang.Task_Select}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Click="ButtonBase_OnClick" Content="{x:Static res:Lang.Task_Select}" Padding="4, 0"
+                                             HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="30" />
                     <DataGridTextColumn Header="{x:Static res:Lang.Task_Question}" Binding="{Binding Text}" Width="*" />
                     <DataGridTextColumn Header="{x:Static res:Lang.Task_Points}" Binding="{Binding Points}" Width="55"/>
