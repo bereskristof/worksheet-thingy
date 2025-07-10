@@ -37,11 +37,6 @@ public partial class MainWindow
         }
     }
 
-    private void MainWindow_OnClosing(object? sender, CancelEventArgs e)
-    {
-        _mainEditor?.OnExit();
-    }
-
     private void PasswordEntry_OnPasswordUnlocked(object? sender, EventArgs e)
     {
         _mainEditor = new MainEditor();

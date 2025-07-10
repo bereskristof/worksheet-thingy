@@ -7,8 +7,6 @@ public partial class MainEditor
 {
     public MainEditor() => InitializeComponent();
 
-    public void OnExit() => TaskPage.OnExit();
-
     private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
     {
         var questions = Bindings.Instance.SheetRoot.GetQuestions();

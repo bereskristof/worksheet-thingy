@@ -21,11 +21,6 @@ public partial class TaskPage
         TaskList.DataContext = Questions;
     }
 
-    public void OnExit()
-    {
-        _currentQuestion?.Store();
-    }
-
     private void TaskList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (sender is not DataGrid grid)
@@ -37,7 +32,6 @@ public partial class TaskPage
 
     private void ChangeSelectedTask(Question question)
     {
-        _currentQuestion?.Store();
         _currentQuestion = question;
         AnswerListPanel.ItemsSource = _currentQuestion.Answers;
         UpdateImagePreview();
@@ -112,7 +106,6 @@ public partial class TaskPage
     {
         var question = Questions.Add();
         _currentQuestion = question;
-        _currentQuestion?.Store();
         ChangeSelectedTask(question);
         TaskList.ScrollIntoView(TaskList.Items[^1]!);
     }
