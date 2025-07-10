@@ -74,7 +74,7 @@ public partial class ExportPage
     
     private void BackgroundLoader_DoWork(object? sender, DoWorkEventArgs e)
     {
-        string pdfPath = "C:/Users/beres/Desktop/LaTeX/preview.pdf";
+        string pdfPath = "C:/Users/beres/Desktop/prj/LaTeX/preview.pdf";
         
         using var doclib = Docnet.Core.DocLib.Instance;
         using var reader = doclib.GetDocReader(pdfPath, new PageDimensions(_dimX, _dimY));

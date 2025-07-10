@@ -134,6 +134,7 @@ public partial class PasswordPage
 
         Storage.Manager.CreateDatabase(filepath, password);
         MessageBox.Show(Interface.Resources.Lang.PasswordResult_CreatedSuccess, "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+        SaveDatabasePath(filepath);
         SwapToPasswordMode(true);
     }
     
@@ -157,8 +158,7 @@ public partial class PasswordPage
 
         if (Storage.Manager.OpenDatabase(filepath))
         {
-            var key = Registry.CurrentUser.CreateSubKey(Interface.Resources.RegistryNames.KeyPath, RegistryKeyPermissionCheck.ReadWriteSubTree);
-            key.SetValue(Interface.Resources.RegistryNames.ValueDbPath, filepath);
+            SaveDatabasePath(filepath);
             MessageBox.Show(Interface.Resources.Lang.PasswordResult_ImportedSuccess, "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             SwapToPasswordMode(true);
         }
@@ -182,6 +182,12 @@ public partial class PasswordPage
     }
     
     // Common methods
+    
+    private static void SaveDatabasePath(string filepath)
+    {
+        var key = Registry.CurrentUser.CreateSubKey(Interface.Resources.RegistryNames.KeyPath, RegistryKeyPermissionCheck.ReadWriteSubTree);
+        key.SetValue(Interface.Resources.RegistryNames.ValueDbPath, filepath);
+    }
     
     private static string GetDefaultDbPath()
     {
