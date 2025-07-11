@@ -47,5 +47,15 @@ public static class Tables
                                          );
                                          """;
         imagesTableCommand.ExecuteNonQuery();
+        
+        var solutionsTableCommand = connection.CreateCommand();
+        solutionsTableCommand.CommandText = """
+                                         CREATE TABLE IF NOT EXISTS Solutions (
+                                             Uuid TEXT NOT NULL,
+                                             QuestionNumber INTEGER,
+                                             AnswerNumber INTEGER
+                                         );
+                                         """;
+        solutionsTableCommand.ExecuteNonQuery();
     }
 }
