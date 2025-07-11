@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Docnet.Core.Models;
+using Storage;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace Interface.Export;
@@ -74,8 +75,21 @@ public partial class ExportPage
     
     private void BackgroundLoader_DoWork(object? sender, DoWorkEventArgs e)
     {
-        string pdfPath = "C:/Users/beres/Desktop/prj/LaTeX/preview.pdf";
+        // Create a PDF to preview
+        var examBuilder = new ExamBuilder(Bindings.Instance.SheetRoot, 5); // TODO: Get from UI
+        try
+        {
+            examBuilder.ExportPdf();
+        }
+        catch (TimeoutException)
+        {
+            e.Result = new Tuple<bool, PageData[], double, double, ExamBuilder>(false, [], 0, 0, examBuilder);
+            return;
+        }
+
+        string pdfPath = examBuilder.GetExportPath();
         
+        // Preview the PDF file
         using var doclib = Docnet.Core.DocLib.Instance;
         using var reader = doclib.GetDocReader(pdfPath, new PageDimensions(_dimX, _dimY));
         var pageCount = reader.GetPageCount();
@@ -115,12 +129,19 @@ public partial class ExportPage
             canvasXOffset = int.Max(width + 2, canvasXOffset);
         }
 
-        e.Result = new Tuple<PageData[], double, double>(pages, canvasYOffset, canvasXOffset);
+        e.Result = new Tuple<bool, PageData[], double, double, ExamBuilder>(false, pages, canvasYOffset, canvasXOffset, examBuilder);
     }
 
     private void BackgroundLoader_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)
     {
-        var (pages, canvasYOffset, canvasXOffset) = (Tuple<PageData[], double, double>)e.Result!; // <--- !!!
+        var (failed, pages, canvasYOffset, canvasXOffset, examBuilder) = (Tuple<bool, PageData[], double, double, ExamBuilder>)e.Result!; // <--- !!!
+        if (failed)
+        {
+            MessageBox.Show("Failed to load PDF preview. Please check the log for details.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            PreviewProgressBar.Visibility = Visibility.Collapsed;
+            CreateButton.IsEnabled = true;
+            return;
+        }
 
         foreach (var page in pages)
         {
@@ -139,6 +160,7 @@ public partial class ExportPage
         PreviewScroll.Height = canvasYOffset;
         PreviewProgressBar.Visibility = Visibility.Collapsed;
         CreateButton.IsEnabled = true;
+        examBuilder.CleanUp();
     }
 
     private void RescalePreview(double mult)
