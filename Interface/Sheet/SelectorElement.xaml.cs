@@ -106,7 +106,9 @@ public partial class SelectorElement : ICanRequestDeletion
 
     private void DeleteChild(object? sender, EventArgs e)
     {
-        ContentList.Children.Remove((Control)sender!);
+        if (sender is TaskElement task)
+            Node.Children.Remove(task.Node);
+        ContentList.Children.Remove(sender! as Control);
     }
 
     public void Delete(bool root = false)
@@ -120,6 +122,7 @@ public partial class SelectorElement : ICanRequestDeletion
                     break;
                 case TaskElement taskElement:
                     taskElement.Delete();
+                    Node.Children.Remove(taskElement.Node);
                     break;
             }
         }
