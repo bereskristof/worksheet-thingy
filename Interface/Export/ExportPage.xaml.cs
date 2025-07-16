@@ -83,7 +83,8 @@ public partial class ExportPage
         }
         catch (TimeoutException)
         {
-            e.Result = new Tuple<bool, PageData[], double, double, ExamBuilder>(false, [], 0, 0, examBuilder);
+            e.Result = new Tuple<bool, PageData[], double, double, ExamBuilder>(true, [], 0, 0, examBuilder);
+            examBuilder.CleanUpError();
             return;
         }
 
@@ -92,6 +93,7 @@ public partial class ExportPage
         // Preview the PDF file
         using var doclib = Docnet.Core.DocLib.Instance;
         using var reader = doclib.GetDocReader(pdfPath, new PageDimensions(_dimX, _dimY));
+
         var pageCount = reader.GetPageCount();
 
         var canvasYOffset = 20;
@@ -137,7 +139,7 @@ public partial class ExportPage
         var (failed, pages, canvasYOffset, canvasXOffset, examBuilder) = (Tuple<bool, PageData[], double, double, ExamBuilder>)e.Result!; // <--- !!!
         if (failed)
         {
-            MessageBox.Show("Failed to load PDF preview. Please check the log for details.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show("Failed to load PDF preview. Please check the log for details.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); // TODO: Localize
             PreviewProgressBar.Visibility = Visibility.Collapsed;
             CreateButton.IsEnabled = true;
             return;
