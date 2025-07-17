@@ -5,7 +5,7 @@ public class LatexBuilder
 {
     private string _text = string.Empty;
     
-    public void AutoHeader(string title, string author, string date)
+    public void AutoHeader(string title, string author, string date, string? backgroundRelativePath)
     {
         Macro("documentclass", "exam", ["addpoints", "answers", "a4paper"]);
         Package("inputenc", ["utf8"]);
@@ -14,9 +14,12 @@ public class LatexBuilder
         Package("amsmath");
         Package("amsfonts");
         Package("amssymb");
+        Package("background");
         Macro("title", title);
         Macro("author", author);
         Macro("date", date);
+        if (backgroundRelativePath != null)
+            Macro("backgroundsetup", @"scale=1,angle=0,opacity=1,contents={\includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio]{" + backgroundRelativePath + "}}");
         Begin("document");
         Begin("questions");
     }

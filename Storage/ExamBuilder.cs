@@ -1,16 +1,16 @@
 using System.Diagnostics;
-using System.Net.Mime;
 using Storage.Sheet;
 
 namespace Storage;
 
+[System.Runtime.Versioning.SupportedOSPlatform("windows")]
 public class ExamBuilder
 {
     private readonly Guid _id = Guid.NewGuid();
     
     private readonly Tuple<long, long[]>[] _skeleton = [];
     private readonly LatexBuilder _builder;
-    
+
     private string? _exportPath;
     
     public ExamBuilder(SelectorNode rootNode, byte answerCount)
@@ -18,7 +18,13 @@ public class ExamBuilder
         var questions = rootNode.GetQuestions();
         
         _builder = new LatexBuilder();
-        _builder.AutoHeader("Test Title", "Author Name", "Date"); // TODO: Replace with obtained values
+        
+        var backgroundPath = Path.Combine(Path.GetTempPath(), "ExamBuilder", $"{_id}.png");
+        var backgroundBuilder = new BackgroundBuilder(_id.ToByteArray());
+        backgroundBuilder.Save(backgroundPath);
+        var backgroundRelativePath = Path.GetRelativePath(Path.GetDirectoryName(backgroundPath)!, backgroundPath);
+        _builder.AutoHeader("Test Title", "Author Name", "Date", backgroundRelativePath); // TODO: Replace with obtained values
+        
         foreach (var question in questions)
         {
             var answers = question.Answers.GetRandomAnswers(answerCount);
@@ -27,7 +33,8 @@ public class ExamBuilder
             _builder.Question(
                 question.Text,
                 question.Points, 
-                answers.Select(a => a.Text).ToArray()
+                answers.Select(a => a.Text).ToArray(),
+                question.FetchImageStream()?.ToArray()
             );
         }
         _builder.AutoFooter();
@@ -73,25 +80,35 @@ public class ExamBuilder
             return;
         }
 
+        CallPdfLatex();
+        CallPdfLatex();
+        
+        _exportPath = Path.ChangeExtension(_exportPath, ".pdf");
+        Log.Write($"ExportPdf: Exported PDF to {_exportPath}");
+    }
+    
+    // Piece of fucking dogshit latexmk does nothing other than NOT kill its fucking children,
+    // So I have to call all these cunts manually
+    // Because obviously if you call pdflatex, you actually just want to somewhat kinda create a PDF file. Sometimes.
+    private void CallPdfLatex()
+    {
         var process = new Process();
-        process.StartInfo = new ProcessStartInfo("pdflatex", $"-halt-on-error -output-directory=\"{Path.GetDirectoryName(_exportPath)}\" \"{_exportPath}\"")
+        var flags = $"-halt-on-error -output-directory=\"{Path.GetDirectoryName(_exportPath)}\" \"{_exportPath}\"";
+        process.StartInfo = new ProcessStartInfo("pdflatex", flags)
         { CreateNoWindow = true };
         process.Start();
-        _exportPath = Path.ChangeExtension(_exportPath, ".pdf");
-        var finished = process.WaitForExit(15_000); // Wait for 15 seconds for the process to complete
-        if (!finished || process.ExitCode != 0 || !File.Exists(_exportPath))
+        var finished = process.WaitForExit(30_000); // Wait for god knows how many this will be seconds for the process to complete
+        var outputPath = Path.ChangeExtension(_exportPath, ".pdf");
+        if (finished && process.ExitCode == 0 && File.Exists(outputPath)) return;
+        process.Kill(true);
+        var killed = process.WaitForExit(5_000);
+        if (!killed)
         {
-            process.Kill(true);
-            var killed = process.WaitForExit(5_000);
-            if (!killed)
-            {
-                Log.Write($"ExportPdf: pdflatex failed to complete, child process has refused to be killed, ABANDONING!", Log.Severity.Error);
-                Environment.Exit(-90); // <--- Process was force abandoned due to extreme complications
-            }
-            Log.Write($"ExportPdf: pdflatex failed to complete, child process was killed", Log.Severity.Warning);
-            throw new TimeoutException();
+            Log.Write($"ExportPdf: pdflatex failed to complete, child process has refused to be killed, ABANDONING!", Log.Severity.Error);
+            Environment.Exit(-90); // <--- Process was force abandoned due to extreme complications
         }
-        Log.Write($"ExportPdf: Exported PDF to {_exportPath}");
+        Log.Write($"ExportPdf: pdflatex failed to complete, child process was killed", Log.Severity.Warning);
+        throw new TimeoutException();
     }
     
     public string GetExportPath()
@@ -109,7 +126,7 @@ public class ExamBuilder
             return;
         }
 
-        var auxFiles = new[] { ".aux", ".log", ".out", ".toc", ".pdf", ".tex" };
+        var auxFiles = new[] { ".aux", ".log", ".out", ".toc", ".pdf", ".tex", ".png" };
         foreach (var ext in auxFiles)
         {
             var auxFile = Path.ChangeExtension(_exportPath, ext);

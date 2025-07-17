@@ -1,6 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 
 namespace ConsoleApp;
@@ -9,7 +7,19 @@ public static class Program
 {
     private const string Chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     
+#pragma warning disable CA1416
     public static void Main()
+    {
+        Guid uuid = Guid.NewGuid();
+        byte[] uuidBytes = uuid.ToByteArray();
+        Console.WriteLine(uuid);
+        Console.WriteLine(uuidBytes);
+        var bg = new Storage.BackgroundBuilder(uuidBytes);
+        bg.Save("C:/Users/beres/Desktop/test-bg0.png");
+    }
+#pragma warning restore CA1416
+
+    private static void Breaker()
     {
         bool r = Storage.Manager.OpenDatabase("C:/Users/beres/Desktop/test-pwd-cc.db");
         if (!r)

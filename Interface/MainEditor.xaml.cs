@@ -12,7 +12,7 @@ public partial class MainEditor
         var questions = Bindings.Instance.SheetRoot.GetQuestions();
         
         var taskSheet = new Storage.LatexBuilder();
-        taskSheet.AutoHeader("Test Title", "Author Name", "Date");
+        taskSheet.AutoHeader("Test Title", "Author Name", "Date", null);
         foreach (var question in questions)
             taskSheet.Question(
                 question.Text,

@@ -50,7 +50,6 @@ public partial class MainWindow
         MessageBox.Show(errorMessage, Interface.Resources.Lang.Crash_Title, MessageBoxButton.OK, MessageBoxImage.Error);
         // TODO: Dump data
         e.Handled = true;
-        // TODO: Attempt saving the database?
         Close();
     }
     
