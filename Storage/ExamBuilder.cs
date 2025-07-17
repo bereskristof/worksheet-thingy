@@ -87,9 +87,10 @@ public class ExamBuilder
         Log.Write($"ExportPdf: Exported PDF to {_exportPath}");
     }
     
-    // Piece of fucking dogshit latexmk does nothing other than NOT kill its fucking children,
-    // So I have to call all these cunts manually
-    // Because obviously if you call pdflatex, you actually just want to somewhat kinda create a PDF file. Sometimes.
+    // `latexmk` won't allow you to kill its children,
+    // So I have to call `pdflatex` manually twice,
+    // Because obviously if you call pdflatex,
+    // You actually just want to somewhat kinda create a PDF file, maybe.
     private void CallPdfLatex()
     {
         var process = new Process();
@@ -97,7 +98,7 @@ public class ExamBuilder
         process.StartInfo = new ProcessStartInfo("pdflatex", flags)
         { CreateNoWindow = true };
         process.Start();
-        var finished = process.WaitForExit(30_000); // Wait for god knows how many this will be seconds for the process to complete
+        var finished = process.WaitForExit(30_000); // Wait for 30 seconds for the process to complete
         var outputPath = Path.ChangeExtension(_exportPath, ".pdf");
         if (finished && process.ExitCode == 0 && File.Exists(outputPath)) return;
         process.Kill(true);
