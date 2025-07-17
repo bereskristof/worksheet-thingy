@@ -15,13 +15,13 @@ public static class Program
         Console.WriteLine(uuid);
         Console.WriteLine(uuidBytes);
         var bg = new Storage.BackgroundBuilder(uuidBytes);
-        bg.Save("C:/Users/beres/Desktop/test-bg0.png");
+        bg.Save(Environment.ExpandEnvironmentVariables("%homepath%/Desktop/test-bg0.png"));
     }
 #pragma warning restore CA1416
 
     private static void Breaker()
     {
-        bool r = Storage.Manager.OpenDatabase("C:/Users/beres/Desktop/test-pwd-cc.db");
+        bool r = Storage.Manager.OpenDatabase(Environment.ExpandEnvironmentVariables("%homepath%/Desktop/test-pwd-cc.db"));
         if (!r)
         {
             Console.WriteLine("Failed to open database. Starting brute force attack...");

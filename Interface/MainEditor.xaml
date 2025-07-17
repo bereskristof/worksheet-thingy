@@ -21,9 +21,6 @@
             <export:ExportPage/>
         </TabItem>
         <TabItem Header="{x:Static res:Lang.MenuTabs_Correct}" IsEnabled="False"/>
-        <TabItem Header="Debug">
-            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Content="Generate lists" Click="ButtonBase_OnClick"/>
-        </TabItem>
         <TabItem Header="About">
             <about:About/>
         </TabItem>

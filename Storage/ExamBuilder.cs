@@ -19,8 +19,9 @@ public class ExamBuilder
         
         _builder = new LatexBuilder();
         
-        var backgroundPath = Path.Combine(Path.GetTempPath(), "ExamBuilder", $"{_id}.png");
+        var backgroundPath = Path.Combine(Path.GetTempPath(), Manager.PathTitle, $"{_id}.png");
         var backgroundBuilder = new BackgroundBuilder(_id.ToByteArray());
+        Directory.CreateDirectory(Path.GetDirectoryName(backgroundPath) ?? throw new InvalidOperationException("Invalid directory name"));
         backgroundBuilder.Save(backgroundPath);
         var backgroundRelativePath = Path.GetRelativePath(Path.GetDirectoryName(backgroundPath)!, backgroundPath);
         _builder.AutoHeader("Test Title", "Author Name", "Date", backgroundRelativePath); // TODO: Replace with obtained values
@@ -56,15 +57,14 @@ public class ExamBuilder
         }
     }
 
-    public void ExportTex(string? filename = null)
+    private void ExportTex(string? filename = null)
     {
         if (_exportPath != null)
         {
             Log.Write("ExportTex: Export path is already set, cannot export again.", Log.Severity.Error);
             return;
         }
-        filename ??= Path.Combine(Path.GetTempPath(), "ExamBuilder", $"{_id}.tex");
-        Directory.CreateDirectory(Path.GetDirectoryName(filename) ?? throw new InvalidOperationException("Invalid directory name"));
+        filename ??= Path.Combine(Path.GetTempPath(), Manager.PathTitle, $"{_id}.tex");
         _exportPath = filename;
         using var writer = new StreamWriter(filename);
         writer.Write(_builder.Finish());

@@ -4,7 +4,7 @@ namespace Storage;
 
 public static class Manager
 {
-    public const string TempUUID = "20384ab2-627d-4d60-bacf-052dc05567e9";
+    public const string PathTitle = "WorksheetToolkit";
     
     private static SqliteConnection? _connection;
 

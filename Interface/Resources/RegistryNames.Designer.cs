@@ -60,7 +60,7 @@ namespace Interface.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SOFTWARE\\VostokToolkit.
+        ///   Looks up a localized string similar to SOFTWARE\\WorksheetToolkit.
         /// </summary>
         internal static string KeyPath {
             get {
