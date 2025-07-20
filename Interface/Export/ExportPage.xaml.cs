@@ -11,6 +11,8 @@ using Docnet.Core.Models;
 using Storage;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
+using WorkArgs = System.Tuple<string, string, string>;
+
 namespace Interface.Export;
 
 public partial class ExportPage : INotifyPropertyChanged
@@ -93,16 +95,22 @@ public partial class ExportPage : INotifyPropertyChanged
         PreviewScroll.Children.Clear();
         _scaleTransform.ScaleX = 1.0;
         _scaleTransform.ScaleY = 1.0;
-        BackgroundWorker asyncImageLoader = new();
-        asyncImageLoader.DoWork += BackgroundLoader_DoWork;
-        asyncImageLoader.RunWorkerCompleted += BackgroundLoader_RunWorkerCompleted;
-        asyncImageLoader.RunWorkerAsync();
+        BackgroundWorker previewWorker = new();
+        previewWorker.DoWork += BackgroundLoader_DoWork;
+        previewWorker.RunWorkerCompleted += BackgroundLoader_RunWorkerCompleted;
+        var title = TitleBox.Text.Trim();
+        var author = AuthorBox.Text.Trim();
+        var date = DateBox.Text.Trim();
+        var args = new WorkArgs(title, author, date);
+        previewWorker.RunWorkerAsync(argument: args);
     }
     
     private void BackgroundLoader_DoWork(object? sender, DoWorkEventArgs e)
     {
+        var (title, author, date) = (WorkArgs)e.Argument!;
+        
         // Create a PDF to preview
-        var examBuilder = new ExamBuilder(Bindings.Instance.SheetRoot, 5); // TODO: Get from UI
+        var examBuilder = new ExamBuilder(Bindings.Instance.SheetRoot, 5, title, author, date);
         try
         {
             examBuilder.ExportPdf();
@@ -207,7 +215,10 @@ public partial class ExportPage : INotifyPropertyChanged
             WindowStartupLocation = WindowStartupLocation.CenterOwner,
             Title = "Exporting PDF", // TODO: Localize
         };
-        window.ExportNPages(Bindings.Instance.SheetRoot, PageCount, 5); // TODO: Get from UI
+        var title = TitleBox.Text.Trim();
+        var author = AuthorBox.Text.Trim();
+        var date = DateBox.Text.Trim();
+        window.ExportNPages(Bindings.Instance.SheetRoot, PageCount, 5, title, author, date);
         window.ShowDialog();
     }
 }

@@ -3,7 +3,7 @@ using System.IO;
 using System.Windows;
 using Storage;
 using Storage.Sheet;
-using WorkArgs = System.Tuple<string, Storage.Sheet.SelectorNode, byte, uint>;
+using WorkArgs = System.Tuple<string, Storage.Sheet.SelectorNode, byte, uint, string, string, string>;
 
 namespace Interface.Export;
 
@@ -17,16 +17,16 @@ public partial class ExportingWindow
         WindowStyle = WindowStyle.None;
     }
     
-    public void ExportNPages(SelectorNode root, uint examCount, byte answerCount)
+    public void ExportNPages(SelectorNode root, uint examCount, byte answerCount, string title, string author, string date)
     {
-        var target = Environment.ExpandEnvironmentVariables("%homepath%/Desktop/final.pdf");
+        var target = Environment.ExpandEnvironmentVariables("%homepath%/Desktop/final.pdf"); // TODO: Get from UI
         _backgroundWorker.WorkerReportsProgress = true;
-        // backgroundWorker.WorkerSupportsCancellation = true;
         ExportProgressBar.Maximum = CalculateMaxProgress(examCount);
+        Counter.Content = $"0 / {ExportProgressBar.Maximum}";
         _backgroundWorker.ProgressChanged += BackgroundWorker_ProgressChanged;
         _backgroundWorker.DoWork += BackgroundLoader_DoWork;
         _backgroundWorker.RunWorkerCompleted += BackgroundLoader_RunWorkerCompleted;
-        var args = new WorkArgs(target, root, answerCount, examCount);
+        var args = new WorkArgs(target, root, answerCount, examCount, title, author, date);
         _backgroundWorker.RunWorkerAsync(argument: args);
     }
     
@@ -41,21 +41,22 @@ public partial class ExportingWindow
 
     private void BackgroundLoader_DoWork(object? sender, DoWorkEventArgs e)
     {
-        var (target, root, answerCount, examCount) = (WorkArgs)e.Argument!;
-        var multipleExportPage = new MultiExamBuilder(root, answerCount, examCount);
+        var (target, root, answerCount, examCount, title, author, date) = (WorkArgs)e.Argument!;
+        var multipleExportPage = new MultiExamBuilder(root, answerCount, title, author, date);
         
         // First always exports a byte array
         var firstPath = multipleExportPage.ExportNewPdf();
         byte[] combinedPdf = File.ReadAllBytes(firstPath);
         _backgroundWorker.ReportProgress(1);
         
-        for (int i = 0; i < examCount; i++)
+        for (int i = 1; i < examCount; i++)
         {
             var path = multipleExportPage.ExportNewPdf();
             combinedPdf = multipleExportPage.MergePdfs(combinedPdf, path);
             _backgroundWorker.ReportProgress(i + 1);
         }
         
+        File.WriteAllBytes(target, combinedPdf);
         multipleExportPage.CleanUp();
     }
 

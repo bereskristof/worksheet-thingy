@@ -15,12 +15,21 @@ public class LatexBuilder
         Package("amsfonts");
         Package("amssymb");
         Package("background");
-        Macro("title", title);
-        Macro("author", author);
-        Macro("date", date);
+        if (title != string.Empty)
+            Macro("title", title);
+        if (author != string.Empty)
+            Macro("author", author);
+        if (date != string.Empty)
+            Macro("date", date);
         if (backgroundRelativePath != null)
             Macro("backgroundsetup", @"scale=1,angle=0,opacity=1,contents={\includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio]{" + backgroundRelativePath + "}}");
         Begin("document");
+        if (title != string.Empty)
+            Macro("textbf", title);
+        if (title != string.Empty && author != string.Empty && date != string.Empty)
+            Text("");
+        if (author != string.Empty && date != string.Empty)
+            Text(author + " --- " + date);
         Begin("questions");
     }
     

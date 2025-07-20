@@ -13,7 +13,7 @@ public class ExamBuilder
 
     private string? _exportPath;
     
-    public ExamBuilder(SelectorNode rootNode, byte answerCount)
+    public ExamBuilder(SelectorNode rootNode, byte answerCount, string title, string author, string date)
     {
         var questions = rootNode.GetQuestions();
         
@@ -24,7 +24,7 @@ public class ExamBuilder
         Directory.CreateDirectory(Path.GetDirectoryName(backgroundPath) ?? throw new InvalidOperationException("Invalid directory name"));
         backgroundBuilder.Save(backgroundPath);
         var backgroundRelativePath = Path.GetRelativePath(Path.GetDirectoryName(backgroundPath)!, backgroundPath);
-        _builder.AutoHeader("Test Title", "Author Name", "Date", backgroundRelativePath); // TODO: Replace with obtained values
+        _builder.AutoHeader(title, author, date, backgroundRelativePath);
         
         foreach (var question in questions)
         {
