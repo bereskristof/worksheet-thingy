@@ -212,4 +212,7 @@
     <data name="MenuTabs_About" xml:space="preserve">
         <value>Névjegy</value>
     </data>
+    <data name="ExportPopup_Exporting" xml:space="preserve">
+        <value>Kiadás...</value>
+    </data>
 </root>

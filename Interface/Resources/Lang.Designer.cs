@@ -177,6 +177,15 @@ namespace Interface.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exporting....
+        /// </summary>
+        public static string ExportPopup_Exporting {
+            get {
+                return ResourceManager.GetString("ExportPopup_Exporting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Browse.
         /// </summary>
         public static string Import_Browse {

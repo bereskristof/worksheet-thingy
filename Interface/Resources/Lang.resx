@@ -219,4 +219,7 @@
     <data name="MenuTabs_About" xml:space="preserve">
         <value>About</value>
     </data>
+    <data name="ExportPopup_Exporting" xml:space="preserve">
+        <value>Exporting...</value>
+    </data>
 </root>

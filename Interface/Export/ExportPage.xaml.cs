@@ -201,6 +201,13 @@ public partial class ExportPage : INotifyPropertyChanged
 
     private void ExportButton_OnClick(object sender, RoutedEventArgs e)
     {
-        Console.WriteLine(PageCount); // TODO: Replace with actual export logic
+        var window = new ExportingWindow
+        {
+            Owner = Window.GetWindow(this),
+            WindowStartupLocation = WindowStartupLocation.CenterOwner,
+            Title = "Exporting PDF", // TODO: Localize
+        };
+        window.ExportNPages(Bindings.Instance.SheetRoot, PageCount, 5); // TODO: Get from UI
+        window.ShowDialog();
     }
 }

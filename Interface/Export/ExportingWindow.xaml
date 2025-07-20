@@ -3,9 +3,21 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:res="clr-namespace:Interface.Resources"
         mc:Ignorable="d"
-        Title="ExportingWindow" Height="450" Width="800">
+        Title="ExportingWindow" Height="80" Width="250">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Label Grid.Row="0" Grid.Column="0" Content="{x:Static res:Lang.ExportPopup_Exporting}"/>
+        <Label Grid.Row="0" Grid.Column="1" Name="Counter" Content="0 / 0"/>
+        <ProgressBar Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Height="10" Minimum="0" Maximum="1000" Name="ExportProgressBar" Margin="3"/>
     </Grid>
 </Window>

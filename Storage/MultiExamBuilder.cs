@@ -3,32 +3,31 @@ using Storage.Sheet;
 
 namespace Storage;
 
+// TODO: Make this use a single TeX file with multiple pages instead of multiple TeX files.
+// Would increase performance and reduce disk usage.
 [System.Runtime.Versioning.SupportedOSPlatform("windows")]
 public class MultiExamBuilder(SelectorNode rootNode, byte answerCount, uint examCount)
 {
     private readonly List<ExamBuilder> _workingExamBuilders = [];
     
-    public void ExportCombinedPdf()
+    [Obsolete]
+    public void ExportCombinedPdf(string targetPath)
     {
         SaveAndExportAllPdfs();
         var pdfPaths = _workingExamBuilders.Select(x => x.GetExportPath()).ToArray();
-        MergePdfs(pdfPaths, Environment.ExpandEnvironmentVariables("%homepath%/Desktop/final.pdf")); // TODO: Make this configurable
+        MergePdfs(pdfPaths, targetPath);
         CleanUp();
     }
     
+    [Obsolete]
     private void SaveAndExportAllPdfs()
     {
         for (int i = 0; i < examCount; i++)
         {
-            var examBuilder = new ExamBuilder(rootNode, answerCount);
-            // examBuilder.Store();
-            examBuilder.ExportPdf();
-            var exportPath = examBuilder.GetExportPath();
-            Console.WriteLine("Exported {0} of {1}", i + 1, examCount);
-            _workingExamBuilders.Add(examBuilder);
         }
     }
     
+    [Obsolete]
     private static void MergePdfs(string[] pdfPaths, string exportPath)
     {
         if (pdfPaths.Length < 2)
@@ -39,14 +38,33 @@ public class MultiExamBuilder(SelectorNode rootNode, byte answerCount, uint exam
         var mergedPdf = DocLib.Instance.Merge(pdfPaths[0], pdfPaths[1]);
         foreach (var path in pdfPaths[2..])
         {
-            var pdfBytes = File.ReadAllBytes(path);
-            mergedPdf = DocLib.Instance.Merge(mergedPdf, pdfBytes);
         }
         
         File.WriteAllBytes(exportPath, mergedPdf);
     }
 
-    private void CleanUp()
+    // A state variable would certainly be more elegant, but this should eventually get completely replaced anyway. (TODO)
+    /// Just read the implementation, it's shorter than explaining it.
+    public string ExportNewPdf()
+    {
+        var examBuilder = new ExamBuilder(rootNode, answerCount);
+        // examBuilder.Store();
+        examBuilder.ExportPdf();
+        var exportPath = examBuilder.GetExportPath();
+        _workingExamBuilders.Add(examBuilder);
+        return examBuilder.GetExportPath();
+    }
+
+    /// Appends a PDF to an existing PDF byte array.
+    public byte[] MergePdfs(byte[] existingPdf, string pathToPdfToAppend)
+    {
+        var pdfBytes = File.ReadAllBytes(pathToPdfToAppend);
+        existingPdf = DocLib.Instance.Merge(existingPdf, pdfBytes);
+        return existingPdf;
+    }
+
+    /// Cleans up all exam builders, removing their temporary files.
+    public void CleanUp()
     {
         var i = 0;
         foreach (var examBuilder in _workingExamBuilders)
