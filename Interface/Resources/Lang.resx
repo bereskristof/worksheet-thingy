@@ -183,4 +183,40 @@
     <data name="Task_Select" xml:space="preserve">
         <value>Select</value>
     </data>
+    <data name="Export_Amount" xml:space="preserve">
+        <value>Amount:</value>
+    </data>
+    <data name="Export_Title" xml:space="preserve">
+        <value>Title:</value>
+    </data>
+    <data name="Export_Author" xml:space="preserve">
+        <value>Author:</value>
+    </data>
+    <data name="Export_Date" xml:space="preserve">
+        <value>Date:</value>
+    </data>
+    <data name="Export_Export" xml:space="preserve">
+        <value>Export PDF</value>
+    </data>
+    <data name="Export_Preview" xml:space="preserve">
+        <value>Create Preview</value>
+    </data>
+    <data name="Export_ZoomIn" xml:space="preserve">
+        <value>Zoom In</value>
+    </data>
+    <data name="Export_ZoomOut" xml:space="preserve">
+        <value>Zoom Out</value>
+    </data>
+    <data name="Export_Low" xml:space="preserve">
+        <value>Low</value>
+    </data>
+    <data name="Export_Med" xml:space="preserve">
+        <value>Medium</value>
+    </data>
+    <data name="Export_High" xml:space="preserve">
+        <value>High</value>
+    </data>
+    <data name="MenuTabs_About" xml:space="preserve">
+        <value>About</value>
+    </data>
 </root>

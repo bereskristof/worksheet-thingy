@@ -176,4 +176,40 @@
     <data name="Task_Select" xml:space="preserve">
         <value>Választ</value>
     </data>
+    <data name="Export_Amount" xml:space="preserve">
+        <value>Mennyiség:</value>
+    </data>
+    <data name="Export_Author" xml:space="preserve">
+        <value>Író:</value>
+    </data>
+    <data name="Export_Date" xml:space="preserve">
+        <value>Dátum:</value>
+    </data>
+    <data name="Export_Export" xml:space="preserve">
+        <value>PDF kiadása</value>
+    </data>
+    <data name="Export_High" xml:space="preserve">
+        <value>Magas</value>
+    </data>
+    <data name="Export_Low" xml:space="preserve">
+        <value>Alacsony</value>
+    </data>
+    <data name="Export_Med" xml:space="preserve">
+        <value>Közepes</value>
+    </data>
+    <data name="Export_Preview" xml:space="preserve">
+        <value>Előnézet készítése</value>
+    </data>
+    <data name="Export_Title" xml:space="preserve">
+        <value>Cím:</value>
+    </data>
+    <data name="Export_ZoomIn" xml:space="preserve">
+        <value>Nagyítás</value>
+    </data>
+    <data name="Export_ZoomOut" xml:space="preserve">
+        <value>Kicsinyítés</value>
+    </data>
+    <data name="MenuTabs_About" xml:space="preserve">
+        <value>Névjegy</value>
+    </data>
 </root>

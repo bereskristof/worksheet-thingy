@@ -78,6 +78,105 @@ namespace Interface.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Amount:.
+        /// </summary>
+        public static string Export_Amount {
+            get {
+                return ResourceManager.GetString("Export_Amount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Author:.
+        /// </summary>
+        public static string Export_Author {
+            get {
+                return ResourceManager.GetString("Export_Author", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date:.
+        /// </summary>
+        public static string Export_Date {
+            get {
+                return ResourceManager.GetString("Export_Date", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export PDF.
+        /// </summary>
+        public static string Export_Export {
+            get {
+                return ResourceManager.GetString("Export_Export", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to High.
+        /// </summary>
+        public static string Export_High {
+            get {
+                return ResourceManager.GetString("Export_High", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Low.
+        /// </summary>
+        public static string Export_Low {
+            get {
+                return ResourceManager.GetString("Export_Low", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Medium.
+        /// </summary>
+        public static string Export_Med {
+            get {
+                return ResourceManager.GetString("Export_Med", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Preview.
+        /// </summary>
+        public static string Export_Preview {
+            get {
+                return ResourceManager.GetString("Export_Preview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title:.
+        /// </summary>
+        public static string Export_Title {
+            get {
+                return ResourceManager.GetString("Export_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zoom In.
+        /// </summary>
+        public static string Export_ZoomIn {
+            get {
+                return ResourceManager.GetString("Export_ZoomIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zoom Out.
+        /// </summary>
+        public static string Export_ZoomOut {
+            get {
+                return ResourceManager.GetString("Export_ZoomOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Browse.
         /// </summary>
         public static string Import_Browse {
@@ -110,6 +209,15 @@ namespace Interface.Resources {
         public static string Import_Title {
             get {
                 return ResourceManager.GetString("Import_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        public static string MenuTabs_About {
+            get {
+                return ResourceManager.GetString("MenuTabs_About", resourceCulture);
             }
         }
         

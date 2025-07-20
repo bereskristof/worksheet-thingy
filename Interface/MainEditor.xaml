@@ -21,7 +21,7 @@
             <export:ExportPage/>
         </TabItem>
         <TabItem Header="{x:Static res:Lang.MenuTabs_Correct}" IsEnabled="False"/>
-        <TabItem Header="About">
+        <TabItem Header="{x:Static res:Lang.MenuTabs_About}">
             <about:About/>
         </TabItem>
     </TabControl>

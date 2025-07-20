@@ -57,7 +57,7 @@ public class ExamBuilder
         }
     }
 
-    private void ExportTex(string? filename = null)
+    public void ExportTex(string? filename = null)
     {
         if (_exportPath != null)
         {

@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Docnet.Core.Models;
@@ -12,8 +13,13 @@ using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace Interface.Export;
 
-public partial class ExportPage
-{ 
+public partial class ExportPage : INotifyPropertyChanged
+{
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    private void OnPropertyChanged(string propertyName)
+        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    
     struct PageData
     {
         public byte[] Data;
@@ -27,9 +33,29 @@ public partial class ExportPage
     private int _dimX = 1080;
     private int _dimY = 1920;
     
+    private uint _pageCount = 1;
+    public uint PageCount
+    {
+        get => _pageCount;
+        set
+        {
+            if (_pageCount == value) return;
+            _pageCount = value;
+            OnPropertyChanged(nameof(PageCount));
+        }
+    }
+    
     public ExportPage()
     {
         InitializeComponent();
+        var pageCountBinding = new Binding("PageCount")
+        {
+            Source = this,
+            Path = new PropertyPath("PageCount"), 
+            Mode = BindingMode.TwoWay,
+            UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+        };
+        BindingOperations.SetBinding(AmountBox, TextBox.TextProperty, pageCountBinding);
         PreviewScroll.RenderTransform = _scaleTransform;
     }
 
@@ -171,5 +197,10 @@ public partial class ExportPage
         _scaleTransform.ScaleY *= mult;
         PreviewScroll.Width *= mult;
         PreviewScroll.Height *= mult;
+    }
+
+    private void ExportButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        Console.WriteLine(PageCount); // TODO: Replace with actual export logic
     }
 }
