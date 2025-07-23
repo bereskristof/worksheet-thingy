@@ -12,6 +12,7 @@ using Storage;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 using WorkArgs = System.Tuple<string, string, string>;
+using PreviewTuple = System.Tuple<string?, Interface.Export.ExportPage.PageData[], double, double, Storage.ExamBuilder>;
 
 namespace Interface.Export;
 
@@ -22,7 +23,7 @@ public partial class ExportPage : INotifyPropertyChanged
     private void OnPropertyChanged(string propertyName)
         => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     
-    struct PageData
+    public struct PageData
     {
         public byte[] Data;
         public int Width;
@@ -115,9 +116,11 @@ public partial class ExportPage : INotifyPropertyChanged
         {
             examBuilder.ExportPdf();
         }
-        catch (TimeoutException)
+        catch (TimeoutException ex)
         {
-            e.Result = new Tuple<bool, PageData[], double, double, ExamBuilder>(true, [], 0, 0, examBuilder);
+            var errorMessage = ex.Message;
+            
+            e.Result = new PreviewTuple(errorMessage, [], 0, 0, examBuilder);
             examBuilder.CleanUpError();
             return;
         }
@@ -165,15 +168,15 @@ public partial class ExportPage : INotifyPropertyChanged
             canvasXOffset = int.Max(width + 2, canvasXOffset);
         }
 
-        e.Result = new Tuple<bool, PageData[], double, double, ExamBuilder>(false, pages, canvasYOffset, canvasXOffset, examBuilder);
+        e.Result = new PreviewTuple(null, pages, canvasYOffset, canvasXOffset, examBuilder);
     }
 
     private void BackgroundLoader_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)
     {
-        var (failed, pages, canvasYOffset, canvasXOffset, examBuilder) = (Tuple<bool, PageData[], double, double, ExamBuilder>)e.Result!; // <--- !!!
-        if (failed)
+        var (error, pages, canvasYOffset, canvasXOffset, examBuilder) = (PreviewTuple)e.Result!;
+        if (error != null)
         {
-            MessageBox.Show("Failed to load PDF preview. Please check the log for details.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); // TODO: Localize
+            MessageBox.Show(error, "Error", MessageBoxButton.OK, MessageBoxImage.Error); // TODO: Localize
             PreviewProgressBar.Visibility = Visibility.Collapsed;
             CreateButton.IsEnabled = true;
             return;

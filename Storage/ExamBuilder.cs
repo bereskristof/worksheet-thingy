@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using Storage.Sheet;
 
 namespace Storage;
@@ -96,8 +97,9 @@ public class ExamBuilder
         var process = new Process();
         var flags = $"-halt-on-error -output-directory=\"{Path.GetDirectoryName(_exportPath)}\" \"{_exportPath}\"";
         process.StartInfo = new ProcessStartInfo("pdflatex", flags)
-        { CreateNoWindow = true };
+        { CreateNoWindow = true, RedirectStandardOutput = true, RedirectStandardError = true };
         process.Start();
+        var stdout = process.StandardOutput.ReadToEnd(); // Latex very helpfully puts its error messages to stdout, not to stderr
         var finished = process.WaitForExit(30_000); // Wait for 30 seconds for the process to complete
         var outputPath = Path.ChangeExtension(_exportPath, ".pdf");
         if (finished && process.ExitCode == 0 && File.Exists(outputPath)) return;
@@ -108,8 +110,11 @@ public class ExamBuilder
             Log.Write($"ExportPdf: pdflatex failed to complete, child process has refused to be killed, ABANDONING!", Log.Severity.Error);
             Environment.Exit(-90); // <--- Process was force abandoned due to extreme complications
         }
+
         Log.Write($"ExportPdf: pdflatex failed to complete, child process was killed", Log.Severity.Warning);
-        throw new TimeoutException();
+        var errorCapture = Regex.Match(stdout, "!((?:.|\\n)*?)! *==>"); // Pretty naive regex to capture errors from stdout
+        var errorText = string.Join(" ", errorCapture.Groups.Cast<Group>().Skip(1).Select(g => g.Value));
+        throw new TimeoutException(errorText);
     }
     
     public string GetExportPath()
