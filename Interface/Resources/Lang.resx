@@ -222,4 +222,7 @@
     <data name="ExportPopup_Exporting" xml:space="preserve">
         <value>Exporting...</value>
     </data>
+    <data name="Export_AnswerCount" xml:space="preserve">
+        <value>Answer count:</value>
+    </data>
 </root>

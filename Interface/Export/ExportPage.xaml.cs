@@ -48,6 +48,18 @@ public partial class ExportPage : INotifyPropertyChanged
         }
     }
     
+    private byte _answerCount = 5;
+    public byte AnswerCount
+    {
+        get => _answerCount;
+        set
+        {
+            if (_answerCount == value) return;
+            _answerCount = value;
+            OnPropertyChanged(nameof(AnswerCount));
+        }
+    }
+    
     public ExportPage()
     {
         InitializeComponent();
@@ -58,7 +70,15 @@ public partial class ExportPage : INotifyPropertyChanged
             Mode = BindingMode.TwoWay,
             UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
         };
+        var answerCountBinding = new Binding("AnswerCount")
+        {
+            Source = this,
+            Path = new PropertyPath("AnswerCount"),
+            Mode = BindingMode.TwoWay,
+            UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+        };
         BindingOperations.SetBinding(AmountBox, TextBox.TextProperty, pageCountBinding);
+        BindingOperations.SetBinding(AnswerCountBox, TextBox.TextProperty, answerCountBinding);
         PreviewScroll.RenderTransform = _scaleTransform;
     }
 
@@ -111,7 +131,7 @@ public partial class ExportPage : INotifyPropertyChanged
         var (title, author, date) = (WorkArgs)e.Argument!;
         
         // Create a PDF to preview
-        var examBuilder = new ExamBuilder(Bindings.Instance.SheetRoot, 5, title, author, date);
+        var examBuilder = new ExamBuilder(Bindings.Instance.SheetRoot, AnswerCount, title, author, date);
         try
         {
             examBuilder.ExportPdf();

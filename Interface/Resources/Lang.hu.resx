@@ -215,4 +215,7 @@
     <data name="ExportPopup_Exporting" xml:space="preserve">
         <value>Kiadás...</value>
     </data>
+    <data name="Export_AnswerCount" xml:space="preserve">
+        <value>Válaszmennyiség:</value>
+    </data>
 </root>

@@ -87,6 +87,15 @@ namespace Interface.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Answer count:.
+        /// </summary>
+        public static string Export_AnswerCount {
+            get {
+                return ResourceManager.GetString("Export_AnswerCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Author:.
         /// </summary>
         public static string Export_Author {
