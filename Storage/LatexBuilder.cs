@@ -140,7 +140,7 @@ public class LatexBuilder(string title, string author, string date)
         End("itemize");
         
         // Answer grid
-        Text(@"\centering \includegraphics[height=8mm]{table-guide-a.png}"); // TODO: Export image
+        Text(@"\centering \includegraphics[height=8mm]{ruler-top.png}"); // TODO: Export image
         Text(@"\def\arraystretch{1.0}");
         Text(@"\setlength\tabcolsep{6.0pt}");
         Begin("center");
@@ -177,7 +177,7 @@ public class LatexBuilder(string title, string author, string date)
         Text(@"\hline");
         End("tabular");
         End("center");
-        Text(@"\centering \includegraphics[height=8mm]{table-guide-b.png}"); // TODO: Export image
+        Text(@"\centering \includegraphics[height=8mm]{ruler-bottom.png}"); // TODO: Export image
         Text(@"\restoregeometry");
     }
 }

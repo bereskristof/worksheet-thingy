@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using System.Drawing;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using Storage.Sheet;
 using Storage.Task;
@@ -112,6 +114,7 @@ public static class MultiExamBuilder
         using var writer = new StreamWriter(filename);
         writer.Write(builder.Finish());
         writer.Close();
+        ExportRulers();
         return filename;
     }
 
@@ -161,6 +164,25 @@ public static class MultiExamBuilder
         var errorCapture = Regex.Match(stdout, "!((?:.|\\n)*?)! *==>"); // Pretty naive regex to capture errors from stdout
         var errorText = string.Join(" ", errorCapture.Groups.Cast<Group>().Skip(1).Select(g => g.Value));
         throw new TimeoutException(errorText);
+    }
+
+    private static void ExportRulers()
+    {
+        var pathTop = Path.Combine(Path.GetTempPath(), Manager.PathTitle, $"ruler-top.png");
+        var pathBottom = Path.Combine(Path.GetTempPath(), Manager.PathTitle, $"ruler-bottom.png");
+        ExportFromAssembly("Storage.Ruler.ruler-top.png", pathTop);
+        ExportFromAssembly("Storage.Ruler.ruler-bottom.png", pathBottom);
+    }
+    
+    private static void ExportFromAssembly(string resourceName, string outputPath)
+    {
+        var assembly = Assembly.GetExecutingAssembly();
+        using var stream = assembly.GetManifestResourceStream(resourceName);
+        if (stream == null)
+            throw new InvalidOperationException($"Resource {resourceName} not found in assembly.");
+        
+        using var fileStream = new FileStream(outputPath, FileMode.Create, FileAccess.Write);
+        stream.CopyTo(fileStream);
     }
 
     /// Cleans up all of temp/.

@@ -13,4 +13,11 @@
       <PackageReference Include="System.Drawing.Common" Version="9.0.6" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Ruler\ruler-bottom.png" />
+      <EmbeddedResource Include="Ruler\ruler-bottom.png" />
+      <None Remove="Ruler\ruler-top.png" />
+      <EmbeddedResource Include="Ruler\ruler-top.png" />
+    </ItemGroup>
+
 </Project>
