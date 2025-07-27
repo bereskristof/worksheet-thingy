@@ -8,6 +8,10 @@
         <UseWPF>true</UseWPF>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <DebugType>full</DebugType>
+    </PropertyGroup>
+
     <ItemGroup>
       <EmbeddedResource Update="Resources\en.resx">
         <LastGenOutput>en.Designer.cs</LastGenOutput>

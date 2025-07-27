@@ -12,7 +12,7 @@ using Storage;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 using WorkArgs = System.Tuple<string, string, string>;
-using PreviewTuple = System.Tuple<string?, Interface.Export.ExportPage.PageData[], double, double, Storage.ExamBuilder>;
+using PreviewTuple = System.Tuple<string?, Interface.Export.ExportPage.PageData[], double, double, string>;
 
 namespace Interface.Export;
 
@@ -131,21 +131,14 @@ public partial class ExportPage : INotifyPropertyChanged
         var (title, author, date) = (WorkArgs)e.Argument!;
         
         // Create a PDF to preview
-        var examBuilder = new ExamBuilder(Bindings.Instance.SheetRoot, AnswerCount, title, author, date);
-        try
+        var builder = MultiExamBuilder.BuildNExams(1, Bindings.Instance.SheetRoot, AnswerCount, title, author, date);
+        string pdfPath;
+        pdfPath = MultiExamBuilder.TryExportPdf(builder, out var success, out var errorMessage);
+        if (!success)
         {
-            examBuilder.ExportPdf();
-        }
-        catch (TimeoutException ex)
-        {
-            var errorMessage = ex.Message;
-            
-            e.Result = new PreviewTuple(errorMessage, [], 0, 0, examBuilder);
-            examBuilder.CleanUpError();
+            e.Result = new PreviewTuple(errorMessage, [], 0, 0, pdfPath);
             return;
         }
-
-        string pdfPath = examBuilder.GetExportPath();
         
         // Preview the PDF file
         using var doclib = Docnet.Core.DocLib.Instance;
@@ -188,12 +181,12 @@ public partial class ExportPage : INotifyPropertyChanged
             canvasXOffset = int.Max(width + 2, canvasXOffset);
         }
 
-        e.Result = new PreviewTuple(null, pages, canvasYOffset, canvasXOffset, examBuilder);
+        e.Result = new PreviewTuple(null, pages, canvasYOffset, canvasXOffset, pdfPath);
     }
 
     private void BackgroundLoader_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)
     {
-        var (error, pages, canvasYOffset, canvasXOffset, examBuilder) = (PreviewTuple)e.Result!;
+        var (error, pages, canvasYOffset, canvasXOffset, pdfPath) = (PreviewTuple)e.Result!;
         if (error != null)
         {
             MessageBox.Show(error, "Error", MessageBoxButton.OK, MessageBoxImage.Error); // TODO: Localize
@@ -219,7 +212,7 @@ public partial class ExportPage : INotifyPropertyChanged
         PreviewScroll.Height = canvasYOffset;
         PreviewProgressBar.Visibility = Visibility.Collapsed;
         CreateButton.IsEnabled = true;
-        examBuilder.CleanUp();
+        MultiExamBuilder.CleanUp(pdfPath);
     }
 
     private void RescalePreview(double mult)

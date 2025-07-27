@@ -35,6 +35,10 @@ public partial class ExportingWindow
 
     private void BackgroundWorker_ProgressChanged(object? sender, ProgressChangedEventArgs e)
     {
+        if (Math.Abs(e.ProgressPercentage - ExportProgressBar.Maximum) < 1e-6)
+        {
+            ExportProgressBar.IsIndeterminate = true;
+        }
         ExportProgressBar.Value = e.ProgressPercentage;
         Counter.Content = $"{e.ProgressPercentage} / {ExportProgressBar.Maximum}";
     }
@@ -42,27 +46,40 @@ public partial class ExportingWindow
     private void BackgroundLoader_DoWork(object? sender, DoWorkEventArgs e)
     {
         var (target, root, answerCount, examCount, title, author, date) = (WorkArgs)e.Argument!;
-        var multipleExportPage = new MultiExamBuilder(root, answerCount, title, author, date);
         
-        // First always exports a byte array
-        var firstPath = multipleExportPage.ExportNewPdf();
-        byte[] combinedPdf = File.ReadAllBytes(firstPath);
-        _backgroundWorker.ReportProgress(1);
-        
-        for (int i = 1; i < examCount; i++)
+        var latexBuilder = new LatexBuilder(title, author, date);
+        MultiExamBuilder.BeginManualAdding(latexBuilder);
+        for (uint i = 0; i < examCount - 1; i++)
         {
-            var path = multipleExportPage.ExportNewPdf();
-            combinedPdf = multipleExportPage.MergePdfs(combinedPdf, path);
-            _backgroundWorker.ReportProgress(i + 1);
+            MultiExamBuilder.AddExam(latexBuilder, root, answerCount);
+            latexBuilder.Macro("newpage");
+            _backgroundWorker.ReportProgress((int)(i + 1));
         }
+        MultiExamBuilder.AddExam(latexBuilder, root, answerCount); // Add the last exam without a new page after it
+        _backgroundWorker.ReportProgress((int)examCount);
+        MultiExamBuilder.EndManualAdding(latexBuilder);
         
-        File.WriteAllBytes(target, combinedPdf);
-        multipleExportPage.CleanUp();
+        var exportPath = MultiExamBuilder.TryExportPdf(latexBuilder, out var success, out var errorMessage);
+        if (success)
+        {
+            File.Move(exportPath, Environment.ExpandEnvironmentVariables("%homepath%/Desktop/final.pdf"), true); // TODO: Get from UI
+        }
+        // TODO: Handle errorMessage properly
+        MultiExamBuilder.CleanUp(exportPath);
+        e.Result = success ? null : errorMessage;
     }
 
     private void BackgroundLoader_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)
     {
-        MessageBox.Show("Export completed successfully!", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
+        string? result = (string?)e.Result;
+        if (result != null)
+        {
+            MessageBox.Show(result, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        else
+        {
+            MessageBox.Show("Export completed successfully!", "Export", MessageBoxButton.OK, MessageBoxImage.Information); // TODO: Localize
+        }
         Close();
     }
 }

@@ -1,43 +1,171 @@
-using Docnet.Core;
+using System.Diagnostics;
+using System.Text.RegularExpressions;
 using Storage.Sheet;
+using Storage.Task;
+
+using Skeleton = System.Tuple<long, long[], System.Guid>;
+using Skeletons = System.Collections.Generic.List<System.Tuple<long, long[], System.Guid>>;
 
 namespace Storage;
 
-// TODO: Make this use a single TeX file with multiple pages instead of multiple TeX files.
-// Would increase performance and reduce disk usage.
 [System.Runtime.Versioning.SupportedOSPlatform("windows")]
-public class MultiExamBuilder(SelectorNode rootNode, byte answerCount, string title, string author, string date)
+public static class MultiExamBuilder
 {
-    private readonly List<ExamBuilder> _workingExamBuilders = [];
-
-    // A state variable would certainly be more elegant, but this should eventually get completely replaced anyway. (TODO)
-    /// Just read the implementation, it's shorter than explaining it.
-    public string ExportNewPdf()
+    /// Generates N exams based on the provided root node and answer count.
+    public static LatexBuilder BuildNExams(uint n, SelectorNode rootNode, byte answerCount, string title, string author, string date)
     {
-        var examBuilder = new ExamBuilder(rootNode, answerCount, title, author, date);
-        // examBuilder.Store();
-        examBuilder.ExportPdf();
-        var exportPath = examBuilder.GetExportPath();
-        _workingExamBuilders.Add(examBuilder);
-        return examBuilder.GetExportPath();
-    }
-
-    /// Appends a PDF to an existing PDF byte array.
-    public byte[] MergePdfs(byte[] existingPdf, string pathToPdfToAppend)
-    {
-        var pdfBytes = File.ReadAllBytes(pathToPdfToAppend);
-        existingPdf = DocLib.Instance.Merge(existingPdf, pdfBytes);
-        return existingPdf;
-    }
-
-    /// Cleans up all exam builders, removing their temporary files.
-    public void CleanUp()
-    {
-        var i = 0;
-        foreach (var examBuilder in _workingExamBuilders)
+        if (n == 0)
+            throw new ArgumentException("The number of exams to generate must be greater than zero.", nameof(n));
+        
+        var builder = new LatexBuilder(title, author, date);
+        builder.AutoHeader(); // TODO: Placeholder for background image path
+        for (uint i = 0; i < n - 1; i++)
         {
-            examBuilder.CleanUp();
-            Console.WriteLine("Cleaned up: {0}", ++i);
+            AddExam(builder, rootNode, answerCount);
+            builder.Macro("newpage");
         }
+        AddExam(builder, rootNode, answerCount); // Add the last exam without a new page after it
+        builder.AutoFooter();
+        return builder;
+    }
+    
+    public static void BeginManualAdding(LatexBuilder builder)
+    {
+        builder.AutoHeader(); // TODO: Placeholder for background image path
+    }
+
+    public static void AddExam(LatexBuilder builder, SelectorNode rootNode, byte answerCount)
+    {
+        var questions = rootNode.GetQuestions();
+        Skeletons skeleton = [];
+        Guid uuid = Guid.NewGuid();
+        
+        // TODO: Generate a QR code for the UUID and save it to a file, then pass the file path to the builder
+        
+        builder.AddTitle();
+        builder.Begin("questions");
+        foreach (var question in questions)
+        {
+            AddQuestions(question, builder, skeleton, uuid, answerCount);
+        }
+        builder.End("questions");
+        builder.Macro("newpage");
+        builder.AddAnswerPage(questions.Length, answerCount, "qr-code.png"); // TODO: Replace with actual QR code path
+        builder.Macro("newpage");
+        StoreSkeleton(skeleton);
+    }
+    
+    public static void EndManualAdding(LatexBuilder builder)
+    {
+        builder.AutoFooter();
+    }
+
+    private static void AddQuestions(Question question, LatexBuilder builder, Skeletons skeleton, Guid uuid, byte answerCount)
+    {
+        var answers = question.Answers.GetRandomAnswers(answerCount);
+        Skeleton skeletonElement = new Skeleton(question.Id, answers.Select(x => x.Id).ToArray(), uuid); // Store IDs to allow for reconstruction
+        skeleton.Add(skeletonElement);
+        var path = ExportMaybeDuplicateQuestionImage(question);
+        builder.Question(
+            question.Text,
+            question.Points, 
+            answers.Select(a => a.Text).ToArray(),
+            path
+        );
+    }
+
+    private static string? ExportMaybeDuplicateQuestionImage(Question question)
+    {
+        var imageData = question.FetchImageStream()?.ToArray();
+        if (imageData == null)
+            return null; // No image to export
+        var imagePath = Path.Combine(Path.GetTempPath(), Manager.PathTitle, $"q{question.Id}.png");
+        Directory.CreateDirectory(Path.GetDirectoryName(imagePath) ?? throw new InvalidOperationException("Invalid directory name"));
+        if (File.Exists(imagePath))
+            return imagePath; // Image already exists, no need to fetch again
+        File.WriteAllBytes(imagePath, imageData);
+        return imagePath;
+    }
+    
+    private static void StoreSkeleton(Skeletons skeletons)
+    {
+        foreach (var (question, answers, uuid) in skeletons)
+        {
+            foreach (var answer in answers)
+            {
+                var storeCommand = Manager.Connection.CreateCommand();
+                storeCommand.CommandText = "INSERT INTO Solutions (Uuid, QuestionNumber, AnswerNumber) VALUES (@Uuid, @QuestionNumber, @AnswerNumber)";
+                storeCommand.Parameters.AddWithValue("@Uuid", uuid.ToString()); // Each exam gets a new UUID
+                storeCommand.Parameters.AddWithValue("@QuestionNumber", question);
+                storeCommand.Parameters.AddWithValue("@AnswerNumber", answer);
+                storeCommand.ExecuteNonQuery();
+            }
+        }
+    }
+    
+    private static string ExportTex(LatexBuilder builder, Guid uuid)
+    {
+        var filename = Path.Combine(Path.GetTempPath(), Manager.PathTitle, $"{uuid.ToString()}.tex");
+        using var writer = new StreamWriter(filename);
+        writer.Write(builder.Finish());
+        writer.Close();
+        return filename;
+    }
+
+    public static string TryExportPdf(LatexBuilder builder, out bool success, out string? errorMessage) // TODO: Tagged unions would go hard here
+    {
+        var batchUuid = Guid.NewGuid();
+        var filename = ExportTex(builder, batchUuid);
+        try
+        {
+            CallPdfLatex(filename);
+            CallPdfLatex(filename); // Latex sucks, so we have to call it twice
+        }
+        catch (TimeoutException e)
+        {
+            Log.Write($"ExportPdf: Failed to export PDF: {e.Message}", Log.Severity.Error);
+            success = false;
+            errorMessage = e.Message;
+            return filename;
+        }
+        var pdfPath = Path.ChangeExtension(filename, ".pdf");
+        Log.Write($"ExportPdf: Exported PDF to {pdfPath}");
+        success = true;
+        errorMessage = null;
+        return pdfPath;
+    }
+    
+    private static void CallPdfLatex(string texPath)
+    {
+        var process = new Process();
+        var flags = $"-halt-on-error -output-directory=\"{Path.GetDirectoryName(texPath)}\" \"{texPath}\"";
+        process.StartInfo = new ProcessStartInfo("pdflatex", flags)
+            { CreateNoWindow = true, RedirectStandardOutput = true, RedirectStandardError = true };
+        process.Start();
+        var stdout = process.StandardOutput.ReadToEnd(); // Latex very helpfully puts its error messages to stdout, not to stderr
+        var finished = process.WaitForExit(30_000); // Wait for 30 seconds for the process to complete
+        var outputPath = Path.ChangeExtension(texPath, ".pdf");
+        if (finished && process.ExitCode == 0 && File.Exists(outputPath)) return;
+        process.Kill(true);
+        var killed = process.WaitForExit(5_000);
+        if (!killed)
+        {
+            Log.Write($"ExportPdf: pdflatex failed to complete, child process has refused to be killed, ABANDONING!", Log.Severity.Error);
+            Environment.Exit(-90); // <--- Process was force abandoned due to extreme complications
+        }
+
+        Log.Write($"ExportPdf: pdflatex failed to complete, child process was killed", Log.Severity.Warning);
+        var errorCapture = Regex.Match(stdout, "!((?:.|\\n)*?)! *==>"); // Pretty naive regex to capture errors from stdout
+        var errorText = string.Join(" ", errorCapture.Groups.Cast<Group>().Skip(1).Select(g => g.Value));
+        throw new TimeoutException(errorText);
+    }
+
+    /// Cleans up all of temp/.
+    public static void CleanUp(string exportPath)
+    {
+        var dir = new FileInfo(exportPath).Directory!.FullName;
+        var files = Directory.GetFiles(dir);
+        foreach (var file in files)
+            File.Delete(file);
     }
 }
