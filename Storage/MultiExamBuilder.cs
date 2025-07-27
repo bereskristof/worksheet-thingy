@@ -40,17 +40,20 @@ public static class MultiExamBuilder
         Skeletons skeleton = [];
         Guid uuid = Guid.NewGuid();
         
-        // TODO: Generate a QR code for the UUID and save it to a file, then pass the file path to the builder
+        var qrBuilder = new QrBuilder(uuid); // Create a QR code builder for the UUID
+        var qrPath = Path.Combine(Path.GetTempPath(), Manager.PathTitle, $"{uuid.ToString()}.png");
+        qrBuilder.Save(qrPath);
+        var qrShortPath = Path.GetFileName(qrPath);
         
         builder.AddTitle();
         builder.Begin("questions");
         foreach (var question in questions)
         {
-            AddQuestions(question, builder, skeleton, uuid, answerCount);
+            AddQuestion(question, builder, skeleton, uuid, answerCount);
         }
         builder.End("questions");
         builder.Macro("newpage");
-        builder.AddAnswerPage(questions.Length, answerCount, "qr-code.png"); // TODO: Replace with actual QR code path
+        builder.AddAnswerPage(questions.Length, answerCount, qrShortPath); // TODO: Replace with actual QR code path
         builder.Macro("newpage");
         StoreSkeleton(skeleton);
     }
@@ -60,7 +63,7 @@ public static class MultiExamBuilder
         builder.AutoFooter();
     }
 
-    private static void AddQuestions(Question question, LatexBuilder builder, Skeletons skeleton, Guid uuid, byte answerCount)
+    private static void AddQuestion(Question question, LatexBuilder builder, Skeletons skeleton, Guid uuid, byte answerCount)
     {
         var answers = question.Answers.GetRandomAnswers(answerCount);
         Skeleton skeletonElement = new Skeleton(question.Id, answers.Select(x => x.Id).ToArray(), uuid); // Store IDs to allow for reconstruction

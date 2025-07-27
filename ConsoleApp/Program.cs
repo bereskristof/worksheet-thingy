@@ -14,8 +14,8 @@ public static class Program
         byte[] uuidBytes = uuid.ToByteArray();
         Console.WriteLine(uuid);
         Console.WriteLine(uuidBytes);
-        var bg = new Storage.BackgroundBuilder(uuidBytes);
-        bg.Save(Environment.ExpandEnvironmentVariables("%homepath%/Desktop/test-bg0.png"));
+        // var bg = new Storage.QrBuilder(uuidBytes);
+        // bg.Save(Environment.ExpandEnvironmentVariables("%homepath%/Desktop/test-bg0.png"));
     }
 #pragma warning restore CA1416
 

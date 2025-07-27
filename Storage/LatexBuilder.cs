@@ -104,7 +104,7 @@ public class LatexBuilder(string title, string author, string date)
             Text(author + " --- " + date);
     }
 
-    public void AddAnswerPage(int questionCount, byte answerCount, string? qrPath) // TODO: Handle image data
+    public void AddAnswerPage(int questionCount, byte answerCount, string? qrPath)
     {
         // Top menu
         Text(@"\newgeometry{a4paper, margin=8mm}");
