@@ -6,9 +6,22 @@ namespace ConsoleApp;
 public static class Program
 {
     private const string Chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+    public static void Main()
+    {
+        var qrScanner = new Scanner.CodeScanner(Environment.ExpandEnvironmentVariables("%homepath%/Desktop/test-page-raw-180.png"));
+        var result = qrScanner.FindCodes();
+
+        Console.WriteLine(result.Uuid);
+        Console.WriteLine(result.Name);
+        Console.WriteLine(result.UserCode);
+        
+        var matrixScanner = new Scanner.MatrixScanner(Environment.ExpandEnvironmentVariables("%homepath%/Desktop/test-page-raw-180.png"));
+        matrixScanner.FindBubbles(15, 5);
+    }
     
 #pragma warning disable CA1416
-    public static void Main()
+    public static void GuidTest()
     {
         Guid uuid = Guid.NewGuid();
         byte[] uuidBytes = uuid.ToByteArray();

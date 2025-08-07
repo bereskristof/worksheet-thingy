@@ -40,6 +40,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Scanner\Scanner.csproj" />
       <ProjectReference Include="..\Storage\Storage.csproj" />
     </ItemGroup>
 
