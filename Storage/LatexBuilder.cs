@@ -140,8 +140,7 @@ public class LatexBuilder(string title, string author, string date)
         End("itemize");
         
         // Answer grid
-        Text(@"\centering \includegraphics[height=8mm]{ruler-top.png}"); // TODO: Export image
-        Text(@"\def\arraystretch{1.0}");
+        Text(@"\def\arraystretch{2.0}");
         Text(@"\setlength\tabcolsep{6.0pt}");
         Begin("center");
         Text(@"\begin{tabular}{|>{\centering\arraybackslash}m{0.8cm}|", lineBreak: false);
@@ -151,12 +150,14 @@ public class LatexBuilder(string title, string author, string date)
         }
         Text(@"|>{\centering\arraybackslash}m{0.8cm}|}");
         Text(@"\hline");
-        Text(@"\null & ", lineBreak: false);
+        // Text(@"\null & ", lineBreak: false);
+        Text(@"\parbox[c][6mm][c]{\linewidth}{\centerline{\includegraphics[height=6mm]{aruco_0.png}}} & ", lineBreak: false);
         for (int i = 0; i < answerCount; i++)
         {
             Text($@"\centerline{{{(char)(i + AsciiA)}}} & ", lineBreak: false);
         }
-        Text(@"\null \\");
+        // Text(@"\null \\");
+        Text(@"\parbox[c][6mm][c]{\linewidth}{\centerline{\includegraphics[height=6mm]{aruco_2.png}}} \\");
         Text(@"\hline");
         for (int i = 0; i < questionCount; i++)
         {
@@ -168,16 +169,18 @@ public class LatexBuilder(string title, string author, string date)
             Text($@"{i + 1} \\");
         }
         Text(@"\hline");
-        Text(@"\null & ", lineBreak: false);
+        // Text(@"\null & ", lineBreak: false);
+        Text(@"\parbox[c][6mm][c]{\linewidth}{\centerline{\includegraphics[height=6mm]{aruco_2.png}}} & ", lineBreak: false);
         for (int i = 0; i < answerCount; i++)
         {
             Text($@"\centerline{{{(char)(i + AsciiA)}}} & ", lineBreak: false);
         }
-        Text(@"\null \\");
+        // Text(@"\null \\");
+        Text(@"\parbox[c][6mm][c]{\linewidth}{\centerline{\includegraphics[height=6mm]{aruco_2.png}}} \\");
         Text(@"\hline");
         End("tabular");
         End("center");
-        Text(@"\centering \includegraphics[height=8mm]{ruler-bottom.png}"); // TODO: Export image
+        // Text(@"\centering \includegraphics[height=8mm]{ruler-bottom.png}"); // TODO: Export image
         Text(@"\restoregeometry");
     }
 }

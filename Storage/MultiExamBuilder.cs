@@ -114,7 +114,7 @@ public static class MultiExamBuilder
         using var writer = new StreamWriter(filename);
         writer.Write(builder.Finish());
         writer.Close();
-        ExportRulers();
+        ExportArUcos();
         return filename;
     }
 
@@ -166,12 +166,15 @@ public static class MultiExamBuilder
         throw new TimeoutException(errorText);
     }
 
-    private static void ExportRulers()
+    private static void ExportArUcos()
     {
-        var pathTop = Path.Combine(Path.GetTempPath(), Manager.PathTitle, $"ruler-top.png");
-        var pathBottom = Path.Combine(Path.GetTempPath(), Manager.PathTitle, $"ruler-bottom.png");
-        ExportFromAssembly("Storage.Ruler.ruler-top.png", pathTop);
-        ExportFromAssembly("Storage.Ruler.ruler-bottom.png", pathBottom);
+        for (int i = 0; i < 4; i++)
+        {
+            var fileName = $"aruco_{i}.png";
+            var filePath = Path.Combine(Path.GetTempPath(), Manager.PathTitle, fileName);
+            var resourcePath = $"Storage.ArUco.{fileName}";
+            ExportFromAssembly(resourcePath, filePath);
+        }
     }
     
     private static void ExportFromAssembly(string resourceName, string outputPath)

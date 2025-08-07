@@ -15,9 +15,15 @@
 
     <ItemGroup>
       <None Remove="Ruler\ruler-bottom.png" />
-      <EmbeddedResource Include="Ruler\ruler-bottom.png" />
       <None Remove="Ruler\ruler-top.png" />
-      <EmbeddedResource Include="Ruler\ruler-top.png" />
+      <None Remove="ArUco\aruco_0.png" />
+      <EmbeddedResource Include="ArUco\aruco_0.png" />
+      <None Remove="ArUco\aruco_1.png" />
+      <EmbeddedResource Include="ArUco\aruco_1.png" />
+      <None Remove="ArUco\aruco_2.png" />
+      <EmbeddedResource Include="ArUco\aruco_2.png" />
+      <None Remove="ArUco\aruco_3.png" />
+      <EmbeddedResource Include="ArUco\aruco_3.png" />
     </ItemGroup>
 
 </Project>
