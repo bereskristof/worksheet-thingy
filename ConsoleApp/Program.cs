@@ -10,7 +10,7 @@ public static class Program
 
     public static void Main()
     {
-        var path = Environment.ExpandEnvironmentVariables("%homepath%/Desktop/prj/07/test-page-example.png");
+        var path = Environment.ExpandEnvironmentVariables("%homepath%/Desktop/prj/07/test-page-00.png");
         var qrScanner = new Scanner.CodeScanner(path);
         var result = qrScanner.FindCodes();
 
@@ -19,10 +19,28 @@ public static class Program
         Console.WriteLine(result.UserCode);
         
         var matrixScanner = new Scanner.MatrixScanner(path);
-        matrixScanner.FindBubbles(15, 5);
+        var matrixBubbles = matrixScanner.FindBubbles(15, 5);
         
-        var hullScanner = new Scanner.HoughScanner(path);
-        hullScanner.FindBubbles(15, 5);
+        var houghScanner = new Scanner.HoughScanner(path);
+        var houghBubbles = houghScanner.FindBubbles(15, 5);
+        
+        var bubbleChecker = new Scanner.BubbleChecker(path);
+        var matrixResults = bubbleChecker.CheckBubbles(matrixBubbles, 15, 5);
+        var houghResults = bubbleChecker.CheckBubbles(houghBubbles, 15, 5);
+        for (int i = 0; i < matrixResults.Length; i++)
+        {
+            var (mResult, mBest, mNextBest) = matrixResults[i];
+            var (hResult, hBest, hNextBest) = houghResults[i];
+            if (mResult == hResult)
+            {
+                Console.WriteLine($"Question {i + 1}: Agree on {mResult + 1}, matrix confidence {(mBest - mNextBest) / mBest}, hough confidence {(hBest - hNextBest) / hBest}");
+            }
+            else
+            {
+                Console.WriteLine($"Question {i + 1}: Disagree, matrix says {mResult + 1} with confidence {(mBest - mNextBest) / mBest}, hough says {hResult + 1} with confidence {(hBest - hNextBest) / hBest}");
+            }
+        }
+        
     }
     
 #pragma warning disable CA1416

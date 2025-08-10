@@ -9,47 +9,21 @@ public class HoughScanner
     
     private readonly Mat _originalImage;
     private readonly Mat _grayImage = new();
-    private readonly Mat _threshImage = new();
 
     public HoughScanner(string imagePath)
     {
         _originalImage = Cv2.ImRead(imagePath);
         Cv2.CvtColor(_originalImage, _grayImage, ColorConversionCodes.BGR2GRAY);
-        var blurredImage = new Mat();
-        var invertedThreshImage = new Mat();
-        Cv2.GaussianBlur(_grayImage, blurredImage, new Size(9, 9), 0);
-        Cv2.Threshold(blurredImage, invertedThreshImage, 0, 255, ThresholdTypes.Otsu | ThresholdTypes.Binary);
-        Cv2.BitwiseNot(invertedThreshImage, _threshImage);
     }
 
-    public void FindBubbles(uint questionCount = 15, uint answerCount = 5)
+    public CircleSegment[] FindBubbles(uint questionCount = 15, uint answerCount = 5)
     {
         var allCircles = Cv2.HoughCircles(_grayImage, HoughModes.Gradient, 1, 20, 100, 30, 10, 40);
+        
         var uv = GetUv();
         var circles = RecoverMatrix(allCircles, uv, questionCount, answerCount);
 
-        DebugPrintResults(circles, uv);
-    }
-    
-    [Obsolete]
-    private void DebugPrintResults(CircleSegment[] circles, Point2f[] uv)
-    {
-        var imageCopy = _originalImage.Clone();
-        
-        var offset = new Point2f(20, 20);
-        Cv2.DrawMarker(imageCopy, offset.ToPoint(), Scalar.SkyBlue);
-        Cv2.DrawMarker(imageCopy, (offset + uv[0]).ToPoint(), Scalar.SkyBlue);
-        Cv2.DrawMarker(imageCopy, (offset + uv[1]).ToPoint(), Scalar.SkyBlue);
-        
-        foreach (var circle in circles)
-        {
-            Cv2.Circle(imageCopy, circle.Center.ToPoint(), (int)circle.Radius, Scalar.OrangeRed);
-            Cv2.PutText(imageCopy, circles.ToList().IndexOf(circle).ToString(), circle.Center.ToPoint(), HersheyFonts.HersheySimplex, 1, Scalar.Black, 2, LineTypes.AntiAlias);
-        }
-        
-        Cv2.Resize(imageCopy, imageCopy, new Size(0, 0), 0.5, 0.5);
-        Cv2.ImShow("Detected Markers", imageCopy);
-        Cv2.WaitKey();
+        return circles;
     }
 
     private Point2f[] GetUv()

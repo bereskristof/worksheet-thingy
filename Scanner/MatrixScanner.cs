@@ -18,7 +18,7 @@ public class MatrixScanner
     }
 
     /// <exception cref="ArgumentException">Failed to find at least 3 markers</exception>
-    public void FindBubbles(uint questionCount = 15, uint answerCount = 5)
+    public CircleSegment[] FindBubbles(uint questionCount = 15, uint answerCount = 5)
     {
         var dict = CvAruco.GetPredefinedDictionary(PredefinedDictionaryName.Dict4X4_50);
         var parameters = new DetectorParameters();
@@ -28,25 +28,7 @@ public class MatrixScanner
         var answerMatrixCorners = GetAnswerMatrixCorners(maybeAnswerMatrixCorners);
         var circles = GetAnswerBubbles(answerMatrixCorners, questionCount, answerCount);
 
-        DebugPrintResults(answerMatrixCorners, circles);
-    }
-
-    [Obsolete]
-    private void DebugPrintResults(Point2f[] answerMatrixCorners, CircleSegment[] circles)
-    {
-        foreach (var answerMatrixCorner in answerMatrixCorners)
-        {
-            Cv2.DrawMarker(_originalImage, answerMatrixCorner.ToPoint(), Scalar.SkyBlue);
-        }
-        foreach (var circle in circles)
-        {
-            Cv2.Circle(_originalImage, circle.Center.ToPoint(), (int)circle.Radius, Scalar.OrangeRed);
-            Cv2.PutText(_originalImage, circles.ToList().IndexOf(circle).ToString(), circle.Center.ToPoint(), HersheyFonts.HersheySimplex, 0.5, Scalar.Black, 2, LineTypes.AntiAlias);
-        }
-        
-        Cv2.Resize(_originalImage, _originalImage, new Size(0, 0), 0.5, 0.5);
-        Cv2.ImShow("Detected Markers", _originalImage);
-        Cv2.WaitKey();
+        return circles;
     }
 
     private static Point2f?[] GetMaybeMarkerCenters(Point2f[][] corners, int[] ids)

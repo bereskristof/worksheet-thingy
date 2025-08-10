@@ -28,12 +28,25 @@ public class CodeScanner
         Cv2.BitwiseNot(invertedThreshImage, _threshImage);
     }
     
+    /// <exception cref="ArgumentException">Failed to find QR codes</exception>
     public QrScanResult FindCodes()
     {
         QrScanResult result = new();
         QRCodeDetector detector = new();
-        detector.DetectMulti(_grayImage, out var points);
-        detector.DecodeMulti(_grayImage, points, out var  decodedTexts);
+        Point2f[] points;
+        detector.DetectMulti(_grayImage, out points);
+        if (points.Length == 0)
+        {
+            // Console.WriteLine("Could not find any QR codes in the image, trying harder...");
+            Cv2.MedianBlur(_grayImage, _grayImage, 5);
+            detector.DetectMulti(_grayImage, out points);
+            if (points.Length == 0)
+            {
+                // Console.WriteLine("Failed to find any QR codes in the image, giving up.");
+                throw new ArgumentException("Failed to find any QR codes in the image.");
+            }
+        }
+        detector.DecodeMulti(_grayImage, points, out var decodedTexts);
         foreach (var text in decodedTexts)
         {
             if (string.IsNullOrEmpty(text)) continue;
