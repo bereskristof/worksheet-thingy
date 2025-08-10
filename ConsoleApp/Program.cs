@@ -1,5 +1,6 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using Range = System.Range;
 
 namespace ConsoleApp;
 
@@ -9,15 +10,19 @@ public static class Program
 
     public static void Main()
     {
-        var qrScanner = new Scanner.CodeScanner(Environment.ExpandEnvironmentVariables("%homepath%/Desktop/test-page-raw-180.png"));
+        var path = Environment.ExpandEnvironmentVariables("%homepath%/Desktop/prj/07/test-page-example.png");
+        var qrScanner = new Scanner.CodeScanner(path);
         var result = qrScanner.FindCodes();
 
         Console.WriteLine(result.Uuid);
         Console.WriteLine(result.Name);
         Console.WriteLine(result.UserCode);
         
-        var matrixScanner = new Scanner.MatrixScanner(Environment.ExpandEnvironmentVariables("%homepath%/Desktop/test-page-raw-180.png"));
+        var matrixScanner = new Scanner.MatrixScanner(path);
         matrixScanner.FindBubbles(15, 5);
+        
+        var hullScanner = new Scanner.HoughScanner(path);
+        hullScanner.FindBubbles(15, 5);
     }
     
 #pragma warning disable CA1416
@@ -112,7 +117,7 @@ public static class Program
         return verify;
     }
 
-    public static bool TryPassword(string password, byte[] salt, byte[] verify)
+    private static bool TryPassword(string password, byte[] salt, byte[] verify)
     {
         var key = Rfc2898DeriveBytes.Pbkdf2(password, salt, 10_000, HashAlgorithmName.SHA3_512, 32);
 

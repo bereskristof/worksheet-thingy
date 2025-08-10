@@ -28,6 +28,12 @@ public class MatrixScanner
         var answerMatrixCorners = GetAnswerMatrixCorners(maybeAnswerMatrixCorners);
         var circles = GetAnswerBubbles(answerMatrixCorners, questionCount, answerCount);
 
+        DebugPrintResults(answerMatrixCorners, circles);
+    }
+
+    [Obsolete]
+    private void DebugPrintResults(Point2f[] answerMatrixCorners, CircleSegment[] circles)
+    {
         foreach (var answerMatrixCorner in answerMatrixCorners)
         {
             Cv2.DrawMarker(_originalImage, answerMatrixCorner.ToPoint(), Scalar.SkyBlue);
