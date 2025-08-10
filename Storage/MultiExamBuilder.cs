@@ -20,7 +20,7 @@ public static class MultiExamBuilder
             throw new ArgumentException("The number of exams to generate must be greater than zero.", nameof(n));
         
         var builder = new LatexBuilder(title, author, date);
-        builder.AutoHeader(); // TODO: Placeholder for background image path
+        builder.AutoHeader();
         for (uint i = 0; i < n - 1; i++)
         {
             AddExam(builder, rootNode, answerCount);
@@ -33,7 +33,7 @@ public static class MultiExamBuilder
     
     public static void BeginManualAdding(LatexBuilder builder)
     {
-        builder.AutoHeader(); // TODO: Placeholder for background image path
+        builder.AutoHeader();
     }
 
     public static void AddExam(LatexBuilder builder, SelectorNode rootNode, byte answerCount)
@@ -41,22 +41,23 @@ public static class MultiExamBuilder
         var questions = rootNode.GetQuestions();
         Skeletons skeleton = [];
         Guid uuid = Guid.NewGuid();
+        var humanReadableCode = MiniCodeGenerator.GenerateCode();
         
         var qrBuilder = new QrBuilder(uuid); // Create a QR code builder for the UUID
         var qrPath = Path.Combine(Path.GetTempPath(), Manager.PathTitle, $"{uuid.ToString()}.png");
         qrBuilder.Save(qrPath);
         var qrShortPath = Path.GetFileName(qrPath);
         
-        builder.AddTitle();
+        builder.AddTitle(humanReadableCode);
         builder.Begin("questions");
         foreach (var question in questions)
         {
             AddQuestion(question, builder, skeleton, uuid, answerCount);
         }
         builder.End("questions");
-        builder.Macro("newpage");
-        builder.AddAnswerPage(questions.Length, answerCount, qrShortPath); // TODO: Replace with actual QR code path
-        builder.Macro("newpage");
+        builder.Macro("cleardoublepage");
+        builder.AddAnswerPage(questions.Length, answerCount, humanReadableCode, qrShortPath);
+        builder.Macro("cleardoublepage");
         StoreSkeleton(skeleton);
     }
     

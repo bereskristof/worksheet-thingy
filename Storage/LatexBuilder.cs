@@ -9,7 +9,7 @@ public class LatexBuilder(string title, string author, string date)
     
     public void AutoHeader()
     {
-        Macro("documentclass", "exam", ["answers", "a4paper"]);
+        Macro("documentclass", "exam", ["answers", "a4paper", "twoside"]);
         Package("inputenc", ["utf8"]);
         Package("fontenc", ["T1"]);
         Package("geometry");
@@ -27,6 +27,7 @@ public class LatexBuilder(string title, string author, string date)
         if (date != string.Empty)
             Macro("date", date);
         Begin("document");
+        Text(@"\pagestyle{empty}");
     }
     
     public void AutoFooter()
@@ -93,7 +94,7 @@ public class LatexBuilder(string title, string author, string date)
         return result;
     }
 
-    public void AddTitle()
+    public void AddTitle(string miniCode)
     {
         Text(@"\textsc{{\textbf{{\Large Feladatlap}}}} \\");
         if (title != string.Empty)
@@ -102,12 +103,13 @@ public class LatexBuilder(string title, string author, string date)
             Text("");
         if (author != string.Empty && date != string.Empty)
             Text(author + " --- " + date);
+        Text(@"\hfill\texttt{Mini kód: " + miniCode + @"} \\");
     }
 
-    public void AddAnswerPage(int questionCount, byte answerCount, string? qrPath)
+    public void AddAnswerPage(int questionCount, byte answerCount, string miniCode, string? qrPath)
     {
         // Top menu
-        Text(@"\newgeometry{a4paper, margin=8mm}");
+        Text(@"\newgeometry{margin=12mm}");
         Text(@"\def\arraystretch{0.0}");
         Text(@"\setlength\tabcolsep{0.0pt}");
         Macro("noindent");
@@ -117,7 +119,7 @@ public class LatexBuilder(string title, string author, string date)
         Text(@"\path (0,0) rectangle (113mm, 45mm);");
         Text(@"\node[draw, dashed, minimum width=105mm, minimum height=37mm, color=black!66] at (56.5mm, 22.5mm) {Ide ragassza a QR kódot tartalmazó címkét!};");
         Text("} &");
-        Text("DS-CODE &"); // TODO: Replace with actual display code
+        Text($"{miniCode} &");
         Text($@"\includegraphics[width=37mm,height=37mm]{{{qrPath}}} \\");
         Text(@"\hline");
         Text(@"\end{tabularx}");
@@ -134,13 +136,12 @@ public class LatexBuilder(string title, string author, string date)
         // Help
         Text(@"\textsc{\textbf{\Large Figyelmesen olvassa el!}}");
         Begin("itemize");
-        Text(@"\item Ezen a lapon csak akkor jelöljön meg választ, ha abban biztos, mivel azt már nem javíthatja!");
-        Text(@"\item Ha több válasz is meg van jelölve, az hibának számít!");
-        Text(@"\item Pontozás: Helyes válasz: 4 pont, kihagyott feladat: 0 pont, helytelen válasz: -1 pont");
+        Text(@"\item A teszt \textbf{15 feleletválasztós feladatot} tartalmaz, a megírására \textbf{45 perc} áll rendelkezésre. A feladatok szövege után öt lehetséges válasz található, amelyek közül pontosan egy a helyes. Minden jó válasz 4 pontot ér, a hibás válasz 1 pont levonásával jár, a nem megválaszolt feladatra nem jár pont. Az elérhető maximális pontszám 60 pont, a dolgozat sikeres, ha legalább 24 pontos.");
+        Text(@"\item A kódlapon a feladatok sorszáma melletti öt négyzet közül a helyes válasz betűjelének megfelelő négyzetbe \(\times\)-et kell sötétkék vagy fekete tollal, jól láthatóan beírni, a többi négy négyzetet pedig üresen kell hagyni. Amennyiben a többi négy négyzet nem teljesen üres (valamelyikben tollal vagy ceruzával írt betű, szám vagy bármilyen jelkezdemény szerepel) a feladatra adott válasz rossz válasznak számít. Radír, javító festék vagy hibajavító toll használata esetén a feladatra adott válasz szintén rossz válasznak számít. Ha valaki egy feladatra nem ad választ, az nem számít rossz megoldásnak. Ebben az esetben a kódlapon a feladat sorszáma melletti négyzeteket üresen kell hagyni. A kódlapot jól láthatóan, sötétkék vagy fekete tollal kell kitölteni, mert más színeket, halványan, vékonyan és kis jelekkel kitöltött kódlap jeleit a leolvasó rendszer nem érzékeli.");
         End("itemize");
         
         // Answer grid
-        Text(@"\def\arraystretch{2.0}");
+        Text(@"\def\arraystretch{0.0}");
         Text(@"\setlength\tabcolsep{6.0pt}");
         Begin("center");
         Text(@"\begin{tabular}{|>{\centering\arraybackslash}m{0.8cm}|", lineBreak: false);
@@ -150,29 +151,29 @@ public class LatexBuilder(string title, string author, string date)
         }
         Text(@"|>{\centering\arraybackslash}m{0.8cm}|}");
         Text(@"\hline");
-        Text(@"\parbox[c][6mm][c]{\linewidth}{\centerline{\includegraphics[height=6mm]{aruco_2.png}}} & ", lineBreak: false); // Markers are ordered weirdly to make the inner corner id equal its id
+        Text(@"\parbox[c][8mm][c]{\linewidth}{\centerline{\includegraphics[height=6mm]{aruco_2.png}}} & ", lineBreak: false); // Markers are ordered weirdly to make the inner corner id equal its id
         for (int i = 0; i < answerCount; i++)
         {
-            Text($@"\centerline{{{(char)(i + AsciiA)}}} & ", lineBreak: false);
+            Text($@"\parbox[c][8mm][c]{{\linewidth}}{{\centerline{{{(char)(i + AsciiA)}}}}} & ", lineBreak: false);
         }
-        Text(@"\parbox[c][6mm][c]{\linewidth}{\centerline{\includegraphics[height=6mm]{aruco_3.png}}} \\");
+        Text(@"\parbox[c][8mm][c]{\linewidth}{\centerline{\includegraphics[height=6mm]{aruco_3.png}}} \\");
         Text(@"\hline");
         for (int i = 0; i < questionCount; i++)
         {
-            Text($"{i + 1} & ", lineBreak: false);
+            Text($@"\parbox[c][8mm][c]{{\linewidth}}{{\centering {i + 1}}} & ", lineBreak: false);
             for (int j = 0; j < answerCount; j++)
             {
-                Text(@"\parbox[c][6mm][c]{\linewidth}{\centerline{\tikz{\draw (0,0) circle (2.5mm);}}} & ", lineBreak: false);
+                Text(@"\parbox[c][8mm][c]{\linewidth}{\centerline{\tikz{\draw (0,0) circle (2.5mm);}}} & ", lineBreak: false);
             }
-            Text($@"{i + 1} \\");
+            Text($@"\parbox[c][8mm][c]{{\linewidth}}{{\centering {i + 1}}} \\");
         }
         Text(@"\hline");
-        Text(@"\parbox[c][6mm][c]{\linewidth}{\centerline{\includegraphics[height=6mm]{aruco_1.png}}} & ", lineBreak: false);
+        Text(@"\parbox[c][8mm][c]{\linewidth}{\centerline{\includegraphics[height=6mm]{aruco_1.png}}} & ", lineBreak: false);
         for (int i = 0; i < answerCount; i++)
         {
-            Text($@"\centerline{{{(char)(i + AsciiA)}}} & ", lineBreak: false);
+            Text($@"\parbox[c][8mm][c]{{\linewidth}}{{\centerline{{{(char)(i + AsciiA)}}}}} & ", lineBreak: false);
         }
-        Text(@"\parbox[c][6mm][c]{\linewidth}{\centerline{\includegraphics[height=6mm]{aruco_0.png}}} \\");
+        Text(@"\parbox[c][8mm][c]{\linewidth}{\centerline{\includegraphics[height=6mm]{aruco_0.png}}} \\");
         Text(@"\hline");
         End("tabular");
         End("center");
