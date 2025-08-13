@@ -4,18 +4,18 @@ using Range = System.Range;
 
 namespace ConsoleApp;
 
+#pragma warning disable CA1416
 public static class Program
 {
     private const string Chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
     public static void Main()
     {
-        var path = Environment.ExpandEnvironmentVariables("%homepath%/Desktop/prj/07/test-page-00.png");
+        var path = Environment.ExpandEnvironmentVariables("%homepath%/Desktop/asd/Scan_20250811+neptun.png");
         var qrScanner = new Scanner.CodeScanner(path);
         var result = qrScanner.FindCodes();
 
         Console.WriteLine(result.Uuid);
-        Console.WriteLine(result.Name);
         Console.WriteLine(result.UserCode);
         
         var matrixScanner = new Scanner.MatrixScanner(path);
@@ -43,7 +43,6 @@ public static class Program
         
     }
     
-#pragma warning disable CA1416
     public static void GuidTest()
     {
         Guid uuid = Guid.NewGuid();
@@ -53,7 +52,6 @@ public static class Program
         // var bg = new Storage.QrBuilder(uuidBytes);
         // bg.Save(Environment.ExpandEnvironmentVariables("%homepath%/Desktop/test-bg0.png"));
     }
-#pragma warning restore CA1416
 
     private static void Breaker()
     {
@@ -172,3 +170,4 @@ public static class Program
         return plaintext;
     }
 }
+#pragma warning restore CA1416

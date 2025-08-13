@@ -37,6 +37,18 @@
                     MIT license
                 </Hyperlink>
             </TextBlock>
+            <TextBlock>
+                OpenCV:&#160;
+                <Hyperlink NavigateUri="https://www.apache.org/licenses/LICENSE-2.0.html" RequestNavigate="Hyperlink_RequestNavigate">
+                    Apache License 2.0
+                </Hyperlink>
+            </TextBlock>
+            <TextBlock>
+                ZXing.Net:&#160;
+                <Hyperlink NavigateUri="https://www.apache.org/licenses/LICENSE-2.0.html" RequestNavigate="Hyperlink_RequestNavigate">
+                    Apache License 2.0
+                </Hyperlink>
+            </TextBlock>
         </StackPanel>
     </Grid>
 </UserControl>
