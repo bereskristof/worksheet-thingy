@@ -11,9 +11,16 @@ public class MatrixScanner
     private readonly Mat _originalImage;
     private readonly Mat _grayImage = new();
     
+    [Obsolete]
     public MatrixScanner(string imagePath)
     {
         _originalImage = Cv2.ImRead(imagePath);
+        Cv2.CvtColor(_originalImage, _grayImage, ColorConversionCodes.BGR2GRAY);
+    }
+    
+    public MatrixScanner(byte[] imageData)
+    {
+        _originalImage = Cv2.ImDecode(imageData, ImreadModes.Color);
         Cv2.CvtColor(_originalImage, _grayImage, ColorConversionCodes.BGR2GRAY);
     }
 
@@ -27,6 +34,14 @@ public class MatrixScanner
         var maybeAnswerMatrixCorners = GetMaybeMarkerCenters(corners, ids);
         var answerMatrixCorners = GetAnswerMatrixCorners(maybeAnswerMatrixCorners);
         var circles = GetAnswerBubbles(answerMatrixCorners, questionCount, answerCount);
+
+        // foreach (var circle in circles)
+        // {
+        //     Cv2.Circle(_originalImage, circle.Center.ToPoint(), (int)circle.Radius, Scalar.Red, 2);
+        //     Cv2.PutText(_originalImage, circles.ToList().IndexOf(circle).ToString(), circle.Center.ToPoint(), HersheyFonts.HersheySimplex, 0.5, Scalar.Red, 1, LineTypes.AntiAlias);
+        // }
+        // Cv2.ImShow("aa", _originalImage);
+        // Cv2.WaitKey();
 
         return circles;
     }

@@ -11,6 +11,7 @@ public class BubbleChecker
     private readonly Mat _grayImage = new();
     private readonly Mat _threshImage = new();
 
+    [Obsolete]
     public BubbleChecker(string imagePath)
     {
         _originalImage = Cv2.ImRead(imagePath);
@@ -18,6 +19,17 @@ public class BubbleChecker
         var blurredImage = new Mat();
         var invertedThreshImage = new Mat();
         Cv2.GaussianBlur(_grayImage, blurredImage, new Size(9, 9), 0);
+        Cv2.Threshold(blurredImage, invertedThreshImage, 0, 255, ThresholdTypes.Otsu | ThresholdTypes.Binary);
+        Cv2.BitwiseNot(invertedThreshImage, _threshImage);
+    }
+
+    public BubbleChecker(byte[] imageData)
+    {
+        _originalImage = Cv2.ImDecode(imageData, ImreadModes.Color);
+        Cv2.CvtColor(_originalImage, _grayImage, ColorConversionCodes.BGR2GRAY);
+        var blurredImage = new Mat();
+        var invertedThreshImage = new Mat();
+        Cv2.GaussianBlur(_grayImage, blurredImage, new Size(3, 3), 0);
         Cv2.Threshold(blurredImage, invertedThreshImage, 0, 255, ThresholdTypes.Otsu | ThresholdTypes.Binary);
         Cv2.BitwiseNot(invertedThreshImage, _threshImage);
     }
@@ -38,6 +50,16 @@ public class BubbleChecker
                 int pixelCount = Cv2.CountNonZero(masked);
                 filledness[b] = pixelCount / (Math.PI * Math.Pow(bubble.Radius - RadiusDecrease, 2));
             }
+
+            // var debugImg = _threshImage.Clone();
+            // for (int b = 0; b < answerCount; b++)
+            // {
+            //     var bubble = bubbles[q * (int)answerCount + b];
+            //     Cv2.Circle(debugImg, bubble.Center.ToPoint(), (int)bubble.Radius, Scalar.Red, 2);
+            // }
+            // Cv2.ImShow("aa", debugImg);
+            // Cv2.WaitKey();
+            
             var ordered = filledness
                 .Select((value, index) => new { value, index })
                 .OrderByDescending(x => x.value)

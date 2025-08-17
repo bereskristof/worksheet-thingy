@@ -5,8 +5,8 @@ using System.Text.RegularExpressions;
 using Storage.Sheet;
 using Storage.Task;
 
-using Skeleton = System.Tuple<long, long[], System.Guid>;
-using Skeletons = System.Collections.Generic.List<System.Tuple<long, long[], System.Guid>>;
+using Skeleton = System.Tuple<long, long, System.Guid>;
+using Skeletons = System.Collections.Generic.List<System.Tuple<long, long, System.Guid>>;
 
 namespace Storage;
 
@@ -50,9 +50,11 @@ public static class MultiExamBuilder
         
         builder.AddTitle(humanReadableCode);
         builder.Begin("questions");
+        var i = 0;
         foreach (var question in questions)
         {
-            AddQuestion(question, builder, skeleton, uuid, answerCount);
+            AddQuestion(question, builder, skeleton, uuid, answerCount, i);
+            i++;
         }
         builder.End("questions");
         builder.Macro("cleardoublepage");
@@ -66,10 +68,15 @@ public static class MultiExamBuilder
         builder.AutoFooter();
     }
 
-    private static void AddQuestion(Question question, LatexBuilder builder, Skeletons skeleton, Guid uuid, byte answerCount)
+    private static void AddQuestion(Question question, LatexBuilder builder, Skeletons skeleton, Guid uuid, byte answerCount, int questionIndex)
     {
         var answers = question.Answers.GetRandomAnswers(answerCount);
-        Skeleton skeletonElement = new Skeleton(question.Id, answers.Select(x => x.Id).ToArray(), uuid); // Store IDs to allow for reconstruction
+        var answerIndex = answers
+            .Select((ans, i) => new {ans, i})
+            .Where(v => v.ans.Correct)
+            .Select(v => v.i)
+            .FirstOrDefault(); // Get the index of the first correct answer, or 0 if none are correct
+        Skeleton skeletonElement = new Skeleton(questionIndex, answerIndex, uuid); // Store IDs to allow for reconstruction
         skeleton.Add(skeletonElement);
         var path = ExportMaybeDuplicateQuestionImage(question);
         builder.Question(
@@ -95,17 +102,14 @@ public static class MultiExamBuilder
     
     private static void StoreSkeleton(Skeletons skeletons)
     {
-        foreach (var (question, answers, uuid) in skeletons)
+        foreach (var (question, answer, uuid) in skeletons)
         {
-            foreach (var answer in answers)
-            {
-                var storeCommand = Manager.Connection.CreateCommand();
-                storeCommand.CommandText = "INSERT INTO Solutions (Uuid, QuestionNumber, AnswerNumber) VALUES (@Uuid, @QuestionNumber, @AnswerNumber)";
-                storeCommand.Parameters.AddWithValue("@Uuid", uuid.ToString()); // Each exam gets a new UUID
-                storeCommand.Parameters.AddWithValue("@QuestionNumber", question);
-                storeCommand.Parameters.AddWithValue("@AnswerNumber", answer);
-                storeCommand.ExecuteNonQuery();
-            }
+            var storeCommand = Manager.Connection.CreateCommand();
+            storeCommand.CommandText = "INSERT INTO Solutions (Uuid, QuestionNumber, AnswerNumber) VALUES (@Uuid, @QuestionNumber, @AnswerNumber)";
+            storeCommand.Parameters.AddWithValue("@Uuid", uuid.ToString()); // Each exam gets a new UUID
+            storeCommand.Parameters.AddWithValue("@QuestionNumber", question);
+            storeCommand.Parameters.AddWithValue("@AnswerNumber", answer);
+            storeCommand.ExecuteNonQuery();
         }
     }
     

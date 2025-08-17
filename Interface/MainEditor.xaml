@@ -8,6 +8,7 @@
              xmlns:sheet="clr-namespace:Interface.Sheet"
              xmlns:export="clr-namespace:Interface.Export"
              xmlns:about="clr-namespace:Interface.About"
+             xmlns:solve="clr-namespace:Interface.Solve"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <TabControl Margin="2" Padding="3">
@@ -20,7 +21,9 @@
         <TabItem Header="{x:Static res:Lang.MenuTabs_Export}">
             <export:ExportPage/>
         </TabItem>
-        <TabItem Header="{x:Static res:Lang.MenuTabs_Correct}" IsEnabled="False"/>
+        <TabItem Header="{x:Static res:Lang.MenuTabs_Correct}">
+            <solve:SolvePage/>
+        </TabItem>
         <TabItem Header="{x:Static res:Lang.MenuTabs_About}">
             <about:About/>
         </TabItem>
