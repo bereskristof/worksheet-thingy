@@ -1,17 +1,14 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using Docnet.Core.Models;
 using Docnet.Core.Readers;
+using Scanner;
 using Storage;
 
 namespace Interface.Password;
 
 public static class ScannerHandler
 {
-    private const int DimX = 1200;
-    private const int DimY = 1700;
-
     private const int SuccessScoreCount = 24;
     
     private const double MinConfidence = 0.8; // Minimum difference between best and next best answer to consider it not double filled
@@ -19,24 +16,13 @@ public static class ScannerHandler
     
     private const int EmptyAnswer = -1;
     private const int WrongAnswer = -2;
-    
-    public static string ScanMultiPagePdf(string path)
-    {
-        var results = new List<string>();
-        using var doclib = Docnet.Core.DocLib.Instance;
-        using var reader = doclib.GetDocReader(path, new PageDimensions(DimX, DimY));
 
-        var pageCount = reader.GetPageCount();
-        
-        for (var i = 0; i < pageCount; i++)
-        {
-            var pageImg = GetSinglePageAsBitmap(reader, i);
-            var scanResult = ScanPageResults(pageImg, 15, 5); // TODO: Get question and answer count dynamically
-            var resultCsv = ProcessScanResults(scanResult);
-            results.Add(resultCsv);
-        }
-        var finalResult = string.Join("\n", results);
-        return finalResult;
+    public static void ScanPdfPage(List<string> resultsToMutate, IDocReader reader, int i)
+    {
+        var pageImg = GetSinglePageAsBitmap(reader, i);
+        var scanResult = ScanPageResults(pageImg, 15, 5); // TODO: Get question and answer count dynamically
+        var resultCsv = ProcessScanResults(scanResult, i);
+        resultsToMutate.Add(resultCsv);
     }
     
     private static Bitmap GetSinglePageAsBitmap(IDocReader reader, int pageIndex)
@@ -63,8 +49,22 @@ public static class ScannerHandler
         var imageConverter = new ImageConverter();
         var imageData = (byte[])(imageConverter.ConvertTo(pageImg, typeof(byte[])) ?? Array.Empty<byte>());
         var qrScanner = new Scanner.CodeScanner(imageData);
-        var result = qrScanner.FindCodes();
-        
+        CodeScanner.QrScanResult result;
+        try
+        {
+            result = qrScanner.FindCodes();
+        }
+        catch (ArgumentException e)
+        {
+            return new ScanResult
+            {
+                ExamCode = Guid.Empty,
+                UserCode = "???",
+                MatrixQuestionResults = [],
+                HoughQuestionResults = []
+            };
+        }
+
         var matrixScanner = new Scanner.MatrixScanner(imageData);
         var matrixBubbles = matrixScanner.FindBubbles(questionCount, answerCount);
         
@@ -104,7 +104,7 @@ public static class ScannerHandler
         return scanResult;
     }
 
-    private static string ProcessScanResults(ScanResult result)
+    private static string ProcessScanResults(ScanResult result, int pageIndex)
     {
         var answers = new int[result.MatrixQuestionResults.Length];
         for (int i = 0; i < result.MatrixQuestionResults.Length; i++)
@@ -120,7 +120,6 @@ public static class ScannerHandler
             }
             else
             {
-                Console.WriteLine($"{i} is wrong :=> {mResult.BestAnswerConfidence}");
                 answers[i] = WrongAnswer;
             }
         }
@@ -128,8 +127,7 @@ public static class ScannerHandler
         var results = ExamResultObtainer.ObtainResults(answers, result.ExamCode);
         var totalScore = results.Sum();
         var isSuccess = totalScore > SuccessScoreCount ? "Sikeres" : "Sikertelen";
-        var resultCsv = $"{result.UserCode}, {totalScore}, {isSuccess}, {string.Join(", ", results)}";
-        Console.WriteLine(resultCsv); // TODO: Delete this line in production
+        var resultCsv = $"{pageIndex}, {result.UserCode}, {totalScore}, {isSuccess}, {string.Join(", ", results)}";
         return resultCsv;
     } 
 }

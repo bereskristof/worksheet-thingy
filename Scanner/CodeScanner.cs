@@ -53,7 +53,8 @@ public class CodeScanner
 
         if (string.IsNullOrEmpty(zxingResult.UserCode) && string.IsNullOrEmpty(opencvResult.UserCode))
         {
-            throw new ArgumentException("Failed to find QR codes in the image.");
+            // throw new ArgumentException("Failed to find QR codes in the image.");
+            zxingResult.UserCode = "???"; // Fallback to empty user code
         }
         if (zxingResult.Uuid == Guid.Empty && opencvResult.Uuid == Guid.Empty)
         {
