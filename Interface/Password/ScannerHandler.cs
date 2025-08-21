@@ -126,7 +126,7 @@ public static class ScannerHandler
 
         var results = ExamResultObtainer.ObtainResults(answers, result.ExamCode);
         var totalScore = results.Sum();
-        var isSuccess = totalScore > SuccessScoreCount ? "Sikeres" : "Sikertelen";
+        var isSuccess = totalScore >= SuccessScoreCount ? "Sikeres" : "Sikertelen"; // TODO: Localize this
         var resultCsv = $"{pageIndex}, {result.UserCode}, {totalScore}, {isSuccess}, {string.Join(", ", results)}";
         return resultCsv;
     } 
