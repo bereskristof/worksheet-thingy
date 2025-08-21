@@ -51,11 +51,27 @@ public partial class ExportingWindow
         MultiExamBuilder.BeginManualAdding(latexBuilder);
         for (uint i = 0; i < examCount - 1; i++)
         {
-            MultiExamBuilder.AddExam(latexBuilder, root, answerCount);
+            try
+            {
+                MultiExamBuilder.AddExam(latexBuilder, root, answerCount);
+            }
+            catch (InvalidOperationException ex)
+            {
+                e.Result = ex.Message;
+                return; // Stop the export if an error occurs
+            }
             latexBuilder.Macro("newpage");
             _backgroundWorker.ReportProgress((int)(i + 1));
         }
-        MultiExamBuilder.AddExam(latexBuilder, root, answerCount); // Add the last exam without a new page after it
+        try
+        {
+            MultiExamBuilder.AddExam(latexBuilder, root, answerCount); // Add the last exam without a new page after it
+        }
+        catch (InvalidOperationException ex)
+        {
+            e.Result = ex.Message;
+            return; // Stop the export if an error occurs
+        }
         _backgroundWorker.ReportProgress((int)examCount);
         MultiExamBuilder.EndManualAdding(latexBuilder);
         

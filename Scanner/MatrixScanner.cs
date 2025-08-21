@@ -11,13 +11,6 @@ public class MatrixScanner
     private readonly Mat _originalImage;
     private readonly Mat _grayImage = new();
     
-    [Obsolete]
-    public MatrixScanner(string imagePath)
-    {
-        _originalImage = Cv2.ImRead(imagePath);
-        Cv2.CvtColor(_originalImage, _grayImage, ColorConversionCodes.BGR2GRAY);
-    }
-    
     public MatrixScanner(byte[] imageData)
     {
         _originalImage = Cv2.ImDecode(imageData, ImreadModes.Color);

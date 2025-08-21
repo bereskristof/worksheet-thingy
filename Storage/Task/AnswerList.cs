@@ -34,6 +34,10 @@ public class AnswerList : ObservableCollection<Answer>
     public Answer[] GetRandomAnswers(int count)
     {
         var correctAnswers = this.Where(e => e.Correct).ToArray();
+        if (correctAnswers.Length == 0)
+        {
+            throw new InvalidOperationException("No valid answers available to select from.");
+        }
         var incorrectAnswers = this.Where(e => !e.Correct)
             .OrderBy(_ => RandomNumberGenerator.GetInt32(int.MaxValue))
             .Take(count - correctAnswers.Length); // Take() never takes more than available

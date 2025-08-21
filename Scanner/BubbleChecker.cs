@@ -11,18 +11,6 @@ public class BubbleChecker
     private readonly Mat _grayImage = new();
     private readonly Mat _threshImage = new();
 
-    [Obsolete]
-    public BubbleChecker(string imagePath)
-    {
-        _originalImage = Cv2.ImRead(imagePath);
-        Cv2.CvtColor(_originalImage, _grayImage, ColorConversionCodes.BGR2GRAY);
-        var blurredImage = new Mat();
-        var invertedThreshImage = new Mat();
-        Cv2.GaussianBlur(_grayImage, blurredImage, new Size(9, 9), 0);
-        Cv2.Threshold(blurredImage, invertedThreshImage, 0, 255, ThresholdTypes.Otsu | ThresholdTypes.Binary);
-        Cv2.BitwiseNot(invertedThreshImage, _threshImage);
-    }
-
     public BubbleChecker(byte[] imageData)
     {
         _originalImage = Cv2.ImDecode(imageData, ImreadModes.Color);

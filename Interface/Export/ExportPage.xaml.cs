@@ -131,7 +131,16 @@ public partial class ExportPage : INotifyPropertyChanged
         var (title, author, date) = (WorkArgs)e.Argument!;
         
         // Create a PDF to preview
-        var builder = MultiExamBuilder.BuildNExams(1, Bindings.Instance.SheetRoot, AnswerCount, title, author, date);
+        LatexBuilder builder;
+        try
+        {
+            builder = MultiExamBuilder.BuildNExams(1, Bindings.Instance.SheetRoot, AnswerCount, title, author, date);
+        }
+        catch (InvalidOperationException ex)
+        {
+            e.Result = new PreviewTuple(ex.Message, [], 0, 0, "");
+            return;
+        }
         string pdfPath;
         pdfPath = MultiExamBuilder.TryExportPdf(builder, out var success, out var errorMessage);
         if (!success)

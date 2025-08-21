@@ -8,40 +8,48 @@ namespace ConsoleApp;
 public static class Program
 {
     private const string Chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-    public static void Main()
+    
+    public static void Main(string[] args)
     {
-        var path = Environment.ExpandEnvironmentVariables("%homepath%/Desktop/asd/Scan_20250811+neptun.png");
-        var qrScanner = new Scanner.CodeScanner(path);
-        var result = qrScanner.FindCodes();
-
-        Console.WriteLine(result.Uuid);
-        Console.WriteLine(result.UserCode);
-        
-        var matrixScanner = new Scanner.MatrixScanner(path);
-        var matrixBubbles = matrixScanner.FindBubbles(15, 5);
-        
-        var houghScanner = new Scanner.HoughScanner(path);
-        var houghBubbles = houghScanner.FindBubbles(15, 5);
-        
-        var bubbleChecker = new Scanner.BubbleChecker(path);
-        var matrixResults = bubbleChecker.CheckBubbles(matrixBubbles, 15, 5);
-        var houghResults = bubbleChecker.CheckBubbles(houghBubbles, 15, 5);
-        for (int i = 0; i < matrixResults.Length; i++)
-        {
-            var (mResult, mBest, mNextBest) = matrixResults[i];
-            var (hResult, hBest, hNextBest) = houghResults[i];
-            if (mResult == hResult)
-            {
-                Console.WriteLine($"Question {i + 1}: Agree on {mResult + 1}, matrix confidence {(mBest - mNextBest) / mBest}, hough confidence {(hBest - hNextBest) / hBest}");
-            }
-            else
-            {
-                Console.WriteLine($"Question {i + 1}: Disagree, matrix says {mResult + 1} with confidence {(mBest - mNextBest) / mBest}, hough says {hResult + 1} with confidence {(hBest - hNextBest) / hBest}");
-            }
-        }
-        
+        // Uncomment the desired test method to run
+        // ScanTest();
+        // GuidTest();
+        Breaker();
     }
+
+    // public static void ScanTest()
+    // {
+    //     var path = Environment.ExpandEnvironmentVariables("%homepath%/Desktop/asd/Scan_20250811+neptun.png");
+    //     var qrScanner = new Scanner.CodeScanner(path);
+    //     var result = qrScanner.FindCodes();
+    //
+    //     Console.WriteLine(result.Uuid);
+    //     Console.WriteLine(result.UserCode);
+    //     
+    //     var matrixScanner = new Scanner.MatrixScanner(path);
+    //     var matrixBubbles = matrixScanner.FindBubbles(15, 5);
+    //     
+    //     var houghScanner = new Scanner.HoughScanner(path);
+    //     var houghBubbles = houghScanner.FindBubbles(15, 5);
+    //     
+    //     var bubbleChecker = new Scanner.BubbleChecker(path);
+    //     var matrixResults = bubbleChecker.CheckBubbles(matrixBubbles, 15, 5);
+    //     var houghResults = bubbleChecker.CheckBubbles(houghBubbles, 15, 5);
+    //     for (int i = 0; i < matrixResults.Length; i++)
+    //     {
+    //         var (mResult, mBest, mNextBest) = matrixResults[i];
+    //         var (hResult, hBest, hNextBest) = houghResults[i];
+    //         if (mResult == hResult)
+    //         {
+    //             Console.WriteLine($"Question {i + 1}: Agree on {mResult + 1}, matrix confidence {(mBest - mNextBest) / mBest}, hough confidence {(hBest - hNextBest) / hBest}");
+    //         }
+    //         else
+    //         {
+    //             Console.WriteLine($"Question {i + 1}: Disagree, matrix says {mResult + 1} with confidence {(mBest - mNextBest) / mBest}, hough says {hResult + 1} with confidence {(hBest - hNextBest) / hBest}");
+    //         }
+    //     }
+    //     
+    // }
     
     public static void GuidTest()
     {

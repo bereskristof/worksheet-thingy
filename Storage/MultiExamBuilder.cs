@@ -70,7 +70,16 @@ public static class MultiExamBuilder
 
     private static void AddQuestion(Question question, LatexBuilder builder, Skeletons skeleton, Guid uuid, byte answerCount, int questionIndex)
     {
-        var answers = question.Answers.GetRandomAnswers(answerCount);
+        Answer[] answers;
+        try
+        {
+            answers = question.Answers.GetRandomAnswers(answerCount);
+        }
+        catch (InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Question has no correct answer:\n\n{question.Id}. {question.Text}");
+        }
+        
         var answerIndex = answers
             .Select((ans, i) => new {ans, i})
             .Where(v => v.ans.Correct)
