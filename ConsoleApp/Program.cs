@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System.Diagnostics;
+using System.Security.Cryptography;
 using System.Text;
 using Range = System.Range;
 
@@ -14,7 +15,14 @@ public static class Program
         // Uncomment the desired test method to run
         // ScanTest();
         // GuidTest();
-        Breaker();
+        string texStatus = Storage.TexDoctor.VerifyTexInstallation(out _) switch
+        {
+            Storage.TexDoctor.TexStatus.Operational => "TeX installation is operational.",
+            Storage.TexDoctor.TexStatus.MissingPackages => "TeX installation is missing required packages.",
+            Storage.TexDoctor.TexStatus.NotFound => "TeX installation not found.",
+            _ => throw new UnreachableException("VerifyTexInstallation TexStatus outside of enum range.")
+        };
+        Console.WriteLine(texStatus);
     }
 
     // public static void ScanTest()
