@@ -225,4 +225,28 @@
     <data name="Export_AnswerCount" xml:space="preserve">
         <value>Answer count:</value>
     </data>
+    <data name="Export_Path" xml:space="preserve">
+        <value>Export path:</value>
+    </data>
+    <data name="Export_Browse" xml:space="preserve">
+        <value>Browse</value>
+    </data>
+    <data name="Common_Error" xml:space="preserve">
+        <value>Error</value>
+    </data>
+    <data name="Export_ShuffleSmart" xml:space="preserve">
+        <value>Shuffle answer order, with exceptions</value>
+    </data>
+    <data name="Export_Shuffle" xml:space="preserve">
+        <value>Shuffle answer order</value>
+    </data>
+    <data name="Export_Ordered" xml:space="preserve">
+        <value>Keep answer order</value>
+    </data>
+    <data name="Solve_Select" xml:space="preserve">
+        <value>Select file...</value>
+    </data>
+    <data name="Solve_Get" xml:space="preserve">
+        <value>Export results...</value>
+    </data>
 </root>

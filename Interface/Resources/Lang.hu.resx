@@ -218,4 +218,28 @@
     <data name="Export_AnswerCount" xml:space="preserve">
         <value>Válaszmennyiség:</value>
     </data>
+    <data name="Export_Path" xml:space="preserve">
+        <value>Kiadási útvonal</value>
+    </data>
+    <data name="Export_Browse" xml:space="preserve">
+        <value>Tallózás</value>
+    </data>
+    <data name="Common_Error" xml:space="preserve">
+        <value>Hiba</value>
+    </data>
+    <data name="Export_Ordered" xml:space="preserve">
+        <value>Válaszsorrend megtartása</value>
+    </data>
+    <data name="Export_Shuffle" xml:space="preserve">
+        <value>Válaszsorrend keverése</value>
+    </data>
+    <data name="Export_ShuffleSmart" xml:space="preserve">
+        <value>Válaszsorrend keverése kivételekkel</value>
+    </data>
+    <data name="Solve_Select" xml:space="preserve">
+        <value>Fájl kiválasztása...</value>
+    </data>
+    <data name="Solve_Get" xml:space="preserve">
+        <value>Eredmény exportálása...</value>
+    </data>
 </root>

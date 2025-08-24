@@ -32,9 +32,9 @@
             <Label Grid.Column="0" Grid.Row="1" Content="{x:Static res:Lang.Export_AnswerCount}" Padding="0" Margin="0, 3, 3, 0"/>
             <TextBox Grid.Column="1" Grid.Row="1" Name="AnswerCountBox"  Margin="0, 3, 0, 0"/>
             <ComboBox Grid.Column="1" Grid.Row="2" Padding="3, 0" Margin="0, 3, 0, 0">
-                <!-- <ComboBoxItem Content="Shuffle answers with exceptions" IsSelected="True"/> --> <!-- Localize -->
-                <ComboBoxItem Content="Shuffle answers" Selected="ShuffleOrder_OnSelected" IsSelected="True"/> <!-- Localize -->
-                <ComboBoxItem Content="Keep answer order" Selected="KeepOrder_OnSelected"/> <!-- Localize -->
+                <ComboBoxItem Content="{x:Static res:Lang.Export_ShuffleSmart}"/>
+                <ComboBoxItem Content="{x:Static res:Lang.Export_Shuffle}" Selected="ShuffleOrder_OnSelected" IsSelected="True"/>
+                <ComboBoxItem Content="{x:Static res:Lang.Export_Ordered}" Selected="KeepOrder_OnSelected"/>
             </ComboBox>
             <Label Grid.Column="0" Grid.Row="3" Content="{x:Static res:Lang.Export_Title}" Padding="0" Margin="0, 3, 3, 0"/>
             <TextBox Grid.Column="1" Grid.Row="3" Margin="0, 3, 0, 0" Name="TitleBox"/>
@@ -42,14 +42,14 @@
             <TextBox Grid.Column="1" Grid.Row="4" Margin="0, 3, 0, 0" Name="AuthorBox"/>
             <Label Grid.Column="0" Grid.Row="5" Content="{x:Static res:Lang.Export_Date}" Padding="0" Margin="0, 3, 3, 0"/>
             <TextBox Grid.Column="1" Grid.Row="5" Margin="0, 3, 0, 0" Name="DateBox"/>
-            <Label Grid.Column="0" Grid.Row="6" Content="Export path:" Padding="0" Margin="0, 3, 3, 0"/> <!-- Localize -->
+            <Label Grid.Column="0" Grid.Row="6" Content="{x:Static res:Lang.Export_Path}" Padding="0" Margin="0, 3, 3, 0"/>
             <Grid Grid.Column="1" Grid.Row="6">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <TextBox Grid.Column="0" Margin="0, 3, 0, 0" Name="ExportBox"/>
-                <Button Grid.Column="1" Margin="3, 3, 0, 0" Name="BrowseButton" Content="Browse" Padding="3, 0" Click="BrowseButton_OnClick"/> <!-- Localize -->
+                <Button Grid.Column="1" Margin="3, 3, 0, 0" Content="{x:Static res:Lang.Export_Browse}" Padding="3, 0" Click="BrowseButton_OnClick"/> <!-- Localize -->
             </Grid>
             <Button Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="2" Content="{x:Static res:Lang.Export_Export}" Margin="0, 3, 0, 0" Click="ExportButton_OnClick"/>
         </Grid>

@@ -60,6 +60,15 @@ namespace Interface.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        public static string Common_Error {
+            get {
+                return ResourceManager.GetString("Common_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An unhandled exception occurred, and the program will close..
         /// </summary>
         public static string Crash_Message {
@@ -101,6 +110,15 @@ namespace Interface.Resources {
         public static string Export_Author {
             get {
                 return ResourceManager.GetString("Export_Author", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Browse.
+        /// </summary>
+        public static string Export_Browse {
+            get {
+                return ResourceManager.GetString("Export_Browse", resourceCulture);
             }
         }
         
@@ -150,11 +168,47 @@ namespace Interface.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Keep answer order.
+        /// </summary>
+        public static string Export_Ordered {
+            get {
+                return ResourceManager.GetString("Export_Ordered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export path:.
+        /// </summary>
+        public static string Export_Path {
+            get {
+                return ResourceManager.GetString("Export_Path", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create Preview.
         /// </summary>
         public static string Export_Preview {
             get {
                 return ResourceManager.GetString("Export_Preview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shuffle answer order.
+        /// </summary>
+        public static string Export_Shuffle {
+            get {
+                return ResourceManager.GetString("Export_Shuffle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shuffle answer order, with exceptions.
+        /// </summary>
+        public static string Export_ShuffleSmart {
+            get {
+                return ResourceManager.GetString("Export_ShuffleSmart", resourceCulture);
             }
         }
         
@@ -533,6 +587,24 @@ namespace Interface.Resources {
         public static string Sheet_Show {
             get {
                 return ResourceManager.GetString("Sheet_Show", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export results....
+        /// </summary>
+        public static string Solve_Get {
+            get {
+                return ResourceManager.GetString("Solve_Get", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select file....
+        /// </summary>
+        public static string Solve_Select {
+            get {
+                return ResourceManager.GetString("Solve_Select", resourceCulture);
             }
         }
         
