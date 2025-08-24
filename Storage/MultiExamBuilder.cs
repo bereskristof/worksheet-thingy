@@ -15,7 +15,7 @@ public static class MultiExamBuilder
 {
     /// Generates N exams based on the provided root node and answer count.
     /// Disables saving to database, since this is only used for previewing.
-    public static LatexBuilder BuildNExams(uint n, SelectorNode rootNode, byte answerCount, string title, string author, string date)
+    public static LatexBuilder BuildNExams(uint n, SelectorNode rootNode, byte answerCount, string title, string author, string date, bool shuffleAnswers, string[] excludedAnswers)
     {
         if (n == 0)
             throw new ArgumentException("The number of exams to generate must be greater than zero.", nameof(n));
@@ -24,10 +24,10 @@ public static class MultiExamBuilder
         builder.AutoHeader();
         for (uint i = 0; i < n - 1; i++)
         {
-            AddExam(builder, rootNode, answerCount, false);
+            AddExam(builder, rootNode, answerCount, shuffleAnswers, excludedAnswers, false);
             builder.Macro("newpage");
         }
-        AddExam(builder, rootNode, answerCount, false); // Add the last exam without a new page after it
+        AddExam(builder, rootNode, answerCount, shuffleAnswers, excludedAnswers, false); // Add the last exam without a new page after it
         builder.AutoFooter();
         return builder;
     }
@@ -37,7 +37,7 @@ public static class MultiExamBuilder
         builder.AutoHeader();
     }
 
-    public static void AddExam(LatexBuilder builder, SelectorNode rootNode, byte answerCount, bool storeSkeleton = true)
+    public static void AddExam(LatexBuilder builder, SelectorNode rootNode, byte answerCount, bool shuffleAnswers, string[] excludedAnswers, bool storeSkeleton = true)
     {
         var questions = rootNode.GetQuestions();
         Skeletons skeleton = [];
@@ -55,7 +55,7 @@ public static class MultiExamBuilder
         var i = 0;
         foreach (var question in questions)
         {
-            AddQuestion(question, builder, skeleton, uuid, answerCount, i);
+            AddQuestion(question, builder, skeleton, uuid, answerCount, i, shuffleAnswers, excludedAnswers);
             i++;
         }
         builder.End("questions");
@@ -71,12 +71,12 @@ public static class MultiExamBuilder
         builder.AutoFooter();
     }
 
-    private static void AddQuestion(Question question, LatexBuilder builder, Skeletons skeleton, Guid uuid, byte answerCount, int questionIndex)
+    private static void AddQuestion(Question question, LatexBuilder builder, Skeletons skeleton, Guid uuid, byte answerCount, int questionIndex, bool shuffleAnswers, string[] excludedAnswers)
     {
         Answer[] answers;
         try
         {
-            answers = question.Answers.GetRandomAnswers(answerCount);
+            answers = question.Answers.GetRandomAnswers(answerCount, shuffleAnswers, excludedAnswers);
         }
         catch (InvalidOperationException)
         {

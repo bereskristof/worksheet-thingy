@@ -3,7 +3,8 @@ using System.IO;
 using System.Windows;
 using Storage;
 using Storage.Sheet;
-using WorkArgs = System.Tuple<string, Storage.Sheet.SelectorNode, byte, uint, string, string, string>;
+using WorkArgsInner = System.Tuple<string, bool, string[]>;
+using WorkArgs = System.Tuple<string, Storage.Sheet.SelectorNode, byte, uint, string, string, System.Tuple<string, bool, string[]>>;
 
 namespace Interface.Export;
 
@@ -17,7 +18,7 @@ public partial class ExportingWindow
         WindowStyle = WindowStyle.None;
     }
     
-    public bool ExportNPages(SelectorNode root, uint examCount, byte answerCount, string title, string author, string date, string target)
+    public bool ExportNPages(SelectorNode root, uint examCount, byte answerCount, string title, string author, string date, string target, bool shuffleAnswers, string[] excludedAnswers)
     {
         if (!IsTargetValid(target))
         {
@@ -30,7 +31,7 @@ public partial class ExportingWindow
         _backgroundWorker.ProgressChanged += BackgroundWorker_ProgressChanged;
         _backgroundWorker.DoWork += BackgroundLoader_DoWork;
         _backgroundWorker.RunWorkerCompleted += BackgroundLoader_RunWorkerCompleted;
-        var args = new WorkArgs(target, root, answerCount, examCount, title, author, date);
+        var args = new WorkArgs(target, root, answerCount, examCount, title, author, new WorkArgsInner(date, shuffleAnswers, excludedAnswers));
         _backgroundWorker.RunWorkerAsync(argument: args);
         return true;
     }
@@ -51,7 +52,7 @@ public partial class ExportingWindow
         }
     }
 
-    private int CalculateMaxProgress(uint examCount)
+    private static int CalculateMaxProgress(uint examCount)
         => (int)examCount;
 
     private void BackgroundWorker_ProgressChanged(object? sender, ProgressChangedEventArgs e)
@@ -66,7 +67,8 @@ public partial class ExportingWindow
 
     private void BackgroundLoader_DoWork(object? sender, DoWorkEventArgs e)
     {
-        var (target, root, answerCount, examCount, title, author, date) = (WorkArgs)e.Argument!;
+        var (target, root, answerCount, examCount, title, author, inner) = (WorkArgs)e.Argument!;
+        var (date, shuffleAnswers, excludedAnswers) = inner;
         
         var latexBuilder = new LatexBuilder(title, author, date);
         MultiExamBuilder.BeginManualAdding(latexBuilder);
@@ -74,7 +76,7 @@ public partial class ExportingWindow
         {
             try
             {
-                MultiExamBuilder.AddExam(latexBuilder, root, answerCount);
+                MultiExamBuilder.AddExam(latexBuilder, root, answerCount, shuffleAnswers, excludedAnswers);
             }
             catch (InvalidOperationException ex)
             {
@@ -86,7 +88,7 @@ public partial class ExportingWindow
         }
         try
         {
-            MultiExamBuilder.AddExam(latexBuilder, root, answerCount); // Add the last exam without a new page after it
+            MultiExamBuilder.AddExam(latexBuilder, root, answerCount, shuffleAnswers, excludedAnswers); // Add the last exam without a new page after it
         }
         catch (InvalidOperationException ex)
         {

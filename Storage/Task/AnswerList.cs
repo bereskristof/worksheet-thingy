@@ -31,18 +31,33 @@ public class AnswerList : ObservableCollection<Answer>
         answer.Delete();
     }
 
-    public Answer[] GetRandomAnswers(int count)
+    public Answer[] GetRandomAnswers(int count, bool shuffle, string[] shuffleExclusions)
     {
+        var exclusionSet = shuffleExclusions.ToHashSet(StringComparer.OrdinalIgnoreCase);
         var correctAnswers = this.Where(e => e.Correct).ToArray();
         if (correctAnswers.Length == 0)
         {
             throw new InvalidOperationException("No valid answers available to select from.");
         }
-        var incorrectAnswers = this.Where(e => !e.Correct)
-            .OrderBy(_ => RandomNumberGenerator.GetInt32(int.MaxValue))
+        var incorrectAnswers = this
+            .Where(e => !e.Correct)
             .Take(count - correctAnswers.Length); // Take() never takes more than available
-        var selectedAnswers = correctAnswers.Concat(incorrectAnswers).ToArray();
-        RandomNumberGenerator.Shuffle<Answer>(selectedAnswers);
+        var selectedAnswers = correctAnswers
+            .Concat(incorrectAnswers)
+            .OrderBy(ans => ans.Id)
+            .ToArray();
+        if (!shuffle)
+        {
+            return selectedAnswers;
+        }
+        var shuffledSubArray = selectedAnswers
+            .Where(x => !exclusionSet.Contains(x.Text))
+            .OrderBy(_ => RandomNumberGenerator.GetInt32(int.MaxValue))
+            .ToArray();
+        var i = 0;
+        selectedAnswers = selectedAnswers
+            .Select(x => exclusionSet.Contains(x.Text) ? x : shuffledSubArray[i++])
+            .ToArray();
         return selectedAnswers;
     }
 }

@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -19,6 +20,15 @@ namespace Interface.Export;
 
 public partial class ExportPage : INotifyPropertyChanged
 {
+    private enum ShuffleMode
+    {
+        Yes,
+        No,
+        Smart,
+    }
+    
+    private ShuffleMode _shuffleMode = ShuffleMode.Yes;
+    
     public event PropertyChangedEventHandler? PropertyChanged;
 
     private void OnPropertyChanged(string propertyName)
@@ -156,15 +166,15 @@ public partial class ExportPage : INotifyPropertyChanged
         LatexBuilder builder;
         try
         {
-            builder = MultiExamBuilder.BuildNExams(1, Bindings.Instance.SheetRoot, AnswerCount, title, author, date);
+            GetShuffleVars(out var shuffle, out var exclusions);
+            builder = MultiExamBuilder.BuildNExams(1, Bindings.Instance.SheetRoot, AnswerCount, title, author, date, shuffle, exclusions);
         }
         catch (InvalidOperationException ex)
         {
             e.Result = new PreviewTuple(ex.Message, [], 0, 0, "");
             return;
         }
-        string pdfPath;
-        pdfPath = MultiExamBuilder.TryExportPdf(builder, out var success, out var errorMessage);
+        var pdfPath = MultiExamBuilder.TryExportPdf(builder, out var success, out var errorMessage);
         if (!success)
         {
             e.Result = new PreviewTuple(errorMessage, [], 0, 0, pdfPath);
@@ -265,7 +275,8 @@ public partial class ExportPage : INotifyPropertyChanged
         var title = TitleBox.Text.Trim();
         var author = AuthorBox.Text.Trim();
         var date = DateBox.Text.Trim();
-        var succeed = window.ExportNPages(Bindings.Instance.SheetRoot, PageCount, 5, title, author, date, ExportPath);
+        GetShuffleVars(out var shuffle, out var exclusions);
+        var succeed = window.ExportNPages(Bindings.Instance.SheetRoot, PageCount, 5, title, author, date, ExportPath, shuffle, exclusions);
         if (succeed)
             window.ShowDialog();
     }
@@ -288,5 +299,32 @@ public partial class ExportPage : INotifyPropertyChanged
         };
         
         return saveDialog.ShowDialog() == true ? Path.GetFullPath(saveDialog.FileName) : string.Empty;
+    }
+
+    private void ShuffleOrder_OnSelected(object sender, RoutedEventArgs e)
+        => _shuffleMode = ShuffleMode.Yes;
+
+    private void KeepOrder_OnSelected(object sender, RoutedEventArgs e)
+        => _shuffleMode = ShuffleMode.No;
+    
+    private void GetShuffleVars(out bool shuffle, out string[] shuffleExclusions)
+    {
+        switch (_shuffleMode)
+        {
+            case ShuffleMode.Yes:
+                shuffle = true;
+                shuffleExclusions = [];
+                break;
+            case ShuffleMode.No:
+                shuffle = false;
+                shuffleExclusions = [];
+                break;
+            case ShuffleMode.Smart:
+                shuffle = true;
+                shuffleExclusions = ["True", "False", "Yes", "No", "I don't know"]; // TODO: Localize
+                break;
+            default:
+                throw new UnreachableException("GetShuffleVars UnreachableException reached");
+        }
     }
 }
