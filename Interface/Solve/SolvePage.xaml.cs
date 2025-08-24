@@ -30,7 +30,6 @@ public partial class SolvePage
         if (string.IsNullOrEmpty(path)) 
             return;
         
-        ProgressBar.Visibility = Visibility.Visible;
         ProgressBar.Value = 0;
         ExportResultsButton.IsEnabled = false;
         _backgroundWorker.WorkerReportsProgress = true;
@@ -122,6 +121,5 @@ public partial class SolvePage
         string result = (string)(e.Result ?? string.Empty);
         _csvBuffer = result;
         ExportResultsButton.IsEnabled = true;
-        ProgressBar.Visibility = Visibility.Hidden;
     }
 }
