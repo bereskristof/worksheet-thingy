@@ -242,4 +242,7 @@
     <data name="Solve_Get" xml:space="preserve">
         <value>Eredmény exportálása...</value>
     </data>
+    <data name="Export_Exceptions" xml:space="preserve">
+        <value>Keverés kivételek:</value>
+    </data>
 </root>

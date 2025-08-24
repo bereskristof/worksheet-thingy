@@ -249,4 +249,7 @@
     <data name="Solve_Get" xml:space="preserve">
         <value>Export results...</value>
     </data>
+    <data name="Export_Exceptions" xml:space="preserve">
+        <value>Shuffle Exceptions:</value>
+    </data>
 </root>

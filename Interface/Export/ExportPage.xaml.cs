@@ -29,6 +29,8 @@ public partial class ExportPage : INotifyPropertyChanged
     
     private ShuffleMode _shuffleMode = ShuffleMode.Yes;
     
+    private string[] _smartExclusions = [];
+    
     public event PropertyChangedEventHandler? PropertyChanged;
 
     private void OnPropertyChanged(string propertyName)
@@ -307,6 +309,9 @@ public partial class ExportPage : INotifyPropertyChanged
     private void KeepOrder_OnSelected(object sender, RoutedEventArgs e)
         => _shuffleMode = ShuffleMode.No;
     
+    private void SmartShuffle_OnSelected(object sender, RoutedEventArgs e)
+        => _shuffleMode = ShuffleMode.Smart;
+    
     private void GetShuffleVars(out bool shuffle, out string[] shuffleExclusions)
     {
         switch (_shuffleMode)
@@ -321,10 +326,20 @@ public partial class ExportPage : INotifyPropertyChanged
                 break;
             case ShuffleMode.Smart:
                 shuffle = true;
-                shuffleExclusions = ["True", "False", "Yes", "No", "I don't know"]; // TODO: Localize
+                shuffleExclusions = _smartExclusions;
                 break;
             default:
                 throw new UnreachableException("GetShuffleVars UnreachableException reached");
         }
+    }
+
+    private void ExceptionList_OnTextChanged(object sender, TextChangedEventArgs e)
+    {
+        var exclusions = ExceptionList.Text
+            .Split('\n', StringSplitOptions.RemoveEmptyEntries)
+            .Select(s => s.Trim())
+            .Where(s => !string.IsNullOrEmpty(s))
+            .ToArray();
+        _smartExclusions = exclusions;
     }
 }

@@ -132,6 +132,15 @@ namespace Interface.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shuffle Exceptions:.
+        /// </summary>
+        public static string Export_Exceptions {
+            get {
+                return ResourceManager.GetString("Export_Exceptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export PDF.
         /// </summary>
         public static string Export_Export {
