@@ -17,9 +17,13 @@ public partial class ExportingWindow
         WindowStyle = WindowStyle.None;
     }
     
-    public void ExportNPages(SelectorNode root, uint examCount, byte answerCount, string title, string author, string date)
+    public bool ExportNPages(SelectorNode root, uint examCount, byte answerCount, string title, string author, string date, string target)
     {
-        var target = Environment.ExpandEnvironmentVariables("%homepath%/Desktop/final.pdf"); // TODO: Get from UI
+        if (!IsTargetValid(target))
+        {
+            MessageBox.Show("The specified target path is invalid.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); // TODO: Localize
+            return false;
+        }
         _backgroundWorker.WorkerReportsProgress = true;
         ExportProgressBar.Maximum = CalculateMaxProgress(examCount);
         Counter.Content = $"0 / {ExportProgressBar.Maximum}";
@@ -28,8 +32,25 @@ public partial class ExportingWindow
         _backgroundWorker.RunWorkerCompleted += BackgroundLoader_RunWorkerCompleted;
         var args = new WorkArgs(target, root, answerCount, examCount, title, author, date);
         _backgroundWorker.RunWorkerAsync(argument: args);
+        return true;
     }
-    
+
+    private static bool IsTargetValid(string target)
+    {
+        try
+        {
+            var fs = new FileStream(target, FileMode.Create, FileAccess.Write);
+            fs.WriteByte(0);
+            fs.Close();
+            File.Delete(target);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
     private int CalculateMaxProgress(uint examCount)
         => (int)examCount;
 
@@ -78,7 +99,7 @@ public partial class ExportingWindow
         var exportPath = MultiExamBuilder.TryExportPdf(latexBuilder, out var success, out var errorMessage);
         if (success)
         {
-            File.Move(exportPath, Environment.ExpandEnvironmentVariables("%homepath%/Desktop/final.pdf"), true); // TODO: Get from UI
+            File.Move(exportPath, target, true);
         }
         // TODO: Handle errorMessage properly
         MultiExamBuilder.CleanUp(exportPath);

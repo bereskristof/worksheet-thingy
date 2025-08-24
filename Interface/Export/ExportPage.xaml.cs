@@ -8,6 +8,7 @@ using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Docnet.Core.Models;
+using Microsoft.Win32;
 using Storage;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
@@ -60,6 +61,19 @@ public partial class ExportPage : INotifyPropertyChanged
         }
     }
     
+    private string _exportPath = "";
+
+    public string ExportPath
+    {
+        get => _exportPath;
+        set
+        {
+            if (_exportPath == value) return;
+            _exportPath = value;
+            OnPropertyChanged(nameof(ExportPath));
+        }
+    }
+    
     public ExportPage()
     {
         InitializeComponent();
@@ -77,8 +91,16 @@ public partial class ExportPage : INotifyPropertyChanged
             Mode = BindingMode.TwoWay,
             UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
         };
+        var exportPathBinding = new Binding("ExportPath")
+        {
+            Source = this,
+            Path = new PropertyPath("ExportPath"),
+            Mode = BindingMode.TwoWay,
+            UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+        };
         BindingOperations.SetBinding(AmountBox, TextBox.TextProperty, pageCountBinding);
         BindingOperations.SetBinding(AnswerCountBox, TextBox.TextProperty, answerCountBinding);
+        BindingOperations.SetBinding(ExportBox, TextBox.TextProperty, exportPathBinding);
         PreviewScroll.RenderTransform = _scaleTransform;
     }
 
@@ -243,7 +265,28 @@ public partial class ExportPage : INotifyPropertyChanged
         var title = TitleBox.Text.Trim();
         var author = AuthorBox.Text.Trim();
         var date = DateBox.Text.Trim();
-        window.ExportNPages(Bindings.Instance.SheetRoot, PageCount, 5, title, author, date);
-        window.ShowDialog();
+        var succeed = window.ExportNPages(Bindings.Instance.SheetRoot, PageCount, 5, title, author, date, ExportPath);
+        if (succeed)
+            window.ShowDialog();
+    }
+
+    private void BrowseButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        var path = GetSavePath(Interface.Resources.Lang.Export_Title);
+        if (!string.IsNullOrEmpty(path))
+            ExportPath = path;
+    }
+    
+    private static string GetSavePath(string title)
+    {
+        SaveFileDialog saveDialog = new SaveFileDialog
+        {
+            Filter = "Portable Document Format|*.pdf|All files|*.*", // TODO: Allow tex?
+            FilterIndex = 1,
+            RestoreDirectory = true,
+            Title = title
+        };
+        
+        return saveDialog.ShowDialog() == true ? Path.GetFullPath(saveDialog.FileName) : string.Empty;
     }
 }
