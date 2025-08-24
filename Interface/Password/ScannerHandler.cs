@@ -12,7 +12,7 @@ public static class ScannerHandler
     private const int SuccessScoreCount = 24;
     
     private const double MinConfidence = 0.8; // Minimum difference between best and next best answer to consider it not double filled
-    private const double MinFilledConfidence = 0.15; // Minimum % of pixels filled in the bubble to consider it filled
+    private const double MinFilledConfidence = 0.1; // Minimum % of pixels filled in the bubble to consider it filled
     
     private const int EmptyAnswer = -1;
     private const int WrongAnswer = -2;
