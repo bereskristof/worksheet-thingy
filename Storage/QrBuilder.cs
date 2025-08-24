@@ -12,7 +12,7 @@ public class QrBuilder
     
     private readonly Image _image = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
     
-    public QrBuilder(Guid uuid) // Required reading: https://stackoverflow.com/questions/9195551/
+    public QrBuilder(Guid uuid)
     {
         using Graphics graphics = Graphics.FromImage(_image);
         graphics.Clear(Color.White); // TODO: Transparent background?

@@ -14,6 +14,7 @@ namespace Storage;
 public static class MultiExamBuilder
 {
     /// Generates N exams based on the provided root node and answer count.
+    /// Disables saving to database, since this is only used for previewing.
     public static LatexBuilder BuildNExams(uint n, SelectorNode rootNode, byte answerCount, string title, string author, string date)
     {
         if (n == 0)
@@ -23,10 +24,10 @@ public static class MultiExamBuilder
         builder.AutoHeader();
         for (uint i = 0; i < n - 1; i++)
         {
-            AddExam(builder, rootNode, answerCount);
+            AddExam(builder, rootNode, answerCount, false);
             builder.Macro("newpage");
         }
-        AddExam(builder, rootNode, answerCount); // Add the last exam without a new page after it
+        AddExam(builder, rootNode, answerCount, false); // Add the last exam without a new page after it
         builder.AutoFooter();
         return builder;
     }
@@ -36,7 +37,7 @@ public static class MultiExamBuilder
         builder.AutoHeader();
     }
 
-    public static void AddExam(LatexBuilder builder, SelectorNode rootNode, byte answerCount)
+    public static void AddExam(LatexBuilder builder, SelectorNode rootNode, byte answerCount, bool storeSkeleton = true)
     {
         var questions = rootNode.GetQuestions();
         Skeletons skeleton = [];
@@ -45,6 +46,7 @@ public static class MultiExamBuilder
         
         var qrBuilder = new QrBuilder(uuid); // Create a QR code builder for the UUID
         var qrPath = Path.Combine(Path.GetTempPath(), Manager.PathTitle, $"{uuid.ToString()}.png");
+        Directory.CreateDirectory(Path.GetDirectoryName(qrPath) ?? throw new InvalidOperationException("Invalid directory name in AddExam"));
         qrBuilder.Save(qrPath);
         var qrShortPath = Path.GetFileName(qrPath);
         
@@ -60,7 +62,8 @@ public static class MultiExamBuilder
         builder.Macro("cleardoublepage");
         builder.AddAnswerPage(questions.Length, answerCount, humanReadableCode, qrShortPath);
         builder.Macro("cleardoublepage");
-        StoreSkeleton(skeleton);
+        if (storeSkeleton)
+            StoreSkeleton(skeleton);
     }
     
     public static void EndManualAdding(LatexBuilder builder)
