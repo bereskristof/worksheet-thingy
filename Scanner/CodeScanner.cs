@@ -74,7 +74,7 @@ public class CodeScanner
             }
         };
 
-        var reader = new GenericMultipleBarcodeReader(baseReader);
+        var reader = new GenericMultipleBarcodeReader(new ByQuadrantReader(baseReader));
         var result = reader.decodeMultiple(binary);
         
         return result.Select(r => r?.Text ?? string.Empty).ToArray();
