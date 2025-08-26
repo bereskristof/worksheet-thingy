@@ -1,12 +1,11 @@
 using System.Diagnostics;
-using System.Drawing;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Storage.Sheet;
 using Storage.Task;
 
-using Skeleton = System.Tuple<long, long, System.Guid>;
-using Skeletons = System.Collections.Generic.List<System.Tuple<long, long, System.Guid>>;
+using Skeleton = System.Tuple<long, long, long, System.Guid>;
+using Skeletons = System.Collections.Generic.List<System.Tuple<long, long, long, System.Guid>>;
 
 namespace Storage;
 
@@ -25,7 +24,9 @@ public static class MultiExamBuilder
         for (uint i = 0; i < n - 1; i++)
         {
             AddExam(builder, rootNode, answerCount, shuffleAnswers, excludedAnswers, false);
-            builder.Macro("newpage");
+            builder.Macro("cleardoublepage");
+            builder.Text(@"\pagestyle{plain}");
+            builder.Text(@"\setcounter{page}{1}");
         }
         AddExam(builder, rootNode, answerCount, shuffleAnswers, excludedAnswers, false); // Add the last exam without a new page after it
         builder.AutoFooter();
@@ -88,7 +89,7 @@ public static class MultiExamBuilder
             .Where(v => v.ans.Correct)
             .Select(v => v.i)
             .FirstOrDefault(); // Get the index of the first correct answer, or 0 if none are correct
-        Skeleton skeletonElement = new Skeleton(questionIndex, answerIndex, uuid); // Store IDs to allow for reconstruction
+        Skeleton skeletonElement = new Skeleton(questionIndex, answerIndex, question.Id, uuid); // Store IDs to allow for reconstruction
         skeleton.Add(skeletonElement);
         var path = ExportMaybeDuplicateQuestionImage(question);
         builder.Question(
@@ -114,13 +115,14 @@ public static class MultiExamBuilder
     
     private static void StoreSkeleton(Skeletons skeletons)
     {
-        foreach (var (question, answer, uuid) in skeletons)
+        foreach (var (question, answer, questionId, uuid) in skeletons)
         {
             var storeCommand = Manager.Connection.CreateCommand();
-            storeCommand.CommandText = "INSERT INTO Solutions (Uuid, QuestionNumber, AnswerNumber) VALUES (@Uuid, @QuestionNumber, @AnswerNumber)";
+            storeCommand.CommandText = "INSERT INTO Solutions (Uuid, QuestionNumber, AnswerNumber, QuestionId) VALUES (@Uuid, @QuestionNumber, @AnswerNumber, @QuestionId);";
             storeCommand.Parameters.AddWithValue("@Uuid", uuid.ToString()); // Each exam gets a new UUID
             storeCommand.Parameters.AddWithValue("@QuestionNumber", question);
             storeCommand.Parameters.AddWithValue("@AnswerNumber", answer);
+            storeCommand.Parameters.AddWithValue("@QuestionId", questionId); // Store the question ID for statistics
             storeCommand.ExecuteNonQuery();
         }
     }

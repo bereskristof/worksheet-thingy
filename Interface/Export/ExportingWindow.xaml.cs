@@ -83,7 +83,9 @@ public partial class ExportingWindow
                 e.Result = ex.Message;
                 return; // Stop the export if an error occurs
             }
-            latexBuilder.Macro("newpage");
+            latexBuilder.Macro("cleardoublepage");
+            latexBuilder.Text(@"\pagestyle{plain}");
+            latexBuilder.Text(@"\setcounter{page}{1}");
             _backgroundWorker.ReportProgress((int)(i + 1));
         }
         try

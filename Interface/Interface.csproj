@@ -6,6 +6,13 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <UseWPF>true</UseWPF>
+        <AssemblyName>WorksheetToolkit</AssemblyName>
+        <ApplicationIcon>Resources\Icon.ico</ApplicationIcon>
+        <PackageId>WorksheetToolkit</PackageId>
+        <Authors>University of Miskolc</Authors>
+        <Copyright>2025, University of Miskolc</Copyright>
+        <Company>University of Miskolc</Company>
+        <Product>WorksheetToolkit</Product>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">

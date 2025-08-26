@@ -214,6 +214,7 @@ public class Question : INotifyPropertyChanged
         storeCommand.Parameters.AddWithValue("@Image", encryptedData);
         DeleteImage();
         storeCommand.ExecuteNonQuery();
+        _isConfirmedImageless = false;
         Log.Write($"StoreImageFromPath: Image added to question {Id}");
     }
     

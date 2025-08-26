@@ -12,7 +12,7 @@ public class LatexBuilder(string title, string author, string date)
         Macro("documentclass", "exam", ["answers", "a4paper", "twoside"]);
         Package("inputenc", ["utf8"]);
         Package("fontenc", ["T1"]);
-        Package("geometry");
+        Package("geometry", ["inner=3cm", "outer=3cm"]);
         Package("graphicx");
         Package("amsmath");
         Package("amsfonts");
@@ -27,7 +27,7 @@ public class LatexBuilder(string title, string author, string date)
         if (date != string.Empty)
             Macro("date", date);
         Begin("document");
-        Text(@"\pagestyle{empty}");
+        Text(@"\pagestyle{plain}");
     }
     
     public void AutoFooter()
@@ -103,12 +103,13 @@ public class LatexBuilder(string title, string author, string date)
             Text("");
         if (author != string.Empty && date != string.Empty)
             Text(author + " --- " + date);
-        Text(@"\hfill\texttt{Mini kód: " + miniCode + @"} \\");
+        Text(@"\hfill\texttt{" + miniCode + @"} \\");
     }
 
     public void AddAnswerPage(int questionCount, byte answerCount, string miniCode, string? qrPath)
     {
         // Top menu
+        Text(@"\pagestyle{empty}");
         Text(@"\newgeometry{margin=12mm}");
         Text(@"\def\arraystretch{0.0}");
         Text(@"\setlength\tabcolsep{0.0pt}");
@@ -127,10 +128,10 @@ public class LatexBuilder(string title, string author, string date)
         // Title
         Begin("center");
         Text(@"\textsc{{\textbf{{\Large Válaszlap}}}} \\");
-        if (title != "")
-            Text($@"\textsc{{\textbf{{{title}}}}} \\");
-        if (author != "" && date != "")
-            Text($@"\textsc{{{author} --- {date}}} \\");
+        // if (title != "")
+        //     Text($@"\textsc{{\textbf{{{title}}}}} \\");
+        // if (author != "" && date != "")
+        //     Text($@"\textsc{{{author} --- {date}}} \\");
         End("center");
         
         // Help
