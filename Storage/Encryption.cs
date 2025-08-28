@@ -31,9 +31,9 @@ public static class Encryption
     {
         byte[] salt = RandomNumberGenerator.GetBytes(32);
         byte[] verify = RandomNumberGenerator.GetBytes(1024);
-        byte[] hash = SHA3_256.HashData(verify);
+        byte[] hash = SHA256.HashData(verify);
         
-        byte[] key = Rfc2898DeriveBytes.Pbkdf2(password, salt, Iterations, HashAlgorithmName.SHA3_512, 32);
+        byte[] key = Rfc2898DeriveBytes.Pbkdf2(password, salt, Iterations, HashAlgorithmName.SHA256, 32);
         _key = key;
 
         byte[] data = Encrypt(Convert.ToBase64String(verify));
@@ -78,13 +78,13 @@ public static class Encryption
             throw new CryptographicException("Verify missing from database");
         }
         
-        var key = Rfc2898DeriveBytes.Pbkdf2(password, salt, Iterations, HashAlgorithmName.SHA3_512, 32);
+        var key = Rfc2898DeriveBytes.Pbkdf2(password, salt, Iterations, HashAlgorithmName.SHA256, 32);
         _key = key;
 
         try
         {
             byte[] data = Convert.FromBase64String(Decrypt(verify[32..]));
-            var challengeHash = SHA3_256.HashData(data);
+            var challengeHash = SHA256.HashData(data);
             return challengeHash.SequenceEqual(verify[..32]);
         }
         catch (CryptographicException)
