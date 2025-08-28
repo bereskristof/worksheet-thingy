@@ -19,7 +19,7 @@
         </Grid.RowDefinitions>
         <Button Grid.Column="0" Grid.Row="0" Content="{x:Static res:Lang.Solve_Select}" Click="ImportPdf_OnClick" VerticalAlignment="Top"/>
         <Button Grid.Column="0" Grid.Row="1" Content="{x:Static res:Lang.Solve_Get}" Click="ExportResults_OnClick" VerticalAlignment="Top" IsEnabled="False" Name="ExportResultsButton" Margin="0, 3, 0, 0"/>
-        <!-- <Button Grid.Row="2" Content="Export statistics" Click="ExportStats_OnClick" VerticalAlignment="Top" Margin="0, 3, 0, 0"/> -->
+        <Button Grid.Column="0" Grid.Row="2" Content="{x:Static res:Lang.Solve_GetAlt}" Click="ExportStats_OnClick" VerticalAlignment="Top" IsEnabled="False" Name="ExportResultsAltButton" Margin="0, 3, 0, 0"/>
         <ProgressBar Grid.Column="1" Grid.Row="0" Height="10" Margin="3, 0, 0, 0" Name="ProgressBar" VerticalAlignment="Top"/>
     </Grid>
 </UserControl>

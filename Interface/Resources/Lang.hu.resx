@@ -240,9 +240,12 @@
         <value>Fájl kiválasztása...</value>
     </data>
     <data name="Solve_Get" xml:space="preserve">
-        <value>Eredmény exportálása...</value>
+        <value>Laponkénti eredmény exportálása...</value>
     </data>
     <data name="Export_Exceptions" xml:space="preserve">
         <value>Keverés kivételek:</value>
+    </data>
+    <data name="Solve_GetAlt" xml:space="preserve">
+        <value>Feladantonkénti eredmény exportálása...</value>
     </data>
 </root>

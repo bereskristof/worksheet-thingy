@@ -15,6 +15,7 @@ public partial class SolvePage
     
     private readonly BackgroundWorker _backgroundWorker = new();
     private string _csvBuffer = string.Empty;
+    private string _csvBufferAlt = string.Empty;
     
     public SolvePage()
     {
@@ -55,7 +56,18 @@ public partial class SolvePage
 
     private void ExportStats_OnClick(object sender, RoutedEventArgs e)
     {
-        throw new NotImplementedException();
+        var exportPath = GetSavePath(Interface.Resources.Lang.Export_Title);
+        if (string.IsNullOrEmpty(exportPath)) 
+            return;
+        try
+        {
+            File.WriteAllText(exportPath, _csvBufferAlt, Encoding.UTF8);
+            MessageBox.Show("Export saved", Interface.Resources.Lang.Export_Title, MessageBoxButton.OK, MessageBoxImage.Information); // TODO: Localize
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Could not export:\n{ex.Message}", Interface.Resources.Lang.Export_Title, MessageBoxButton.OK, MessageBoxImage.Error); // TODO: Localize
+        }
     }
     
     private static string GetLoadPath(string title)
@@ -100,8 +112,10 @@ public partial class SolvePage
     {
         var path = (string)(e.Argument ?? "");
         
-        var results = new List<string>();
-        results.Add("Oldal, Neptun kód, Pontok, Eredmény, Részpontok");
+        var sheetResults = new List<string>();
+        sheetResults.Add("Oldal, Neptun kód, Pontok, Eredmény, Részpontok");
+        var taskResults = new List<string>();
+        taskResults.Add("Oldal, Neptun kód, Pontok, Eredmény, Feladatok");
         using var doclib = Docnet.Core.DocLib.Instance;
         using var reader = doclib.GetDocReader(path, new PageDimensions(DimX, DimY));
 
@@ -109,17 +123,22 @@ public partial class SolvePage
     
         for (var i = 0; i < pageCount; i++)
         {
-            ScannerHandler.ScanPdfPage(results, reader, i);
+            ScannerHandler.ScanPdfPage(sheetResults, taskResults, reader, i);
             _backgroundWorker.ReportProgress(i + 1);
         }
-        var finalResult = string.Join("\n", results);
-        e.Result = finalResult;
+        var sheetResult = string.Join("\n", sheetResults);
+        var taskResult = string.Join("\n", taskResults);
+        e.Result = new PrivateWorkerResult(sheetResult, taskResult);
     }
+    
+    private record PrivateWorkerResult(string SheetResult, string TaskResult);
 
     private void BackgroundLoader_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)
     {
-        string result = (string)(e.Result ?? string.Empty);
-        _csvBuffer = result;
+        var (sheetResult, taskResult) = (PrivateWorkerResult)(e.Result ?? new PrivateWorkerResult("", ""));
+        _csvBuffer = sheetResult;
+        _csvBufferAlt = taskResult;
         ExportResultsButton.IsEnabled = true;
+        ExportResultsAltButton.IsEnabled = true;
     }
 }

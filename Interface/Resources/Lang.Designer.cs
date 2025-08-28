@@ -600,11 +600,20 @@ namespace Interface.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export results....
+        ///   Looks up a localized string similar to Export results by sheet....
         /// </summary>
         public static string Solve_Get {
             get {
                 return ResourceManager.GetString("Solve_Get", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export results by task....
+        /// </summary>
+        public static string Solve_GetAlt {
+            get {
+                return ResourceManager.GetString("Solve_GetAlt", resourceCulture);
             }
         }
         

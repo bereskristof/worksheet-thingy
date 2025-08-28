@@ -1,5 +1,6 @@
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Globalization;
 using System.IO;
 using Docnet.Core.Readers;
 using Scanner;
@@ -17,12 +18,14 @@ public static class ScannerHandler
     private const int EmptyAnswer = -1;
     private const int WrongAnswer = -2;
 
-    public static void ScanPdfPage(List<string> resultsToMutate, IDocReader reader, int i)
+    public static void ScanPdfPage(List<string> bySheetResultsToMutate, List<string> byTaskResultsToMutate, IDocReader reader, int i)
     {
         var pageImg = GetSinglePageAsBitmap(reader, i);
         var scanResult = ScanPageResults(pageImg, 15, 5); // TODO: Get question and answer count dynamically
-        var resultCsv = ProcessScanResults(scanResult, i);
-        resultsToMutate.Add(resultCsv);
+        var sheetResultCsv = ProcessScanResults(scanResult, i, ResultOrdering.BySheet);
+        var taskResultCsv = ProcessScanResults(scanResult, i, ResultOrdering.ByTask);
+        bySheetResultsToMutate.Add(sheetResultCsv);
+        byTaskResultsToMutate.Add(taskResultCsv);
     }
     
     private static Bitmap GetSinglePageAsBitmap(IDocReader reader, int pageIndex)
@@ -68,12 +71,8 @@ public static class ScannerHandler
         var matrixScanner = new Scanner.MatrixScanner(imageData);
         var matrixBubbles = matrixScanner.FindBubbles(questionCount, answerCount);
         
-        var houghScanner = new Scanner.HoughScanner(imageData);
-        var houghBubbles = houghScanner.FindBubbles(questionCount, answerCount);
-        
         var bubbleChecker = new Scanner.BubbleChecker(imageData);
         var matrixResults = bubbleChecker.CheckBubbles(matrixBubbles, questionCount, answerCount);
-        var houghResults = bubbleChecker.CheckBubbles(houghBubbles, questionCount, answerCount);
         
         var scanResult = new ScanResult
         {
@@ -86,25 +85,23 @@ public static class ScannerHandler
         for (int i = 0; i < matrixResults.Length; i++)
         {
             var (mResult, mBest, mNextBest) = matrixResults[i];
-            Console.WriteLine(mResult);
             scanResult.MatrixQuestionResults[i] = new ScanResult.QuestionResult
             {
                 SelectedAnswer = mResult,
                 Confidence = (mBest - mNextBest) / mBest,
                 BestAnswerConfidence = mBest,
             };
-            var (hResult, hBest, hNextBest) = houghResults[i];
-            scanResult.HoughQuestionResults[i] = new ScanResult.QuestionResult
-            {
-                SelectedAnswer = hResult,
-                Confidence = (hBest - hNextBest) / hBest,
-                BestAnswerConfidence = hBest,
-            };
         }
         return scanResult;
     }
+    
+    public enum ResultOrdering
+    {
+        BySheet,
+        ByTask
+    }
 
-    private static string ProcessScanResults(ScanResult result, int pageIndex)
+    private static string ProcessScanResults(ScanResult result, int pageIndex, ResultOrdering ordering) // TODO: Add confidence
     {
         var answers = new int[result.MatrixQuestionResults.Length];
         for (int i = 0; i < result.MatrixQuestionResults.Length; i++)
@@ -124,10 +121,26 @@ public static class ScannerHandler
             }
         }
 
-        var results = ExamResultObtainer.ObtainResults(answers, result.ExamCode);
+        var results = ExamResultObtainer.ObtainResults(answers, result.ExamCode, out var questionIds);
         var totalScore = results.Sum();
         var isSuccess = totalScore >= SuccessScoreCount ? "Sikeres" : "Sikertelen"; // TODO: Localize this
-        var resultCsv = $"{pageIndex}, {result.UserCode}, {totalScore}, {isSuccess}, {string.Join(", ", results)}";
+        string resultCsv;
+        if (ordering == ResultOrdering.BySheet)
+        {
+            resultCsv = $"{pageIndex}, {result.UserCode}, {totalScore}, {isSuccess}, {string.Join(", ", results)}";
+            resultCsv += $"\n, , , , {string.Join(", ", result.MatrixQuestionResults.Select(v => v.Confidence.ToString(CultureInfo.InvariantCulture)))}"; // Append question IDs for reference
+        }
+        else
+        {
+            int?[] taskOrderedResults = new int?[questionIds.Max() + 1];
+            taskOrderedResults = taskOrderedResults
+                .Select((_, i) => questionIds.Contains(i) ? (int?)results[questionIds.ToList().IndexOf(i)] : null).ToArray();
+            string[] readableResults = taskOrderedResults
+                .Select(r => (r == null) ? "" : r.ToString())
+                .ToArray()!;
+            resultCsv = $"{result.UserCode}, {pageIndex}, {totalScore}, {isSuccess}, {string.Join(", ", readableResults)}";
+        }
+            
         return resultCsv;
-    } 
+    }
 }

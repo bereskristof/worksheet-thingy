@@ -10,13 +10,14 @@ public static class ExamResultObtainer
     
     private const int EmptyAnswer = -1; // Mirrored from ScannerHandler.EmptyAnswer
     
-    public static int[] ObtainResults(int[] answerIndices, Guid uuid)
+    public static int[] ObtainResults(int[] answerIndices, Guid uuid, out int[] questionIds)
     {
         var points = new int[answerIndices.Length];
+        questionIds = new int[answerIndices.Length];
         for (int i = 0; i < answerIndices.Length; i++)
         {
             var verifyCommand = Manager.Connection.CreateCommand();
-            verifyCommand.CommandText = "SELECT AnswerNumber FROM Solutions WHERE Uuid == @Uuid AND QuestionNumber == @QuestionNumber;";
+            verifyCommand.CommandText = "SELECT AnswerNumber, QuestionId FROM Solutions WHERE Uuid == @Uuid AND QuestionNumber == @QuestionNumber;";
             verifyCommand.Parameters.AddWithValue("@Uuid", uuid.ToString());
             verifyCommand.Parameters.AddWithValue("@QuestionNumber", i);
             using var reader = verifyCommand.ExecuteReader();
@@ -26,6 +27,8 @@ public static class ExamResultObtainer
                 throw new Exception($"QuestionNumber {i} not in database"); // TODO: Handle this more gracefully, ask for manual checking
             }
             var correctAnswer = reader.GetInt32(0);
+            questionIds[i] = reader.GetInt32(1);
+            reader.Close();
             if (answerIndices[i] == EmptyAnswer)
             {
                 points[i] = EmptyAnswerPoints;

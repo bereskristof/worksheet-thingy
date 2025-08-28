@@ -3,6 +3,20 @@ using OpenCvSharp.Aruco;
 
 namespace Scanner;
 
+public record BubbleScanResult
+{
+    public int SelectedAnswer; // -1 = empty, -2 = multiple filled
+    public double Filledness; // Filledness of the selected answer
+    public double SecondFilledness; // Filledness of the second most filled answer
+
+    public void Deconstruct(out int selectedAnswer, out double filledness, out double secondFilledness)
+    {
+        selectedAnswer = this.SelectedAnswer;
+        filledness = this.Filledness;
+        secondFilledness = this.SecondFilledness;
+    }
+}
+
 public class BubbleChecker
 {
     private const int RadiusDecrease = 3; // Radius decrease for bubble detection
@@ -22,9 +36,9 @@ public class BubbleChecker
         Cv2.BitwiseNot(invertedThreshImage, _threshImage);
     }
     
-    public Tuple<int, double, double>[] CheckBubbles(CircleSegment[] bubbles, uint questionCount = 15, uint answerCount = 5)
+    public BubbleScanResult[] CheckBubbles(CircleSegment[] bubbles, uint questionCount = 15, uint answerCount = 5)
     {
-        var results = new List<Tuple<int, double, double>>();
+        var results = new List<BubbleScanResult>();
         for (int q = 0; q < questionCount; q++)
         {
             double[] filledness = [-1, -1, -1, -1, -1]; // It IS a word: https://en.wiktionary.org/wiki/filledness
@@ -55,7 +69,12 @@ public class BubbleChecker
             var maxIndex = ordered.First().index;
             var secondIndex = ordered.Skip(1).First().index;
             results.Add(
-                new Tuple<int, double, double>(maxIndex, filledness[maxIndex], filledness[secondIndex])
+                new BubbleScanResult
+                {
+                    SelectedAnswer = maxIndex,
+                    Filledness = filledness[maxIndex],
+                    SecondFilledness = filledness[secondIndex]
+                }
             );
         }
         return results.ToArray();

@@ -247,9 +247,12 @@
         <value>Select file...</value>
     </data>
     <data name="Solve_Get" xml:space="preserve">
-        <value>Export results...</value>
+        <value>Export results by sheet...</value>
     </data>
     <data name="Export_Exceptions" xml:space="preserve">
         <value>Shuffle Exceptions:</value>
+    </data>
+    <data name="Solve_GetAlt" xml:space="preserve">
+        <value>Export results by task...</value>
     </data>
 </root>
