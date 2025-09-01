@@ -33,6 +33,7 @@ public partial class SolvePage
         
         ProgressBar.Value = 0;
         ExportResultsButton.IsEnabled = false;
+        ExportResultsAltButton.IsEnabled = false;
         _backgroundWorker.WorkerReportsProgress = true;
         ProgressBar.Maximum = GetPageCount(path);
         _backgroundWorker.RunWorkerAsync(argument: path);

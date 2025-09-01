@@ -78,13 +78,15 @@ public class LatexBuilder(string title, string author, string date)
             End("center");
             Text("");
         }
-        Begin("choices");
+        Text("");
+        Begin("oneparchoices");
         foreach (string answer in answers)
         {
             Macro("choice", lineBreak: false);
             Text(answer);
         }
-        End("choices");
+        End("oneparchoices");
+        Macro("vspace", "4mm");
     }
 
     public string Finish()
@@ -96,13 +98,15 @@ public class LatexBuilder(string title, string author, string date)
 
     public void AddTitle(string miniCode)
     {
-        Text(@"\textsc{{\textbf{{\Large Feladatlap}}}} \\");
         if (title != string.Empty)
-            Macro("textbf", title);
+            Text(@$"\centering\textsc{{\textbf{{\Large{{{title}}}}}}}");
         if (title != string.Empty && author != string.Empty && date != string.Empty)
             Text("");
         if (author != string.Empty && date != string.Empty)
-            Text(author + " --- " + date);
+            Text(@$"\centering{{{author} --- {date}}}");
+        if (title != string.Empty || author != string.Empty || date != string.Empty)
+            Text("\n\\hfill\n");
+        Text(@"\centering\textsc{{\textbf{{\Large Feladatlap}}}} \\");
         Text(@"\hfill\texttt{" + miniCode + @"} \\");
     }
 

@@ -19,7 +19,7 @@ public record BubbleScanResult
 
 public class BubbleChecker
 {
-    private const int RadiusDecrease = 3; // Radius decrease for bubble detection
+    private const int RadiusDecrease = 2; // Radius decrease for bubble detection
     
     private readonly Mat _originalImage;
     private readonly Mat _grayImage = new();

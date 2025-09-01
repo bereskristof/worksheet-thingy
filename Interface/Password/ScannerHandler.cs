@@ -13,7 +13,7 @@ public static class ScannerHandler
     private const int SuccessScoreCount = 24;
     
     private const double MinConfidence = 0.8; // Minimum difference between best and next best answer to consider it not double filled
-    private const double MinFilledConfidence = 0.1; // Minimum % of pixels filled in the bubble to consider it filled
+    private const double MinFilledConfidence = 0.075; // Minimum % of pixels filled in the bubble to consider it filled
     
     private const int EmptyAnswer = -1;
     private const int WrongAnswer = -2;
@@ -128,7 +128,9 @@ public static class ScannerHandler
         if (ordering == ResultOrdering.BySheet)
         {
             resultCsv = $"{pageIndex}, {result.UserCode}, {totalScore}, {isSuccess}, {string.Join(", ", results)}";
-            resultCsv += $"\n, , , , {string.Join(", ", result.MatrixQuestionResults.Select(v => v.Confidence.ToString(CultureInfo.InvariantCulture)))}"; // Append question IDs for reference
+            resultCsv += $"\n, , , , {string.Join(", ", result.MatrixQuestionResults
+                .Select((_, i) => result.MatrixQuestionResults[i])
+                .Select(v => CalculateConfidenceStr(v.BestAnswerConfidence, v.Confidence)))}";
         }
         else
         {
@@ -143,4 +145,16 @@ public static class ScannerHandler
             
         return resultCsv;
     }
+
+    private static double CalculateConfidence(double bestFillPercent, double nextBestRatio)
+    {
+        const double v = 15;
+        var fillConfidence = double.Min(1, double.Abs(v * bestFillPercent - v * MinFilledConfidence));
+        var ratioConfidence = double.Min(1, double.Abs(v * nextBestRatio - v * MinConfidence));
+        var totalConfidence = ratioConfidence * fillConfidence;
+        return totalConfidence;
+    }
+    
+    private static string CalculateConfidenceStr(double bestFillPercent, double nextBestRatio)
+        => CalculateConfidence(bestFillPercent, nextBestRatio).ToString(CultureInfo.InvariantCulture);
 }
