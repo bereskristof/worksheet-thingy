@@ -1,10 +1,11 @@
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Windows;
 using Docnet.Core.Models;
-using Interface.Password;
 using Microsoft.Win32;
+using Scanner;
 
 namespace Interface.Solve;
 
@@ -14,8 +15,7 @@ public partial class SolvePage
     private const int DimY = 1700;
     
     private readonly BackgroundWorker _backgroundWorker = new();
-    private string _csvBuffer = string.Empty;
-    private string _csvBufferAlt = string.Empty;
+    private ScanResult[] _csvBuffer = [];
     
     public SolvePage()
     {
@@ -34,6 +34,7 @@ public partial class SolvePage
         ProgressBar.Value = 0;
         ExportResultsButton.IsEnabled = false;
         ExportResultsAltButton.IsEnabled = false;
+        ProgressLogs.Text = "";
         _backgroundWorker.WorkerReportsProgress = true;
         ProgressBar.Maximum = GetPageCount(path);
         _backgroundWorker.RunWorkerAsync(argument: path);
@@ -46,7 +47,10 @@ public partial class SolvePage
             return;
         try
         {
-            File.WriteAllText(exportPath, _csvBuffer, Encoding.UTF8);
+            var locale = GetLocaleSpecifics();
+            var stringLines = _csvBuffer.Select((v, i) => v.ToSheetCsv(i, locale));
+            var sb = GetStringFromDualStringBuilders(stringLines);
+            File.WriteAllText(exportPath, sb.ToString(), Encoding.UTF8);
             MessageBox.Show("Export saved", Interface.Resources.Lang.Export_Title, MessageBoxButton.OK, MessageBoxImage.Information); // TODO: Localize
         }
         catch (Exception ex)
@@ -62,13 +66,30 @@ public partial class SolvePage
             return;
         try
         {
-            File.WriteAllText(exportPath, _csvBufferAlt, Encoding.UTF8);
+            var locale = GetLocaleSpecifics();
+            var stringLines = _csvBuffer.Select((v, i) => v.ToTaskCsv(i, locale));
+            var sb = GetStringFromDualStringBuilders(stringLines);
+            File.WriteAllText(exportPath, sb.ToString(), Encoding.UTF8);
             MessageBox.Show("Export saved", Interface.Resources.Lang.Export_Title, MessageBoxButton.OK, MessageBoxImage.Information); // TODO: Localize
         }
         catch (Exception ex)
         {
             MessageBox.Show($"Could not export:\n{ex.Message}", Interface.Resources.Lang.Export_Title, MessageBoxButton.OK, MessageBoxImage.Error); // TODO: Localize
         }
+    }
+    
+    private StringBuilder GetStringFromDualStringBuilders(IEnumerable<DualAutoSeparatedStringBuilder> stringLines)
+    {
+        var text = new StringBuilder();
+        foreach (var line in stringLines)
+        {
+            text.Append(line);
+            if (ExtraInfoCheckbox.IsChecked ?? false)
+            {
+                text.Append(line.ToExtraString());
+            }
+        }
+        return text;
     }
     
     private static string GetLoadPath(string title)
@@ -106,40 +127,67 @@ public partial class SolvePage
 
     private void BackgroundWorker_ProgressChanged(object? sender, ProgressChangedEventArgs e)
     {
+        var scanResult = (ScanResult?)e.UserState;
         ProgressBar.Value = e.ProgressPercentage;
+        ProgressLogs.Text += $"Page {e.ProgressPercentage}/{ProgressBar.Maximum}: {scanResult?.CurrentState}\n";
+        ProgressLogsScroll.ScrollToEnd();
     }
 
     private void BackgroundLoader_DoWork(object? sender, DoWorkEventArgs e)
     {
         var path = (string)(e.Argument ?? "");
         
-        var sheetResults = new List<string>();
-        sheetResults.Add("Oldal, Neptun kód, Pontok, Eredmény, Részpontok");
-        var taskResults = new List<string>();
-        taskResults.Add("Oldal, Neptun kód, Pontok, Eredmény, Feladatok");
         using var doclib = Docnet.Core.DocLib.Instance;
         using var reader = doclib.GetDocReader(path, new PageDimensions(DimX, DimY));
 
         var pageCount = reader.GetPageCount();
+        var scanResults = new ScanResult[pageCount];
     
         for (var i = 0; i < pageCount; i++)
         {
-            ScannerHandler.ScanPdfPage(sheetResults, taskResults, reader, i);
-            _backgroundWorker.ReportProgress(i + 1);
+            try
+            {
+                scanResults[i] = ScannerHandler.ScanPdfPage(reader, i);
+            }
+            catch (Exception)
+            {
+                scanResults[i] = new ScanResult
+                {
+                    CurrentState = ScanResult.State.UnexpectedException,
+                    ExamCode = null,
+                    UserCode = null,
+                    FinalPoints = null,
+                    Results = [],
+                };
+            }
+
+            _backgroundWorker.ReportProgress(i + 1, scanResults[i]);
         }
-        var sheetResult = string.Join("\n", sheetResults);
-        var taskResult = string.Join("\n", taskResults);
-        e.Result = new PrivateWorkerResult(sheetResult, taskResult);
+        e.Result = scanResults;
     }
-    
-    private record PrivateWorkerResult(string SheetResult, string TaskResult);
 
     private void BackgroundLoader_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)
     {
-        var (sheetResult, taskResult) = (PrivateWorkerResult)(e.Result ?? new PrivateWorkerResult("", ""));
-        _csvBuffer = sheetResult;
-        _csvBufferAlt = taskResult;
+        var results = (ScanResult[]?)e.Result;
+        if (results == null || results.Length == 0)
+        {
+            // TODO: !!! Properly handle this
+            return;
+        }
+        _csvBuffer = results;
         ExportResultsButton.IsEnabled = true;
         ExportResultsAltButton.IsEnabled = true;
+    }
+
+    private static LocaleSpecifics GetLocaleSpecifics()
+    {
+        return new LocaleSpecifics()
+        {
+            Culture = CultureInfo.CurrentCulture,
+            DecimalPoint = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator,
+            ListSeparator = CultureInfo.CurrentCulture.TextInfo.ListSeparator,
+            SuccessText = "Sikeres", // TODO: !!! Localize
+            FailText = "Sikertelen", // TODO: !!! Localize
+        };
     }
 }

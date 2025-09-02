@@ -26,4 +26,8 @@
       <EmbeddedResource Include="ArUco\aruco_3.png" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Scanner\Scanner.csproj" />
+    </ItemGroup>
+
 </Project>

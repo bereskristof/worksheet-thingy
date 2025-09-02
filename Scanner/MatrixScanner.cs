@@ -28,22 +28,29 @@ public class MatrixScanner
         var answerMatrixCorners = GetAnswerMatrixCorners(maybeAnswerMatrixCorners);
         var circles = GetAnswerBubbles(answerMatrixCorners, questionCount, answerCount);
 
-        // foreach (var circle in circles)
+        // if (ids.Length != 4)
         // {
-        //     Cv2.Circle(_originalImage, circle.Center.ToPoint(), (int)circle.Radius, Scalar.Red, 2);
-        //     Cv2.PutText(_originalImage, circles.ToList().IndexOf(circle).ToString(), circle.Center.ToPoint(), HersheyFonts.HersheySimplex, 0.5, Scalar.Red, 1, LineTypes.AntiAlias);
+        //     foreach (var circle in circles)
+        //     {
+        //         Cv2.Circle(_originalImage, circle.Center.ToPoint(), (int)circle.Radius, Scalar.Red, 2);
+        //         Cv2.PutText(_originalImage, circles.ToList().IndexOf(circle).ToString(), circle.Center.ToPoint(),
+        //             HersheyFonts.HersheySimplex, 0.5, Scalar.Red, 1, LineTypes.AntiAlias);
+        //     }
+        //
+        //     Cv2.ImShow("aa", _originalImage);
+        //     Cv2.WaitKey();
         // }
-        // Cv2.ImShow("aa", _originalImage);
-        // Cv2.WaitKey();
 
         return circles;
     }
 
     private static Point2f?[] GetMaybeMarkerCenters(Point2f[][] corners, int[] ids)
     {
+        // TODO: !!! Properly handle the case of multiple markers with the same ID, VERY FUCKING IMPORTANT!!!!!
+        // TODO: This shit sometimes sees an extra ArUco, causing the weird crash!
         int[] idToPosition = [3, 2, 0, 1];
         var maybeAnswerMatrixCorners = new Point2f?[4];
-        for (uint i = 0; i < ids.Length; i++)
+        for (uint i = 0; i < decimal.Min(idToPosition.Length, ids.Length); i++)
         {
             float x = 0;
             float y = 0;

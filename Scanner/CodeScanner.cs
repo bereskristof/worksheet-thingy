@@ -11,12 +11,6 @@ namespace Scanner;
 [System.Runtime.Versioning.SupportedOSPlatform("windows")]
 public class CodeScanner
 {
-    public struct QrScanResult
-    {
-        public string UserCode;
-        public Guid Uuid;
-    }
-    
     private readonly Mat _originalImage;
     private readonly Mat _grayImage = new();
     
@@ -26,39 +20,19 @@ public class CodeScanner
         Cv2.CvtColor(_originalImage, _grayImage, ColorConversionCodes.BGR2GRAY);
     }
     
-    /// <exception cref="ArgumentException">Failed to find QR codes</exception>
-    public QrScanResult FindCodes()
+    public void FindCodes(ref ScanResult result)
     {
         var bm = (Bitmap)Image.FromStream(_originalImage.ToMemoryStream());
         var findings = FindQrCodesUsingZxing(bm);
-        var zxingResult = ParseDecodedText(findings);
-        if (IsValidScanResult(zxingResult))
+        ParseDecodedText(ref result, findings);
+        if (IsValidScanResult(result))
         {
-            return zxingResult;
+            return;
         }
         
         var opencvFindings = FindQrCodesUsingOpenCv(_grayImage);
-        var opencvResult = ParseDecodedText(opencvFindings);
-        if (IsValidScanResult(opencvResult))
-        {
-            return opencvResult;
-        }
-
-        if (string.IsNullOrEmpty(zxingResult.UserCode) && string.IsNullOrEmpty(opencvResult.UserCode))
-        {
-            // throw new ArgumentException("Failed to find QR codes in the image.");
-            zxingResult.UserCode = "???"; // Fallback to empty user code
-        }
-        if (zxingResult.Uuid == Guid.Empty && opencvResult.Uuid == Guid.Empty)
-        {
-            throw new ArgumentException("Failed to find UUID in the QR codes.");
-        }
-
-        return new QrScanResult
-        {
-            UserCode = !string.IsNullOrEmpty(zxingResult.UserCode) ? zxingResult.UserCode : opencvResult.UserCode,
-            Uuid = zxingResult.Uuid != Guid.Empty ? zxingResult.Uuid : opencvResult.Uuid,
-        };
+        ParseDecodedText(ref result, opencvFindings);
+        // TODO: !!! Try zbar maybe?
     }
     
     private static string[] FindQrCodesUsingZxing(Bitmap image)
@@ -77,10 +51,9 @@ public class CodeScanner
         var reader = new GenericMultipleBarcodeReader(new ByQuadrantReader(baseReader));
         var result = reader.decodeMultiple(binary);
         
-        return result.Select(r => r?.Text ?? string.Empty).ToArray();
+        return (result ?? []).Select(r => r?.Text ?? string.Empty).ToArray();
     }
-
-    // No shot this would do anything if ZXing fails, but who knows
+    
     private static string[] FindQrCodesUsingOpenCv(Mat image)
     {
         QRCodeDetector detector = new();
@@ -96,29 +69,25 @@ public class CodeScanner
         return decodedTexts.Select(r => r ?? string.Empty).ToArray();
     }
     
-    private static QrScanResult ParseDecodedText(string[] texts)
+    private static void ParseDecodedText(ref ScanResult result, string[] texts)
     {
-        var result = new QrScanResult();
-
         foreach (var text in texts)
         {
             if (string.IsNullOrEmpty(text)) continue;
             if (IsUuid(text))
             {
                 var uuid = Guid.ParseExact(text, "N");
-                result.Uuid = uuid;
+                result.ExamCode = uuid;
             }
             else if (IsNeptunCode(text))
             {
                 result.UserCode = text;
             }
         }
-
-        return result;
     }
     
-    private static bool IsValidScanResult(QrScanResult result)
-        => result.Uuid != Guid.Empty && !string.IsNullOrEmpty(result.UserCode);
+    private static bool IsValidScanResult(ScanResult result)
+        => result is { ExamCode: not null, UserCode: not null } && result.ExamCode != Guid.Empty && !string.IsNullOrEmpty(result.UserCode);
 
     private static bool IsUuid(string text)
         => Guid.TryParseExact(text, "N", out _);

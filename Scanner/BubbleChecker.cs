@@ -53,15 +53,18 @@ public class BubbleChecker
                 filledness[b] = pixelCount / (Math.PI * Math.Pow(bubble.Radius - RadiusDecrease, 2));
             }
 
-            // var debugImg = _threshImage.Clone();
+            // var debugImg = _originalImage.Clone();
             // for (int b = 0; b < answerCount; b++)
             // {
             //     var bubble = bubbles[q * (int)answerCount + b];
             //     Cv2.Circle(debugImg, bubble.Center.ToPoint(), (int)bubble.Radius, Scalar.Red, 2);
             // }
+            //
+            // Cv2.Resize(debugImg, debugImg, new Size(), 0.5, 0.5);
+            //
             // Cv2.ImShow("aa", debugImg);
             // Cv2.WaitKey();
-            
+
             var ordered = filledness
                 .Select((value, index) => new { value, index })
                 .OrderByDescending(x => x.value)
