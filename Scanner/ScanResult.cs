@@ -20,6 +20,7 @@ public struct ScanResult
         MissingExamCode,
         MissingUserCode,
         MissingTaskFromDatabase,
+        ManuallyCorrected,
         UnexpectedException,
     }
     

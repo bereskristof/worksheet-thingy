@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -161,9 +162,32 @@ public partial class SolvePage
                 };
             }
 
+            
+            switch (scanResults[i].CurrentState)
+            {
+                case ScanResult.State.MissingExamCode:
+                    var examCode = DispatchHelpDialog();
+                    ScannerHandler.TryUpdateResult(ref scanResults[i], examCode, ScannerHandler.CodeType.ExamCode);
+                    break;
+                case ScanResult.State.MissingUserCode:
+                    var userCode = DispatchHelpDialog();
+                    ScannerHandler.TryUpdateResult(ref scanResults[i], userCode, ScannerHandler.CodeType.UserCode);
+                    break;
+            }
+            
             _backgroundWorker.ReportProgress(i + 1, scanResults[i]);
         }
         e.Result = scanResults;
+    }
+
+    private string DispatchHelpDialog()
+    {
+        MissingCodeTool window = new MissingCodeTool();
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            window.ShowDialog();
+        });
+        return window.Code;
     }
 
     private void BackgroundLoader_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)

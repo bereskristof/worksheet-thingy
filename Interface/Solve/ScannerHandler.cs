@@ -101,4 +101,37 @@ public static class ScannerHandler
         ExamResultObtainer.ObtainResults(ref result);
         result.FinalPoints = result.Results.Select(r => r.Points).Sum();
     }
+    
+    public enum CodeType
+    {
+        ExamCode,
+        UserCode
+    }
+
+    // TODO: !!! Move to a better location, since this is used from SolvePage.xaml.cs
+    public static bool TryUpdateResult(ref ScanResult result, string newCode, CodeType newType)
+    {
+        switch (newType)
+        {
+            case CodeType.ExamCode:
+                if (!CodeScanner.IsUuid(newCode)) return false;
+                var uuid = Guid.ParseExact(newCode, "N");
+                result.ExamCode = uuid;
+                if (CodeScanner.IsValidScanResult(result))
+                {
+                    result.CurrentState = ScanResult.State.ManuallyCorrected;
+                }
+                return true;
+            case CodeType.UserCode:
+                if (!CodeScanner.IsNeptunCode(newCode)) return false;
+                result.UserCode = newCode;
+                if (CodeScanner.IsValidScanResult(result))
+                {
+                    result.CurrentState = ScanResult.State.ManuallyCorrected;
+                }
+                return true;
+            default:
+                return false;
+        }
+    }
 }

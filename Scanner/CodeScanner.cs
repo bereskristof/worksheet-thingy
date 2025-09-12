@@ -86,12 +86,13 @@ public class CodeScanner
         }
     }
     
-    private static bool IsValidScanResult(ScanResult result)
+    // TODO: !!! Move all of these to a better location, now that they are used in ScannerHandler too
+    public static bool IsValidScanResult(ScanResult result)
         => result is { ExamCode: not null, UserCode: not null } && result.ExamCode != Guid.Empty && !string.IsNullOrEmpty(result.UserCode);
 
-    private static bool IsUuid(string text)
+    public static bool IsUuid(string text)
         => Guid.TryParseExact(text, "N", out _);
 
-    private static bool IsNeptunCode(string text)
+    public static bool IsNeptunCode(string text)
         => text.Length == 6 && text.All(char.IsLetterOrDigit);
 }
