@@ -36,12 +36,20 @@ public static class ExamResultObtainer
             result.Results[i] = select;
         }
         
+        // TODO: Make this nicer
         if (result.CurrentState == ScanResult.State.Unknown)
         {
             result.CurrentState =
                 result.Results.Any(x => x.Points == null || x.TaskIndex == null)
                     ? ScanResult.State.MissingTaskFromDatabase
                     : ScanResult.State.Completed;
+        }
+        if (result.CurrentState == ScanResult.State.ManuallyCorrected)
+        {
+            result.CurrentState =
+                result.Results.Any(x => x.Points == null || x.TaskIndex == null)
+                    ? ScanResult.State.MissingTaskFromDatabase
+                    : ScanResult.State.CompletedWithManualCorrection;
         }
     }
 }

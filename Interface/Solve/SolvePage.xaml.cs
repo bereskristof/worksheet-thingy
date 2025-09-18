@@ -1,9 +1,11 @@
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Windows;
+using System.Windows.Threading;
 using Docnet.Core.Models;
 using Microsoft.Win32;
 using Scanner;
@@ -162,17 +164,23 @@ public partial class SolvePage
                 };
             }
 
-            
-            switch (scanResults[i].CurrentState)
+            // If there is a missing code, open the dialog to fix it.
+            if (scanResults[i].CurrentState == ScanResult.State.MissingExamCode
+                || scanResults[i].CurrentState == ScanResult.State.MissingUserCode)
             {
-                case ScanResult.State.MissingExamCode:
-                    var examCode = DispatchHelpDialog();
-                    ScannerHandler.TryUpdateResult(ref scanResults[i], examCode, ScannerHandler.CodeType.ExamCode);
-                    break;
-                case ScanResult.State.MissingUserCode:
-                    var userCode = DispatchHelpDialog();
-                    ScannerHandler.TryUpdateResult(ref scanResults[i], userCode, ScannerHandler.CodeType.UserCode);
-                    break;
+                var pageImg = ScannerHandler.GetSinglePageAsBitmap(reader, i);
+                scanResults[i] = DispatchHelpDialog(pageImg, scanResults[i]);
+            }
+            
+            try 
+            {
+                HandleUnfinishedResults(ref scanResults[i], i, reader);
+            }
+            catch (Exception)
+            {
+                scanResults[i].CurrentState = ScanResult.State.UnexpectedException;
+                scanResults[i].FinalPoints = null;
+                scanResults[i].Results = [];
             }
             
             _backgroundWorker.ReportProgress(i + 1, scanResults[i]);
@@ -180,14 +188,38 @@ public partial class SolvePage
         e.Result = scanResults;
     }
 
-    private string DispatchHelpDialog()
+    private static ScanResult DispatchHelpDialog(Bitmap image, ScanResult invalidResult)
     {
-        MissingCodeTool window = new MissingCodeTool();
+        ScanResult newResult = invalidResult;
         Application.Current.Dispatcher.Invoke(() =>
         {
+            MissingCodeTool window = new MissingCodeTool
+            {
+                Owner = Application.Current.MainWindow,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                FixedResult = invalidResult,
+            };
+            window.Setup(image, invalidResult);
             window.ShowDialog();
+            newResult = window.FixedResult;
         });
-        return window.Code;
+        return newResult;
+    }
+
+    private static void HandleUnfinishedResults(ref ScanResult result, int i, Docnet.Core.Readers.IDocReader reader)
+    {
+        switch (result.CurrentState)
+        {
+            case ScanResult.State.MissingExamCode or ScanResult.State.MissingUserCode:
+                return; // If still missing code, skip processing
+            case ScanResult.State.ManuallyCorrected:
+            {
+                var pageImg = ScannerHandler.GetSinglePageAsBitmap(reader, i);
+                result = ScannerHandler.ScanPageResults(pageImg, 15, 5, result);
+                break;
+            }
+        }
+        ScannerHandler.ProcessScanResults(ref result, i);
     }
 
     private void BackgroundLoader_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)

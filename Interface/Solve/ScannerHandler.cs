@@ -7,21 +7,23 @@ using Storage;
 
 namespace Interface.Solve;
 
+// TODO: !!! Move to scanner
 public static class ScannerHandler
 {
     public static ScanResult ScanPdfPage(IDocReader reader, int i)
     {
         var pageImg = GetSinglePageAsBitmap(reader, i);
         var scanResult = ScanPageResults(pageImg, 15, 5); // TODO: Get question and answer count dynamically
-        if (scanResult.CurrentState == ScanResult.State.MissingExamCode)
-        {
-            return scanResult;
-        }
-        ProcessScanResults(ref scanResult, i);
+        // if (scanResult.CurrentState == ScanResult.State.MissingExamCode)
+        // {
+        //     return scanResult;
+        // }
+        // ProcessScanResults(ref scanResult, i);
         return scanResult;
     }
     
-    private static Bitmap GetSinglePageAsBitmap(IDocReader reader, int pageIndex)
+    // TODO: !!! Move to a better location, since this is used from MissingCodeTool.xaml.cs
+    public static Bitmap GetSinglePageAsBitmap(IDocReader reader, int pageIndex)
     {
         using var pageReader = reader.GetPageReader(pageIndex);
         var page = pageReader.GetImage();
@@ -40,22 +42,29 @@ public static class ScannerHandler
         return bmp;
     }
     
-    private static ScanResult ScanPageResults(Bitmap pageImg, uint questionCount, uint answerCount)
+    public static ScanResult ScanPageResults(Bitmap pageImg, uint questionCount, uint answerCount, ScanResult? fixedResult = null)
     {
         var result = new ScanResult();
         result.Results = [];
         var imageConverter = new ImageConverter();
         var imageData = (byte[])(imageConverter.ConvertTo(pageImg, typeof(byte[])) ?? Array.Empty<byte>());
-        var qrScanner = new CodeScanner(imageData);
-        qrScanner.FindCodes(ref result);
-        if (result.ExamCode == null)
+        if (fixedResult == null)
         {
-            result.CurrentState = ScanResult.State.MissingExamCode;
-            return result;
+            var qrScanner = new CodeScanner(imageData);
+            qrScanner.FindCodes(ref result);
+            if (result.ExamCode == null)
+            {
+                result.CurrentState = ScanResult.State.MissingExamCode;
+                return result;
+            }
+            if (result.UserCode == null)
+            {
+                result.CurrentState = ScanResult.State.MissingUserCode;
+            }
         }
-        if (result.UserCode == null)
+        else
         {
-            result.CurrentState = ScanResult.State.MissingUserCode;
+            result = fixedResult.Value;
         }
 
         var matrixScanner = new MatrixScanner(imageData);
@@ -82,7 +91,7 @@ public static class ScannerHandler
         return result;
     }
 
-    private static void ProcessScanResults(ref ScanResult result, int pageIndex)
+    public static void ProcessScanResults(ref ScanResult result, int pageIndex)
     {
         for (int i = 0; i < result.Results.Length; i++)
         {

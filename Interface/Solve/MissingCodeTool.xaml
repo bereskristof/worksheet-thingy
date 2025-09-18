@@ -4,11 +4,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         mc:Ignorable="d"
-        Title="MissingUserCodeTool" Height="450" Width="800">
+        Title="MissingUserCodeTool" Height="675" Width="1200">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -16,12 +16,61 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="5"/>
-        <Label Grid.Row="0" Grid.Column="1" Content="This page failed to parse it's user code!"/>
-        <TextBox Grid.Row="1" Grid.Column="1"/>
-        <CheckBox Grid.Row="2" Grid.Column="1" Content="Skip every following user code issue"/>
-        <Button Grid.Row="3" Grid.Column="1" Content="Enter code"/>
-        <Button Grid.Row="4" Grid.Column="1" Content="Skip"/>
+        <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="7" Name="PreviewImage" VerticalAlignment="Stretch" Stretch="Uniform" MaxHeight="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=ActualHeight}"/>
+        <Label Grid.Row="0" Grid.Column="1" Content="This page has failed to parse some data, and needs to be filled manually!" Margin="0, 0, 3, 3"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Margin="0, 0, 3, 3" Name="CodeTextBox">
+            <TextBox.Style>
+                <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                    <Style.Resources>
+                        <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None">
+                            <VisualBrush.Visual>
+                                <Label Content="Enter Neptun code..." Foreground="LightGray" /> <!-- TODO: !!! Localize -->
+                            </VisualBrush.Visual>
+                        </VisualBrush>
+                    </Style.Resources>
+                    <Style.Triggers>
+                        <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
+                            <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                        </Trigger>
+                        <Trigger Property="Text" Value="{x:Null}">
+                            <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter Property="Background" Value="White" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+        <TextBox Grid.Row="2" Grid.Column="1" Margin="0, 0, 3, 3" Name="ExamTextBox">
+            <TextBox.Style>
+                <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                    <Style.Resources>
+                        <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None">
+                            <VisualBrush.Visual>
+                                <Label Content="Enter Exam code..." Foreground="LightGray" /> <!-- TODO: !!! Localize -->
+                            </VisualBrush.Visual>
+                        </VisualBrush>
+                    </Style.Resources>
+                    <Style.Triggers>
+                        <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
+                            <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                        </Trigger>
+                        <Trigger Property="Text" Value="{x:Null}">
+                            <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter Property="Background" Value="White" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+        <!-- <CheckBox Grid.Row="3" Grid.Column="1" Content="Skip every following user code issue" Margin="0, 0, 3, 3"/> -->
+        <Button Grid.Row="4" Grid.Column="1" Content="Enter code" Margin="0, 0, 3, 3" Click="EnterButton_OnClick"/>
+        <Button Grid.Row="5" Grid.Column="1" Content="Skip" Margin="0, 0, 3, 0" Click="SkipButton_OnClick"/>
     </Grid>
 </Window>

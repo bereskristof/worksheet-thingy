@@ -17,6 +17,7 @@ public struct ScanResult
     {
         Unknown,
         Completed,
+        CompletedWithManualCorrection,
         MissingExamCode,
         MissingUserCode,
         MissingTaskFromDatabase,
