@@ -11,6 +11,7 @@ namespace Interface.Solve;
 public partial class MissingCodeTool : Window
 {
     public ScanResult FixedResult = new();
+    public bool SkipFuturePrompts = false;
     
     public MissingCodeTool()
     {
@@ -77,4 +78,8 @@ public partial class MissingCodeTool : Window
     {
         Close();
     }
+
+    private void ToggleButton_OnChecked(object sender, RoutedEventArgs e) => SkipFuturePrompts = true;
+
+    private void ToggleButton_OnUnchecked(object sender, RoutedEventArgs e) => SkipFuturePrompts = false;
 }

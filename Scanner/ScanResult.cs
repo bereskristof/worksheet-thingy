@@ -33,8 +33,8 @@ public struct ScanResult
         public const int EmptyAnswerPoints = 0;
         public const int WrongAnswerPoints = -1;
     
-        public const double MinDeltaConfidence = 0.8; /// Minimum difference between best and next best answer to consider it not double filled
-        public const double MinFillConfidence = 0.075; /// Minimum % of pixels filled in the bubble to consider it filled
+        public const double MinDeltaConfidence = 0.4; /// Minimum difference between best and next best answer to consider it not double filled
+        public const double MinFillConfidence = 0.1; /// Minimum % of pixels filled in the bubble to consider it filled (0.2 skips)
         
         public int? TaskIndex;
         public int? Points;

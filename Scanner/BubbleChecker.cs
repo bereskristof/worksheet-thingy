@@ -19,7 +19,7 @@ public record BubbleScanResult
 
 public class BubbleChecker
 {
-    private const int RadiusDecrease = 2; // Radius decrease for bubble detection
+    private const int RadiusDecrease = 6; // Radius decrease for bubble detection
     
     private readonly Mat _originalImage;
     private readonly Mat _grayImage = new();
@@ -32,7 +32,7 @@ public class BubbleChecker
         var blurredImage = new Mat();
         var invertedThreshImage = new Mat();
         Cv2.GaussianBlur(_grayImage, blurredImage, new Size(3, 3), 0);
-        Cv2.Threshold(blurredImage, invertedThreshImage, 0, 255, ThresholdTypes.Otsu | ThresholdTypes.Binary);
+        Cv2.Threshold(blurredImage, invertedThreshImage, 255 - 16, 255, ThresholdTypes.Binary); // TODO: 16 is a magic number found by testing
         Cv2.BitwiseNot(invertedThreshImage, _threshImage);
     }
     

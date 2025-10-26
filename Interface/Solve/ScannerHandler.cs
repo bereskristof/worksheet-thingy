@@ -2,6 +2,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using Docnet.Core.Readers;
+using OpenCvSharp;
 using Scanner;
 using Storage;
 
@@ -38,7 +39,7 @@ public static class ScannerHandler
         bmp.UnlockBits(bmpData);
             
         var stream = new MemoryStream();
-        bmp.Save(stream, ImageFormat.Png);
+        bmp.Save(stream, ImageFormat.Bmp);
         return bmp;
     }
     

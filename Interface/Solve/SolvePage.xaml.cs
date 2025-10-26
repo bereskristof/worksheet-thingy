@@ -7,7 +7,9 @@ using System.Text;
 using System.Windows;
 using System.Windows.Threading;
 using Docnet.Core.Models;
+using Docnet.Core.Readers;
 using Microsoft.Win32;
+using OpenCvSharp;
 using Scanner;
 
 namespace Interface.Solve;
@@ -145,6 +147,8 @@ public partial class SolvePage
 
         var pageCount = reader.GetPageCount();
         var scanResults = new ScanResult[pageCount];
+
+        var skipDialog = false;
     
         for (var i = 0; i < pageCount; i++)
         {
@@ -165,11 +169,12 @@ public partial class SolvePage
             }
 
             // If there is a missing code, open the dialog to fix it.
-            if (scanResults[i].CurrentState == ScanResult.State.MissingExamCode
-                || scanResults[i].CurrentState == ScanResult.State.MissingUserCode)
+            if (!skipDialog
+                && (scanResults[i].CurrentState == ScanResult.State.MissingExamCode
+                || scanResults[i].CurrentState == ScanResult.State.MissingUserCode))
             {
                 var pageImg = ScannerHandler.GetSinglePageAsBitmap(reader, i);
-                scanResults[i] = DispatchHelpDialog(pageImg, scanResults[i]);
+                scanResults[i] = DispatchHelpDialog(pageImg, scanResults[i], out skipDialog);
             }
             
             try 
@@ -188,8 +193,9 @@ public partial class SolvePage
         e.Result = scanResults;
     }
 
-    private static ScanResult DispatchHelpDialog(Bitmap image, ScanResult invalidResult)
+    private static ScanResult DispatchHelpDialog(Bitmap image, ScanResult invalidResult, out bool skipFuture)
     {
+        bool skipFuturePrompts = false;
         ScanResult newResult = invalidResult;
         Application.Current.Dispatcher.Invoke(() =>
         {
@@ -202,7 +208,9 @@ public partial class SolvePage
             window.Setup(image, invalidResult);
             window.ShowDialog();
             newResult = window.FixedResult;
+            skipFuturePrompts = window.SkipFuturePrompts;
         });
+        skipFuture = skipFuturePrompts;
         return newResult;
     }
 
@@ -210,7 +218,7 @@ public partial class SolvePage
     {
         switch (result.CurrentState)
         {
-            case ScanResult.State.MissingExamCode or ScanResult.State.MissingUserCode:
+            case ScanResult.State.MissingExamCode: // or ScanResult.State.MissingUserCode: // Funny ahh bug
                 return; // If still missing code, skip processing
             case ScanResult.State.ManuallyCorrected:
             {
