@@ -150,11 +150,38 @@ namespace Interface.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not export:.
+        /// </summary>
+        public static string Export_ExportFailed {
+            get {
+                return ResourceManager.GetString("Export_ExportFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export saved.
+        /// </summary>
+        public static string Export_ExportSaved {
+            get {
+                return ResourceManager.GetString("Export_ExportSaved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to High.
         /// </summary>
         public static string Export_High {
             get {
                 return ResourceManager.GetString("Export_High", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The specified target path is invalid..
+        /// </summary>
+        public static string Export_InvalidPath {
+            get {
+                return ResourceManager.GetString("Export_InvalidPath", resourceCulture);
             }
         }
         
@@ -222,11 +249,29 @@ namespace Interface.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export completed successfully!.
+        /// </summary>
+        public static string Export_Success {
+            get {
+                return ResourceManager.GetString("Export_Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Title:.
         /// </summary>
         public static string Export_Title {
             get {
                 return ResourceManager.GetString("Export_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export.
+        /// </summary>
+        public static string Export_WindowLabel {
+            get {
+                return ResourceManager.GetString("Export_WindowLabel", resourceCulture);
             }
         }
         
@@ -335,6 +380,78 @@ namespace Interface.Resources {
         public static string MenuTabs_Tasks {
             get {
                 return ResourceManager.GetString("MenuTabs_Tasks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter code.
+        /// </summary>
+        public static string Missing_EnterCode {
+            get {
+                return ResourceManager.GetString("Missing_EnterCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Entered exam code is not valid!.
+        /// </summary>
+        public static string Missing_ExamCode {
+            get {
+                return ResourceManager.GetString("Missing_ExamCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter Exam code....
+        /// </summary>
+        public static string Missing_ExamHint {
+            get {
+                return ResourceManager.GetString("Missing_ExamHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Entered Neptun code is not valid!.
+        /// </summary>
+        public static string Missing_Neptun {
+            get {
+                return ResourceManager.GetString("Missing_Neptun", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter Neptun code....
+        /// </summary>
+        public static string Missing_NeptunHint {
+            get {
+                return ResourceManager.GetString("Missing_NeptunHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scan result is not valid!.
+        /// </summary>
+        public static string Missing_ResultInvalid {
+            get {
+                return ResourceManager.GetString("Missing_ResultInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skip.
+        /// </summary>
+        public static string Missing_Skip {
+            get {
+                return ResourceManager.GetString("Missing_Skip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This page has failed to parse some data, and needs to be filled manually!.
+        /// </summary>
+        public static string Missing_Title {
+            get {
+                return ResourceManager.GetString("Missing_Title", resourceCulture);
             }
         }
         
@@ -600,6 +717,15 @@ namespace Interface.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exporting PDF.
+        /// </summary>
+        public static string Solve_ExportingPdf {
+            get {
+                return ResourceManager.GetString("Solve_ExportingPdf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export results by sheet....
         /// </summary>
         public static string Solve_Get {
@@ -614,6 +740,15 @@ namespace Interface.Resources {
         public static string Solve_GetAlt {
             get {
                 return ResourceManager.GetString("Solve_GetAlt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export with confidence.
+        /// </summary>
+        public static string Solve_IncludeConfidence {
+            get {
+                return ResourceManager.GetString("Solve_IncludeConfidence", resourceCulture);
             }
         }
         

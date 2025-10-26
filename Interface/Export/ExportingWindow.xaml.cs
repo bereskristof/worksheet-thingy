@@ -22,7 +22,7 @@ public partial class ExportingWindow
     {
         if (!IsTargetValid(target))
         {
-            MessageBox.Show("The specified target path is invalid.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); // TODO: Localize
+            MessageBox.Show(Interface.Resources.Lang.Export_InvalidPath, Interface.Resources.Lang.Common_Error, MessageBoxButton.OK, MessageBoxImage.Error);
             return false;
         }
         _backgroundWorker.WorkerReportsProgress = true;
@@ -115,11 +115,11 @@ public partial class ExportingWindow
         string? result = (string?)e.Result;
         if (result != null)
         {
-            MessageBox.Show(result, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(result, Interface.Resources.Lang.Common_Error, MessageBoxButton.OK, MessageBoxImage.Error);
         }
         else
         {
-            MessageBox.Show("Export completed successfully!", "Export", MessageBoxButton.OK, MessageBoxImage.Information); // TODO: Localize
+            MessageBox.Show(Interface.Resources.Lang.Export_Success, Interface.Resources.Lang.Export_WindowLabel, MessageBoxButton.OK, MessageBoxImage.Information);
         }
         Close();
     }

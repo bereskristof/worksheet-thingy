@@ -232,7 +232,7 @@ public partial class ExportPage : INotifyPropertyChanged
         var (error, pages, canvasYOffset, canvasXOffset, pdfPath) = (PreviewTuple)e.Result!;
         if (error != null)
         {
-            MessageBox.Show(error, "Error", MessageBoxButton.OK, MessageBoxImage.Error); // TODO: Localize
+            MessageBox.Show(error, Interface.Resources.Lang.Common_Error, MessageBoxButton.OK, MessageBoxImage.Error);
             PreviewProgressBar.Visibility = Visibility.Collapsed;
             CreateButton.IsEnabled = true;
             return;
@@ -272,7 +272,7 @@ public partial class ExportPage : INotifyPropertyChanged
         {
             Owner = Window.GetWindow(this),
             WindowStartupLocation = WindowStartupLocation.CenterOwner,
-            Title = "Exporting PDF", // TODO: Localize
+            Title = Interface.Resources.Lang.Solve_ExportingPdf,
         };
         var title = TitleBox.Text.Trim();
         var author = AuthorBox.Text.Trim();

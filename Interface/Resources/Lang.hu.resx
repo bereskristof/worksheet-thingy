@@ -248,4 +248,49 @@
     <data name="Solve_GetAlt" xml:space="preserve">
         <value>Feladantonkénti eredmény exportálása...</value>
     </data>
+    <data name="Solve_ExportingPdf" xml:space="preserve">
+        <value>PDF exportálása</value>
+    </data>
+    <data name="Export_InvalidPath" xml:space="preserve">
+        <value>A megadott exportálási útvonal hibás.</value>
+    </data>
+    <data name="Export_Success" xml:space="preserve">
+        <value>Exportálás sikeres!</value>
+    </data>
+    <data name="Export_WindowLabel" xml:space="preserve">
+        <value>Exportálás</value>
+    </data>
+    <data name="Missing_ExamCode" xml:space="preserve">
+        <value>A megadott dolgozat kód hibás!</value>
+    </data>
+    <data name="Missing_Neptun" xml:space="preserve">
+        <value>A megadott Neptun kód hibás!ű</value>
+    </data>
+    <data name="Missing_ResultInvalid" xml:space="preserve">
+        <value>Skennelési eredmény hibás!</value>
+    </data>
+    <data name="Export_ExportFailed" xml:space="preserve">
+        <value>Exportálás sikeres</value>
+    </data>
+    <data name="Export_ExportSaved" xml:space="preserve">
+        <value>Sikertelen exportálás:</value>
+    </data>
+    <data name="Missing_Title" xml:space="preserve">
+        <value>Ez az oldal nem tudott feldolgozni néhány adatot, ezért azokat manuálisan kell kitölteni!</value>
+    </data>
+    <data name="Missing_EnterCode" xml:space="preserve">
+        <value>Kódok megadása</value>
+    </data>
+    <data name="Missing_Skip" xml:space="preserve">
+        <value>Kihagy</value>
+    </data>
+    <data name="Missing_ExamHint" xml:space="preserve">
+        <value>A vizsga kódja...</value>
+    </data>
+    <data name="Missing_NeptunHint" xml:space="preserve">
+        <value>A hallgató Neptun kódja...</value>
+    </data>
+    <data name="Solve_IncludeConfidence" xml:space="preserve">
+        <value>Exportálás konfidenciával</value>
+    </data>
 </root>

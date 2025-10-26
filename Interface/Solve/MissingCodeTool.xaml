@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:res="clr-namespace:Interface.Resources"
         mc:Ignorable="d"
         Title="MissingUserCodeTool" Height="675" Width="1200">
     <Grid>
@@ -20,14 +21,14 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="7" Name="PreviewImage" VerticalAlignment="Stretch" Stretch="Uniform" MaxHeight="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=ActualHeight}"/>
-        <Label Grid.Row="0" Grid.Column="1" Content="This page has failed to parse some data, and needs to be filled manually!" Margin="0, 0, 3, 3"/>
+        <Label Grid.Row="0" Grid.Column="1" Content="{x:Static res:Lang.Missing_Title}" Margin="0, 0, 3, 3"/>
         <TextBox Grid.Row="1" Grid.Column="1" Margin="0, 0, 3, 3" Name="CodeTextBox">
             <TextBox.Style>
                 <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
                     <Style.Resources>
                         <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None">
                             <VisualBrush.Visual>
-                                <Label Content="Enter Neptun code..." Foreground="LightGray" /> <!-- TODO: !!! Localize -->
+                                <Label Content="{x:Static res:Lang.Missing_NeptunHint}" Foreground="LightGray" />
                             </VisualBrush.Visual>
                         </VisualBrush>
                     </Style.Resources>
@@ -51,7 +52,7 @@
                     <Style.Resources>
                         <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None">
                             <VisualBrush.Visual>
-                                <Label Content="Enter Exam code..." Foreground="LightGray" /> <!-- TODO: !!! Localize -->
+                                <Label Content="{x:Static res:Lang.Missing_ExamHint}" Foreground="LightGray" />
                             </VisualBrush.Visual>
                         </VisualBrush>
                     </Style.Resources>
@@ -69,8 +70,8 @@
                 </Style>
             </TextBox.Style>
         </TextBox>
-        <CheckBox Grid.Row="3" Grid.Column="1" Content="Skip every following user code issue" Margin="0, 0, 3, 3" Checked="ToggleButton_OnChecked" Unchecked="ToggleButton_OnUnchecked"/>
-        <Button Grid.Row="4" Grid.Column="1" Content="Enter code" Margin="0, 0, 3, 3" Click="EnterButton_OnClick"/>
-        <Button Grid.Row="5" Grid.Column="1" Content="Skip" Margin="0, 0, 3, 0" Click="SkipButton_OnClick"/>
+        <!-- <CheckBox Grid.Row="3" Grid.Column="1" Content="Skip every following user code issue" Margin="0, 0, 3, 3" Checked="ToggleButton_OnChecked" Unchecked="ToggleButton_OnUnchecked"/> -->
+        <Button Grid.Row="4" Grid.Column="1" Content="{x:Static res:Lang.Missing_EnterCode}" Margin="0, 0, 3, 3" Click="EnterButton_OnClick"/>
+        <Button Grid.Row="5" Grid.Column="1" Content="{x:Static res:Lang.Missing_Skip}" Margin="0, 0, 3, 0" Click="SkipButton_OnClick"/>
     </Grid>
 </Window>

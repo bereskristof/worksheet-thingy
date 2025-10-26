@@ -49,7 +49,7 @@ public partial class MissingCodeTool : Window
         }
         else
         {
-            MessageBox.Show("Entered exam code is not valid!", "Error", MessageBoxButton.OK, MessageBoxImage.Error); // TODO: Localize
+            MessageBox.Show(Interface.Resources.Lang.Missing_ExamCode, Interface.Resources.Lang.Common_Error, MessageBoxButton.OK, MessageBoxImage.Error);
             return;
         }
         
@@ -60,13 +60,13 @@ public partial class MissingCodeTool : Window
         }
         else
         {
-            MessageBox.Show("Entered Neptun code is not valid!", "Error", MessageBoxButton.OK, MessageBoxImage.Error); // TODO: Localize
+            MessageBox.Show(Interface.Resources.Lang.Missing_Neptun, Interface.Resources.Lang.Common_Error, MessageBoxButton.OK, MessageBoxImage.Error);
             return;
         }
 
         if (!CodeScanner.IsValidScanResult(FixedResult))
         {
-            MessageBox.Show("Scan result is not valid!", "Error", MessageBoxButton.OK, MessageBoxImage.Error); // TODO: Localize
+            MessageBox.Show(Interface.Resources.Lang.Missing_ResultInvalid, Interface.Resources.Lang.Common_Error, MessageBoxButton.OK, MessageBoxImage.Error);
             return;
         }
         
