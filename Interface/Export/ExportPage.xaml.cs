@@ -96,13 +96,6 @@ public partial class ExportPage : INotifyPropertyChanged
             Mode = BindingMode.TwoWay,
             UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
         };
-        var answerCountBinding = new Binding("AnswerCount")
-        {
-            Source = this,
-            Path = new PropertyPath("AnswerCount"),
-            Mode = BindingMode.TwoWay,
-            UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
-        };
         var exportPathBinding = new Binding("ExportPath")
         {
             Source = this,
@@ -111,7 +104,6 @@ public partial class ExportPage : INotifyPropertyChanged
             UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
         };
         BindingOperations.SetBinding(AmountBox, TextBox.TextProperty, pageCountBinding);
-        BindingOperations.SetBinding(AnswerCountBox, TextBox.TextProperty, answerCountBinding);
         BindingOperations.SetBinding(ExportBox, TextBox.TextProperty, exportPathBinding);
         PreviewScroll.RenderTransform = _scaleTransform;
     }
