@@ -15,9 +15,14 @@ public static class ExamResultObtainer
         using var reader = verifyCommand.ExecuteReader();
         while (reader.Read())
         {
-            var answerNumber = reader.GetInt32(0);
+            var answerNumberBlob = reader.GetStream(0); // reader.GetInt32(0);
             var questionId = reader.GetInt32(1);
             var i = reader.GetInt32(2);
+
+            var memoryStream = new MemoryStream();
+            answerNumberBlob.CopyTo(memoryStream);
+            var decryptedData = Encryption.DecryptBlob(memoryStream.ToArray());
+            long answerNumber = BitConverter.ToInt64(decryptedData, 0);
             
             var select = result.Results[i];
             select.TaskIndex = questionId;

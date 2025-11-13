@@ -117,11 +117,12 @@ public static class MultiExamBuilder
     {
         foreach (var (question, answer, questionId, uuid) in skeletons)
         {
+            var encryptedAnswer = Encryption.EncryptBlob(BitConverter.GetBytes(answer));
             var storeCommand = Manager.Connection.CreateCommand();
             storeCommand.CommandText = "INSERT INTO Solutions (Uuid, QuestionNumber, AnswerNumber, QuestionId) VALUES (@Uuid, @QuestionNumber, @AnswerNumber, @QuestionId);";
             storeCommand.Parameters.AddWithValue("@Uuid", uuid.ToString()); // Each exam gets a new UUID
             storeCommand.Parameters.AddWithValue("@QuestionNumber", question);
-            storeCommand.Parameters.AddWithValue("@AnswerNumber", answer);
+            storeCommand.Parameters.AddWithValue("@AnswerNumber", encryptedAnswer);
             storeCommand.Parameters.AddWithValue("@QuestionId", questionId); // Store the question ID for statistics
             storeCommand.ExecuteNonQuery();
         }

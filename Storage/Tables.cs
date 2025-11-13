@@ -53,7 +53,7 @@ public static class Tables
                                          CREATE TABLE IF NOT EXISTS Solutions (
                                              Uuid TEXT NOT NULL,
                                              QuestionNumber INTEGER,
-                                             AnswerNumber INTEGER,
+                                             AnswerNumber BLOB,
                                              QuestionId INTEGER,
                                              FOREIGN KEY (QuestionId) REFERENCES Questions(Id)
                                          );
