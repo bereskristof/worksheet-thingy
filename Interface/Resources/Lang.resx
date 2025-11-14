@@ -300,4 +300,10 @@
     <data name="Solve_IncludeConfidence" xml:space="preserve">
         <value>Export with confidence</value>
     </data>
+    <data name="About_1" xml:space="preserve">
+        <value>Created for the University of Miskolc.</value>
+    </data>
+    <data name="About_2" xml:space="preserve">
+        <value>Third-Party Licenses:</value>
+    </data>
 </root>

@@ -60,6 +60,24 @@ namespace Interface.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Created for the University of Miskolc..
+        /// </summary>
+        public static string About_1 {
+            get {
+                return ResourceManager.GetString("About_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Third-Party Licenses:.
+        /// </summary>
+        public static string About_2 {
+            get {
+                return ResourceManager.GetString("About_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         public static string Common_Error {
