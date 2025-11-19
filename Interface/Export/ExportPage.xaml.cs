@@ -233,7 +233,7 @@ public partial class ExportPage : INotifyPropertyChanged
         foreach (var page in pages)
         {
             var previewImage = new LatexPagePreview();
-            var stream = new MemoryStream(); // TODO: Probably useless, added for debugging some other issue
+            var stream = new MemoryStream();
             stream.Write(page.Data, 0, page.Data.Length);
             previewImage.MainImage.Source = BitmapFrame.Create(stream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
             previewImage.MainImage.Width = page.Width;

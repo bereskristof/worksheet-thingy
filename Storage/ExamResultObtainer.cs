@@ -41,7 +41,6 @@ public static class ExamResultObtainer
             result.Results[i] = select;
         }
         
-        // TODO: Make this nicer
         if (result.CurrentState == ScanResult.State.Unknown)
         {
             result.CurrentState =

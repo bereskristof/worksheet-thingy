@@ -218,7 +218,7 @@ public partial class SolvePage
     {
         switch (result.CurrentState)
         {
-            case ScanResult.State.MissingExamCode: // or ScanResult.State.MissingUserCode: // Funny ahh bug
+            case ScanResult.State.MissingExamCode:
                 return; // If still missing code, skip processing
             case ScanResult.State.ManuallyCorrected:
             {
@@ -235,7 +235,6 @@ public partial class SolvePage
         var results = (ScanResult[]?)e.Result;
         if (results == null || results.Length == 0)
         {
-            // TODO: !!! Properly handle this
             return;
         }
         _csvBuffer = results;
@@ -250,8 +249,8 @@ public partial class SolvePage
             Culture = CultureInfo.CurrentCulture,
             DecimalPoint = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator,
             ListSeparator = CultureInfo.CurrentCulture.TextInfo.ListSeparator,
-            SuccessText = "Sikeres", // TODO: !!! Localize
-            FailText = "Sikertelen", // TODO: !!! Localize
+            SuccessText = "Sikeres", // TODO: Localize
+            FailText = "Sikertelen", // TODO: Localize
         };
     }
 }

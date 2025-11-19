@@ -48,7 +48,6 @@ public partial class MainWindow
     {
         string errorMessage = $"{Interface.Resources.Lang.Crash_Message}\n\n- Error message -\n{e.Exception.Message}\n\n- Error stacktrace -\n{e.Exception.StackTrace}";
         MessageBox.Show(errorMessage, Interface.Resources.Lang.Crash_Title, MessageBoxButton.OK, MessageBoxImage.Error);
-        // TODO: Dump data
         e.Handled = true;
         Close();
     }

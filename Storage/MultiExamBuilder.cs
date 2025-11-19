@@ -138,14 +138,14 @@ public static class MultiExamBuilder
         return filename;
     }
 
-    public static string TryExportPdf(LatexBuilder builder, out bool success, out string? errorMessage) // TODO: Tagged unions would go hard here
+    public static string TryExportPdf(LatexBuilder builder, out bool success, out string? errorMessage)
     {
         var batchUuid = Guid.NewGuid();
         var filename = ExportTex(builder, batchUuid);
         try
         {
             CallPdfLatex(filename);
-            CallPdfLatex(filename); // Latex sucks, so we have to call it twice
+            CallPdfLatex(filename); // Latex "ain't the best", so we have to call it twice
         }
         catch (TimeoutException e)
         {

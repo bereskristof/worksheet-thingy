@@ -105,7 +105,6 @@ public partial class ExportingWindow
         {
             File.Move(exportPath, target, true);
         }
-        // TODO: Handle errorMessage properly
         MultiExamBuilder.CleanUp(exportPath);
         e.Result = success ? null : errorMessage;
     }
