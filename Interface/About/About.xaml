@@ -33,12 +33,6 @@
                 </Hyperlink>
             </TextBlock>
             <TextBlock>
-                WpfMath (XAML-Math):&#160;
-                <Hyperlink NavigateUri="https://mit-license.org/" RequestNavigate="Hyperlink_RequestNavigate">
-                    MIT license
-                </Hyperlink>
-            </TextBlock>
-            <TextBlock>
                 QRCoder:&#160;
                 <Hyperlink NavigateUri="https://mit-license.org/" RequestNavigate="Hyperlink_RequestNavigate">
                     MIT license
