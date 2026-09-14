@@ -32,7 +32,7 @@ public class BubbleChecker
         var blurredImage = new Mat();
         var invertedThreshImage = new Mat();
         Cv2.GaussianBlur(_grayImage, blurredImage, new Size(3, 3), 0);
-        Cv2.Threshold(blurredImage, invertedThreshImage, 255 - 16, 255, ThresholdTypes.Binary); // TODO: 16 is a magic number found by testing
+        Cv2.Threshold(blurredImage, invertedThreshImage, 255 - 16, 255, ThresholdTypes.Binary);
         Cv2.BitwiseNot(invertedThreshImage, _threshImage);
     }
     

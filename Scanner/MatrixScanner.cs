@@ -46,8 +46,6 @@ public class MatrixScanner
 
     private static Point2f?[] GetMaybeMarkerCenters(Point2f[][] corners, int[] ids)
     {
-        // TODO: !!! Properly handle the case of multiple markers with the same ID, VERY FUCKING IMPORTANT!!!!!
-        // TODO: This shit sometimes sees an extra ArUco, causing the weird crash!
         int[] idToPosition = [3, 2, 0, 1];
         var maybeAnswerMatrixCorners = new Point2f?[4];
         for (uint i = 0; i < decimal.Min(idToPosition.Length, ids.Length); i++)

@@ -8,7 +8,6 @@ using Storage;
 
 namespace Interface.Solve;
 
-// TODO: !!! Move to scanner
 public static class ScannerHandler
 {
     public static ScanResult ScanPdfPage(IDocReader reader, int i)
@@ -23,7 +22,6 @@ public static class ScannerHandler
         return scanResult;
     }
     
-    // TODO: !!! Move to a better location, since this is used from MissingCodeTool.xaml.cs
     public static Bitmap GetSinglePageAsBitmap(IDocReader reader, int pageIndex)
     {
         using var pageReader = reader.GetPageReader(pageIndex);
@@ -118,7 +116,6 @@ public static class ScannerHandler
         UserCode
     }
 
-    // TODO: !!! Move to a better location, since this is used from SolvePage.xaml.cs
     public static bool TryUpdateResult(ref ScanResult result, string newCode, CodeType newType)
     {
         switch (newType)

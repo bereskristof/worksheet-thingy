@@ -32,7 +32,6 @@ public class CodeScanner
         
         var opencvFindings = FindQrCodesUsingOpenCv(_grayImage);
         ParseDecodedText(ref result, opencvFindings);
-        // TODO: !!! Try zbar maybe?
     }
     
     private static string[] FindQrCodesUsingZxing(Bitmap image)
@@ -86,7 +85,6 @@ public class CodeScanner
         }
     }
     
-    // TODO: !!! Move all of these to a better location, now that they are used in ScannerHandler too
     public static bool IsValidScanResult(ScanResult result)
         => result is { ExamCode: not null, UserCode: not null } && result.ExamCode != Guid.Empty && !string.IsNullOrEmpty(result.UserCode);
 

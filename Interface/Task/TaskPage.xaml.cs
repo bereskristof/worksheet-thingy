@@ -52,7 +52,7 @@ public partial class TaskPage
             Mode = BindingMode.TwoWay,
         };
         BindingOperations.SetBinding(ScoreBox, TextBox.TextProperty, scoreBinding);
-        TaskList.Items.Refresh(); // Ugly HACK, does cause problems with async workers!
+        TaskList.Items.Refresh();
         TaskList.SelectedItem = question;
         SetRightControls();
     }

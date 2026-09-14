@@ -15,7 +15,7 @@ public class QrBuilder
     public QrBuilder(Guid uuid)
     {
         using Graphics graphics = Graphics.FromImage(_image);
-        graphics.Clear(Color.White); // TODO: Transparent background?
+        graphics.Clear(Color.White);
         
         using var codeGenerator = new QRCodeGenerator();
         using var qrCodeData = codeGenerator.CreateQrCode(uuid.ToString().Replace("-", ""), QRCodeGenerator.ECCLevel.H);

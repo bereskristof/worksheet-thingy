@@ -41,7 +41,6 @@ public partial class MissingCodeTool : Window
 
     private void EnterButton_OnClick(object sender, RoutedEventArgs e)
     {
-        // TODO: Validate code
         string examCode = ExamTextBox.Text.Trim();
         if (CodeScanner.IsUuid(examCode)) 
         {
