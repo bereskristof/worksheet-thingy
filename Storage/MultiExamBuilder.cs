@@ -102,6 +102,7 @@ public static class MultiExamBuilder
             {
                 return uncheckedUuid;
             }
+            Log.Write($"UUID {uncheckedUuid.ToString()} failed to be unique!", Log.Severity.Warning);
             failedUuids.Add(uncheckedUuid);
         }
 
