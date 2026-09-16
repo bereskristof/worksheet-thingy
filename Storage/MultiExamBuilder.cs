@@ -12,6 +12,22 @@ namespace Storage;
 [System.Runtime.Versioning.SupportedOSPlatform("windows")]
 public static class MultiExamBuilder
 {
+    private const uint UuidMaxTries = 5;
+    private static readonly string UuidErrorMessageTemplate = """
+                                                       Failed to create unique uuid.
+
+                                                       Only share this information with someone you trust to have database access!
+                                                       Additional information:
+                                                       - Uuids attempted:
+                                                         - {0}
+                                                         - {1}
+                                                         - {2}
+                                                         - {3}
+                                                         - {4}
+                                                       - Number of Uuids in the database already:
+                                                         - {5}
+                                                       """;
+    
     /// Generates N exams based on the provided root node and answer count.
     /// Disables saving to database, since this is only used for previewing.
     public static LatexBuilder BuildNExams(uint n, SelectorNode rootNode, byte answerCount, string title, string author, string date, bool shuffleAnswers, string[] excludedAnswers)
@@ -42,7 +58,8 @@ public static class MultiExamBuilder
     {
         var questions = rootNode.GetQuestions();
         Skeletons skeleton = [];
-        Guid uuid = Guid.NewGuid();
+        Guid uuid = CreateUniqueUuid();
+        
         var humanReadableCode = MiniCodeGenerator.GenerateCode();
         
         var qrBuilder = new QrBuilder(uuid); // Create a QR code builder for the UUID
@@ -65,6 +82,41 @@ public static class MultiExamBuilder
         builder.Macro("cleardoublepage");
         if (storeSkeleton)
             StoreSkeleton(skeleton);
+    }
+
+    /// Generate a new GUID that is checked for uniqueness.
+    /// This is done because while a UUID should never clash in theory,
+    /// on real systems, bad entropy can cause repeated values to appear exceedingly rarely.
+    private static Guid CreateUniqueUuid()
+    {
+        List<Guid> failedUuids = [];
+        for (uint attempt = 0; attempt < UuidMaxTries; attempt++)
+        {
+            Guid uncheckedUuid = Guid.NewGuid();
+            var uuidVerifyCommand = Manager.Connection.CreateCommand();
+            uuidVerifyCommand.CommandText = "SELECT COUNT(1) FROM Solutions WHERE Uuid = @Uuid;";
+            uuidVerifyCommand.Parameters.AddWithValue("@Uuid", uncheckedUuid.ToString());
+            long verifyValue = (long)(uuidVerifyCommand.ExecuteScalar() ?? throw new InvalidOperationException("Database didn't return whether the UUID is unique!"));
+            bool isUnique = verifyValue == 0;
+            if (isUnique)
+            {
+                return uncheckedUuid;
+            }
+            failedUuids.Add(uncheckedUuid);
+        }
+
+        var uuidCountCommand = Manager.Connection.CreateCommand();
+        uuidCountCommand.CommandText = "SELECT COUNT(DISTINCT Uuid) FROM Solutions;";
+        long uniqueUuidsInDb = (long)(uuidCountCommand.ExecuteScalar() ?? throw new InvalidOperationException("Database didn't return the number of unique UUIDs!"));
+        throw new RepeatedlyRepeatingGuidException(
+            string.Format(
+                UuidErrorMessageTemplate,
+                failedUuids[0],
+                failedUuids[1],
+                failedUuids[2],
+                failedUuids[3],
+                failedUuids[4],
+                uniqueUuidsInDb));
     }
     
     public static void EndManualAdding(LatexBuilder builder)

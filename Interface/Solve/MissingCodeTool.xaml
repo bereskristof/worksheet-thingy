@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:res="clr-namespace:Interface.Resources"
         mc:Ignorable="d"
-        Title="MissingUserCodeTool" Height="675" Width="1200">
+        Title="{x:Static res:Lang.Missing_WindowTitle}" Height="675" Width="1200">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>

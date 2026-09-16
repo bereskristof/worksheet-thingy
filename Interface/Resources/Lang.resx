@@ -306,4 +306,7 @@
     <data name="About_2" xml:space="preserve">
         <value>Third-Party Licenses:</value>
     </data>
+    <data name="Missing_WindowTitle" xml:space="preserve">
+        <value>Missing Data Form</value>
+    </data>
 </root>

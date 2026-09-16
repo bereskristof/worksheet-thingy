@@ -299,4 +299,7 @@
     <data name="About_2" xml:space="preserve">
         <value>Külső licenszek:</value>
     </data>
+    <data name="Missing_WindowTitle" xml:space="preserve">
+        <value>Hiányzó adatok pótlása</value>
+    </data>
 </root>

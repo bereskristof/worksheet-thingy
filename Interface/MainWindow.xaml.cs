@@ -44,14 +44,6 @@ public partial class MainWindow
         Main.Children.Add(_mainEditor);
     }
     
-    private void DispatcherUnhandledException_Raised(object sender, DispatcherUnhandledExceptionEventArgs e)
-    {
-        string errorMessage = $"{Interface.Resources.Lang.Crash_Message}\n\n- Error message -\n{e.Exception.Message}\n\n- Error stacktrace -\n{e.Exception.StackTrace}";
-        MessageBox.Show(errorMessage, Interface.Resources.Lang.Crash_Title, MessageBoxButton.OK, MessageBoxImage.Error);
-        e.Handled = true;
-        Close();
-    }
-    
     private static string GetDefaultDbPath()
     {
         RegistryKey? path = Registry.CurrentUser.OpenSubKey(Interface.Resources.RegistryNames.KeyPath);
@@ -63,5 +55,16 @@ public partial class MainWindow
     {
         var key = Registry.CurrentUser.OpenSubKey(Interface.Resources.RegistryNames.KeyPath, RegistryKeyPermissionCheck.ReadWriteSubTree);
         key?.SetValue(Interface.Resources.RegistryNames.ValueDbPath, string.Empty);
+    }
+    
+    private void DispatcherUnhandledException_Raised(object sender, DispatcherUnhandledExceptionEventArgs e)
+    {
+        Exception ex = e.Exception;
+        while (ex.InnerException != null) 
+            ex = ex.InnerException;
+        string errorMessage = $"{Interface.Resources.Lang.Crash_Message}\n\n- Error message -\n{ex.Message}\n\n- Error stacktrace -\n{ex.StackTrace}";
+        MessageBox.Show(errorMessage, Interface.Resources.Lang.Crash_Title, MessageBoxButton.OK, MessageBoxImage.Error);
+        e.Handled = true;
+        Close();
     }
 }

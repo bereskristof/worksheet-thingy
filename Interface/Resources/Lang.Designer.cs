@@ -474,6 +474,15 @@ namespace Interface.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Missing Data Form.
+        /// </summary>
+        public static string Missing_WindowTitle {
+            get {
+                return ResourceManager.GetString("Missing_WindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import.
         /// </summary>
         public static string Password_Change {
