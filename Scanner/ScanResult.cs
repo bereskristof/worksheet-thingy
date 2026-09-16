@@ -21,6 +21,7 @@ public struct ScanResult
         MissingExamCode,
         MissingUserCode,
         MissingTaskFromDatabase,
+        UnreliableDataFromDatabase,
         ManuallyCorrected,
         UnexpectedException,
     }

@@ -11,6 +11,7 @@ using Docnet.Core.Readers;
 using Microsoft.Win32;
 using OpenCvSharp;
 using Scanner;
+using Storage;
 
 namespace Interface.Solve;
 
@@ -223,7 +224,7 @@ public partial class SolvePage
             case ScanResult.State.ManuallyCorrected:
             {
                 var pageImg = ScannerHandler.GetSinglePageAsBitmap(reader, i);
-                result = ScannerHandler.ScanPageResults(pageImg, 15, 5, result);
+                result = ScannerHandler.ScanPageResults(pageImg, 5, result);
                 break;
             }
         }

@@ -13,7 +13,7 @@ public static class ScannerHandler
     public static ScanResult ScanPdfPage(IDocReader reader, int i)
     {
         var pageImg = GetSinglePageAsBitmap(reader, i);
-        var scanResult = ScanPageResults(pageImg, 15, 5); // TODO: Get question and answer count dynamically
+        var scanResult = ScanPageResults(pageImg, 5);
         // if (scanResult.CurrentState == ScanResult.State.MissingExamCode)
         // {
         //     return scanResult;
@@ -41,7 +41,7 @@ public static class ScannerHandler
         return bmp;
     }
     
-    public static ScanResult ScanPageResults(Bitmap pageImg, uint questionCount, uint answerCount, ScanResult? fixedResult = null)
+    public static ScanResult ScanPageResults(Bitmap pageImg, uint answerCount, ScanResult? fixedResult = null)
     {
         var result = new ScanResult();
         result.Results = [];
@@ -64,6 +64,17 @@ public static class ScannerHandler
         else
         {
             result = fixedResult.Value;
+        }
+
+        uint questionCount;
+        try
+        {
+            questionCount = ExamResultObtainer.ObtainExamQuestionCount((Guid)result.ExamCode!);
+        }
+        catch (InvalidExamQuestionCountException)
+        {
+            result.CurrentState = ScanResult.State.UnreliableDataFromDatabase;
+            return result;
         }
 
         var matrixScanner = new MatrixScanner(imageData);

@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Scanner;
+using static System.Math;
 
 namespace Storage;
 
@@ -55,5 +56,19 @@ public static class ExamResultObtainer
                     ? ScanResult.State.MissingTaskFromDatabase
                     : ScanResult.State.CompletedWithManualCorrection;
         }
+    }
+
+    /// Get the number of questions the exam sheet with the provided exam id contains.
+    /// <exception cref="InvalidExamQuestionCountException"></exception>
+    public static uint ObtainExamQuestionCount(Guid examId)
+    {
+        var uuidQuestionCountCommand = Manager.Connection.CreateCommand();
+        uuidQuestionCountCommand.CommandText = "SELECT COUNT() FROM Solutions WHERE Uuid = @Uuid;";
+        uuidQuestionCountCommand.Parameters.AddWithValue("@Uuid", examId.ToString());
+        if (uuidQuestionCountCommand.ExecuteScalar() is not long count) return 0;
+        if (Clamp(count, 0, uint.MaxValue) != count)
+            // TODO: Replace with a proper maximum
+            throw new InvalidExamQuestionCountException("The database contains an invalid number of exam questions for the provided index.");
+        return (uint)count;
     }
 }
