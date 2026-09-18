@@ -309,4 +309,21 @@
     <data name="Missing_WindowTitle" xml:space="preserve">
         <value>Missing Data Form</value>
     </data>
+    <data name="ExportError_MayBeZero" xml:space="preserve">
+        <value>The number of questions may not be 0!</value>
+    </data>
+    <data name="ExportError_MayBeTooMany" xml:space="preserve">
+        <value>The number of questions may not be more than #MAX#!</value>
+    </data>
+    <data name="ExportError_MayBeZeroOrTooMany" xml:space="preserve">
+        <value>The number of questions may not be 0 or more than #MAX#!</value>
+    </data>
+    <data name="ExportError_HasNull" xml:space="preserve">
+        <value>Not every question on the sheet has been set (A question is set to '...')!
+Continue anyway?</value>
+    </data>
+    <data name="ExportError_NonConst" xml:space="preserve">
+        <value>The number of questions is not an exact number!
+Continue anyway?</value>
+    </data>
 </root>

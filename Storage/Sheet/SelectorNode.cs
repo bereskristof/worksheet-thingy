@@ -34,4 +34,19 @@ public class SelectorNode : ISheetNode
                 throw new ArgumentOutOfRangeException();
         }
     }
+
+    public SheetTreeInfo GetSheetInfo()
+    {
+        var elementZero = new SheetTreeInfo(null);
+        return Type switch
+        {
+            SelectorType.Random => Children
+                .Select(node => node.GetSheetInfo())
+                .Aggregate(elementZero, SheetTreeInfo.MinMax),
+            SelectorType.Sequential or SelectorType.Shuffled => Children
+                .Select(node => node.GetSheetInfo())
+                .Aggregate(elementZero, SheetTreeInfo.Add),
+            _ => throw new ArgumentOutOfRangeException()
+        };
+    }
 }

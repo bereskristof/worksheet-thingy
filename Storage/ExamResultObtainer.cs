@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Scanner;
+using Storage.Sheet;
 using static System.Math;
 
 namespace Storage;
@@ -66,8 +67,7 @@ public static class ExamResultObtainer
         uuidQuestionCountCommand.CommandText = "SELECT COUNT() FROM Solutions WHERE Uuid = @Uuid;";
         uuidQuestionCountCommand.Parameters.AddWithValue("@Uuid", examId.ToString());
         if (uuidQuestionCountCommand.ExecuteScalar() is not long count) return 0;
-        if (Clamp(count, 0, uint.MaxValue) != count)
-            // TODO: Replace with a proper maximum
+        if (Clamp(count, 1, SheetTreeInfo.MaximumNumberOfQuestions) != count)
             throw new InvalidExamQuestionCountException("The database contains an invalid number of exam questions for the provided index.");
         return (uint)count;
     }

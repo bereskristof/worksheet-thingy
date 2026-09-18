@@ -23,7 +23,6 @@ public partial class App
         string systemCulture = CultureInfo.InstalledUICulture.ToString();
         var key = Registry.CurrentUser.OpenSubKey(Interface.Resources.RegistryNames.KeyPath);
         string targetCulture = key?.GetValue(Interface.Resources.RegistryNames.ValueLocale, systemCulture) as string ?? systemCulture;
-        Console.WriteLine(targetCulture);
         var culture = new CultureInfo(targetCulture);
         Thread.CurrentThread.CurrentCulture = culture;
         Thread.CurrentThread.CurrentUICulture = culture;

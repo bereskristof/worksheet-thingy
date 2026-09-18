@@ -312,6 +312,53 @@ namespace Interface.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not every question on the sheet has been set (A question is set to &apos;...&apos;)!
+        ///Continue anyway?.
+        /// </summary>
+        public static string ExportError_HasNull {
+            get {
+                return ResourceManager.GetString("ExportError_HasNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The number of questions may not be more than #MAX#!.
+        /// </summary>
+        public static string ExportError_MayBeTooMany {
+            get {
+                return ResourceManager.GetString("ExportError_MayBeTooMany", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The number of questions may not be 0!.
+        /// </summary>
+        public static string ExportError_MayBeZero {
+            get {
+                return ResourceManager.GetString("ExportError_MayBeZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The number of questions may not be 0 or more than #MAX#!.
+        /// </summary>
+        public static string ExportError_MayBeZeroOrTooMany {
+            get {
+                return ResourceManager.GetString("ExportError_MayBeZeroOrTooMany", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The number of questions is not an exact number!
+        ///Continue anyway?.
+        /// </summary>
+        public static string ExportError_NonConst {
+            get {
+                return ResourceManager.GetString("ExportError_NonConst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exporting....
         /// </summary>
         public static string ExportPopup_Exporting {

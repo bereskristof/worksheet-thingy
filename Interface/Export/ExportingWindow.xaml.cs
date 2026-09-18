@@ -1,8 +1,10 @@
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using Storage;
 using Storage.Sheet;
+using static Storage.Sheet.SheetTreeInfo;
 using WorkArgsInner = System.Tuple<string, bool, string[]>;
 using WorkArgs = System.Tuple<string, Storage.Sheet.SelectorNode, byte, uint, string, string, System.Tuple<string, bool, string[]>>;
 
@@ -20,11 +22,15 @@ public partial class ExportingWindow
     
     public bool ExportNPages(SelectorNode root, uint examCount, byte answerCount, string title, string author, string date, string target, bool shuffleAnswers, string[] excludedAnswers)
     {
-        if (!IsTargetValid(target))
+        if (!CanCreateFile(target))
         {
             MessageBox.Show(Interface.Resources.Lang.Export_InvalidPath, Interface.Resources.Lang.Common_Error, MessageBoxButton.OK, MessageBoxImage.Error);
             return false;
         }
+        var blocking = Exporting.IsTreeSafe(root);
+        if (blocking == Exporting.TreeSafetyResult.Blocked)
+            return false;
+        
         _backgroundWorker.WorkerReportsProgress = true;
         ExportProgressBar.Maximum = CalculateMaxProgress(examCount);
         Counter.Content = $"0 / {ExportProgressBar.Maximum}";
@@ -36,7 +42,7 @@ public partial class ExportingWindow
         return true;
     }
 
-    private static bool IsTargetValid(string target)
+    private static bool CanCreateFile(string target)
     {
         try
         {

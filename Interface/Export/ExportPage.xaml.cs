@@ -137,6 +137,10 @@ public partial class ExportPage : INotifyPropertyChanged
 
     private void CreatePdfPreview()
     {
+        var blocking = Exporting.IsTreeSafe(Bindings.Instance.SheetRoot);
+        if (blocking == Exporting.TreeSafetyResult.Blocked)
+            return;
+        
         CreateButton.IsEnabled = false;
         PreviewProgressBar.Visibility = Visibility.Visible;
         PreviewScroll.Children.Clear();

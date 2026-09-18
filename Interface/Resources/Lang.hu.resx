@@ -302,4 +302,21 @@
     <data name="Missing_WindowTitle" xml:space="preserve">
         <value>Hiányzó adatok pótlása</value>
     </data>
+    <data name="ExportError_NonConst" xml:space="preserve">
+        <value>A feladatok száma nem egyértelmű a feladatlapból.
+Folytatja ennek ellenére?</value>
+    </data>
+    <data name="ExportError_MayBeZeroOrTooMany" xml:space="preserve">
+        <value>A feladatok száma nem lehet 0 vagy több mint #MAX#.</value>
+    </data>
+    <data name="ExportError_MayBeZero" xml:space="preserve">
+        <value>A feladatok száma nem lehet 0.</value>
+    </data>
+    <data name="ExportError_MayBeTooMany" xml:space="preserve">
+        <value>A feladatok száma nem lehet több mint #MAX#.</value>
+    </data>
+    <data name="ExportError_HasNull" xml:space="preserve">
+        <value>A feladatlap nem minden feladata lett megadva (Az egyik feladat '...').
+Folytatja ennek ellenére?</value>
+    </data>
 </root>
