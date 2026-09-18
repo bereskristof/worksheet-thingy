@@ -14,11 +14,6 @@ public static class ScannerHandler
     {
         var pageImg = GetSinglePageAsBitmap(reader, i);
         var scanResult = ScanPageResults(pageImg, 5);
-        // if (scanResult.CurrentState == ScanResult.State.MissingExamCode)
-        // {
-        //     return scanResult;
-        // }
-        // ProcessScanResults(ref scanResult, i);
         return scanResult;
     }
     
@@ -77,8 +72,17 @@ public static class ScannerHandler
             return result;
         }
 
-        var matrixScanner = new MatrixScanner(imageData);
-        var matrixBubbles = matrixScanner.FindBubbles(questionCount, answerCount);
+        CircleSegment[] matrixBubbles;
+        try
+        {
+            var matrixScanner = new MatrixScanner(imageData);
+            matrixBubbles = matrixScanner.FindBubbles(questionCount, answerCount);
+        }
+        catch (MarkerException)
+        {
+            result.CurrentState =  ScanResult.State.MarkerDetectionError;
+            return result;
+        }
         
         var bubbleChecker = new BubbleChecker(imageData);
         var matrixResults = bubbleChecker.CheckBubbles(matrixBubbles, questionCount, answerCount);

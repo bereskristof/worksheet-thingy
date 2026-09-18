@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace Storage;
 
-internal static class Log
+public static class Log
 {
     public enum Severity
     {

@@ -17,7 +17,7 @@ public class MatrixScanner
         Cv2.CvtColor(_originalImage, _grayImage, ColorConversionCodes.BGR2GRAY);
     }
 
-    /// <exception cref="ArgumentException">Failed to find at least 3 markers</exception>
+    /// <exception cref="MarkerException">Failed to find at least 3 markers, or a marker was repeated</exception>
     public CircleSegment[] FindBubbles(uint questionCount = 15, uint answerCount = 5)
     {
         var dict = CvAruco.GetPredefinedDictionary(PredefinedDictionaryName.Dict4X4_50);
@@ -48,8 +48,11 @@ public class MatrixScanner
     {
         int[] idToPosition = [3, 2, 0, 1];
         var maybeAnswerMatrixCorners = new Point2f?[4];
-        for (uint i = 0; i < decimal.Min(idToPosition.Length, ids.Length); i++)
+        for (uint i = 0; i < ids.Length; i++)
         {
+            if (ids[i] >= idToPosition.Length)
+                continue;
+            
             float x = 0;
             float y = 0;
             for (uint j = 0; j < 4; j++)
@@ -60,7 +63,10 @@ public class MatrixScanner
             x /= 4;
             y /= 4;
             
-            maybeAnswerMatrixCorners[idToPosition[ids[i]]] = new Point2f(x, y);
+            int index = idToPosition[ids[i]];
+            if (maybeAnswerMatrixCorners[index] != null)
+                throw new MarkerException("Duplicate marker indices detected");
+            maybeAnswerMatrixCorners[index] = new Point2f(x, y);
         }
 
         return maybeAnswerMatrixCorners;
@@ -93,7 +99,7 @@ public class MatrixScanner
     {
         if (uAligned == null || vAligned == null || diagonalAligned == null)
         {
-            throw new ArgumentException("Cannot recover point, multiple points are null");
+            throw new MarkerException("Cannot recover point, multiple points are null");
         }
         
         Point2f u = uAligned.Value - diagonalAligned.Value;

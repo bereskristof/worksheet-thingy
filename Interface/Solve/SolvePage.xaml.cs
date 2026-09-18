@@ -157,8 +157,9 @@ public partial class SolvePage
             {
                 scanResults[i] = ScannerHandler.ScanPdfPage(reader, i);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.Write($"Unexpected exception while trying to check exam: {ex.Message}", Log.Severity.Error);
                 scanResults[i] = new ScanResult
                 {
                     CurrentState = ScanResult.State.UnexpectedException,
@@ -176,17 +177,18 @@ public partial class SolvePage
             {
                 var pageImg = ScannerHandler.GetSinglePageAsBitmap(reader, i);
                 scanResults[i] = DispatchHelpDialog(pageImg, scanResults[i], out skipDialog);
-            }
-            
-            try 
-            {
-                HandleUnfinishedResults(ref scanResults[i], i, reader);
-            }
-            catch (Exception)
-            {
-                scanResults[i].CurrentState = ScanResult.State.UnexpectedException;
-                scanResults[i].FinalPoints = null;
-                scanResults[i].Results = [];
+                
+                try 
+                {
+                    HandleUnfinishedResults(ref scanResults[i], i, reader);
+                }
+                catch (Exception ex)
+                {
+                    Log.Write($"Unexpected exception while trying to check manually corrected exam: {ex.Message}", Log.Severity.Error);
+                    scanResults[i].CurrentState = ScanResult.State.UnexpectedException;
+                    scanResults[i].FinalPoints = null;
+                    scanResults[i].Results = [];
+                }
             }
             
             _backgroundWorker.ReportProgress(i + 1, scanResults[i]);

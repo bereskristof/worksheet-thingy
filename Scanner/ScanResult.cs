@@ -22,6 +22,7 @@ public struct ScanResult
         MissingUserCode,
         MissingTaskFromDatabase,
         UnreliableDataFromDatabase,
+        MarkerDetectionError,
         ManuallyCorrected,
         UnexpectedException,
     }
