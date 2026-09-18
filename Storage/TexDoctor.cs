@@ -28,15 +28,6 @@ public static class TexDoctor
         MissingPackages,
         NotFound,
     }
-    
-    // public static string? GetTexPath()
-    // {
-    //     if (_texPath == null)
-    //     {
-    //         FindPdfLatex();
-    //     }
-    //     return _texPath;
-    // }
 
     public static TexStatus VerifyTexInstallation(out string[] missingPackages)
     {
@@ -101,9 +92,8 @@ public static class TexDoctor
             { CreateNoWindow = true, RedirectStandardOutput = true, RedirectStandardError = true };
         process.Start();
         var output = process.StandardOutput.ReadToEnd();
-        var error = process.StandardError.ReadToEnd();
         var finished = process.WaitForExit(30_000); // Wait for 30 seconds for the process to complete
-        return finished && process.ExitCode == 0 && !string.IsNullOrEmpty(output) && string.IsNullOrEmpty(error);
+        return finished && process.ExitCode == 0 && !string.IsNullOrEmpty(output);
     }
 
     private static string GetPdfLatexFromFile()
