@@ -27,19 +27,6 @@ public class MatrixScanner
         var maybeAnswerMatrixCorners = GetMaybeMarkerCenters(corners, ids);
         var answerMatrixCorners = GetAnswerMatrixCorners(maybeAnswerMatrixCorners);
         var circles = GetAnswerBubbles(answerMatrixCorners, questionCount, answerCount);
-
-        // if (ids.Length != 4)
-        // {
-        //     foreach (var circle in circles)
-        //     {
-        //         Cv2.Circle(_originalImage, circle.Center.ToPoint(), (int)circle.Radius, Scalar.Red, 2);
-        //         Cv2.PutText(_originalImage, circles.ToList().IndexOf(circle).ToString(), circle.Center.ToPoint(),
-        //             HersheyFonts.HersheySimplex, 0.5, Scalar.Red, 1, LineTypes.AntiAlias);
-        //     }
-        //
-        //     Cv2.ImShow("aa", _originalImage);
-        //     Cv2.WaitKey();
-        // }
         
         return circles;
     }
