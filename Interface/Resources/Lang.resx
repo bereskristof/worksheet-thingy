@@ -326,4 +326,32 @@ Continue anyway?</value>
         <value>The number of questions is not an exact number!
 Continue anyway?</value>
     </data>
+    <data name="ExportError_NotEnoughAnswers" xml:space="preserve">
+        <value>The provided question(s) ha(ve|s) less than 5 answers:
+#ERR#
+
+Continue anyway?</value>
+    </data>
+    <data name="ExportError_OneAnswer" xml:space="preserve">
+        <value>The provided question(s)ha(ve|s) 1 answer:
+#ERR#</value>
+    </data>
+    <data name="ExportError_ZeroAnswer" xml:space="preserve">
+        <value>The provided question(s) ha(ve|s) no answers:
+#ERR#</value>
+    </data>
+    <data name="ExportError_ZeroSolution" xml:space="preserve">
+        <value>The provided question(s) ha(ve|s) no solution(s):
+#ERR#</value>
+    </data>
+    <data name="ExportError_ManySolutions" xml:space="preserve">
+        <value>The provided question(s) ha(ve|s) more than 1 solution:
+#ERR#</value>
+    </data>
+    <data name="ExportError_RepeatedQuestion" xml:space="preserve">
+        <value>The provided question(s) ha(ve|s) more been added more than once to the test sheet:
+#ERR#
+
+Continue anyway?</value>
+    </data>
 </root>

@@ -124,6 +124,14 @@ public class Question : INotifyPropertyChanged
         return _answers;
     }
 
+    /// Return the number of correct answers this question has.
+    internal uint GetCorrectAnswerCount()
+    {
+        var answers = GetAnswers();
+        var correctAnswersCount = answers.Count(ans => ans.Correct);
+        return (uint)correctAnswersCount;
+    }
+
     private Question(long id, string text, int points, bool failedToDecrypt)
     {
         Id = id;

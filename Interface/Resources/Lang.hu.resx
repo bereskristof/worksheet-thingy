@@ -319,4 +319,32 @@ Folytatja ennek ellenére?</value>
         <value>A feladatlap nem minden feladata lett megadva (Az egyik feladat '...').
 Folytatja ennek ellenére?</value>
     </data>
+    <data name="ExportError_ManySolutions" xml:space="preserve">
+        <value>Az adott feladat(ok)nak több, mint 1 megoldása van:
+#ERR#</value>
+    </data>
+    <data name="ExportError_NotEnoughAnswers" xml:space="preserve">
+        <value>Az adott feladat(ok)nak kevesebb, mint 5 válasza van:
+#ERR#
+
+Folytatja ennek ellenére?</value>
+    </data>
+    <data name="ExportError_OneAnswer" xml:space="preserve">
+        <value>Az adott feladat(ok)nak csak 1 válasza van:
+#ERR#</value>
+    </data>
+    <data name="ExportError_ZeroAnswer" xml:space="preserve">
+        <value>Az adott feladat(ok)nak nincs 1 válasza sem:
+#ERR#</value>
+    </data>
+    <data name="ExportError_ZeroSolution" xml:space="preserve">
+        <value>Az adott feladat(ok)nak nincs 1 megoldása sem:
+#ERR#</value>
+    </data>
+    <data name="ExportError_RepeatedQuestion" xml:space="preserve">
+        <value>Az adott feladat(ok) több(ször), mint egyszer van(nak) hozzáadva a feladatlaphoz:
+#ERR#
+            
+Folytatja ennek ellenére?</value>
+    </data>
 </root>

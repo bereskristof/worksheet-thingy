@@ -42,10 +42,10 @@ public class SelectorNode : ISheetNode
         {
             SelectorType.Random => Children
                 .Select(node => node.GetSheetInfo())
-                .Aggregate(elementZero, SheetTreeInfo.MinMax),
+                .Aggregate(elementZero, SheetTreeInfo.CombineOr),
             SelectorType.Sequential or SelectorType.Shuffled => Children
                 .Select(node => node.GetSheetInfo())
-                .Aggregate(elementZero, SheetTreeInfo.Add),
+                .Aggregate(elementZero, SheetTreeInfo.CombineAnd),
             _ => throw new ArgumentOutOfRangeException()
         };
     }

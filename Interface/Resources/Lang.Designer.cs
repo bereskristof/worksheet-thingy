@@ -322,6 +322,16 @@ namespace Interface.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The provided question(s) ha(ve|s) more than 1 solution:
+        ///#ERR#.
+        /// </summary>
+        public static string ExportError_ManySolutions {
+            get {
+                return ResourceManager.GetString("ExportError_ManySolutions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The number of questions may not be more than #MAX#!.
         /// </summary>
         public static string ExportError_MayBeTooMany {
@@ -355,6 +365,60 @@ namespace Interface.Resources {
         public static string ExportError_NonConst {
             get {
                 return ResourceManager.GetString("ExportError_NonConst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The provided question(s) ha(ve|s) less than 5 answers:
+        ///#ERR#
+        ///
+        ///Continue anyway?.
+        /// </summary>
+        public static string ExportError_NotEnoughAnswers {
+            get {
+                return ResourceManager.GetString("ExportError_NotEnoughAnswers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The provided question(s)ha(ve|s) 1 answer:
+        ///#ERR#.
+        /// </summary>
+        public static string ExportError_OneAnswer {
+            get {
+                return ResourceManager.GetString("ExportError_OneAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The provided question(s) ha(ve|s) more been added more than once to the test sheet:
+        ///#ERR#
+        ///
+        ///Continue anyway?.
+        /// </summary>
+        public static string ExportError_RepeatedQuestion {
+            get {
+                return ResourceManager.GetString("ExportError_RepeatedQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The provided question(s) ha(ve|s) no answers:
+        ///#ERR#.
+        /// </summary>
+        public static string ExportError_ZeroAnswer {
+            get {
+                return ResourceManager.GetString("ExportError_ZeroAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The provided question(s) ha(ve|s) no solution(s):
+        ///#ERR#.
+        /// </summary>
+        public static string ExportError_ZeroSolution {
+            get {
+                return ResourceManager.GetString("ExportError_ZeroSolution", resourceCulture);
             }
         }
         
